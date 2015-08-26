@@ -1,10 +1,16 @@
 function _13Game() {
-	var _mCanvas = document.getElementById('main-canvas');
-	var _mContext = _mCanvas.getContext('2d');
 	
-	var _bgCanvas = document.getElementById('bg-canvas');
-
-	var _allCanvas = [_bgCanvas, _mCanvas ];
+	var _allCanvas = [];
+	
+	for(var i = 0; i < 2; i++)
+	{
+		var _canvas = document.createElement('canvas')
+		_canvas.width = 1920;
+		_canvas.height = 1080;
+		_allCanvas.push(_canvas);
+		
+		document.body.appendChild(_canvas);
+	}
 	
 	/*** SCALE HANDLING ***/
 	
@@ -39,8 +45,8 @@ function _13Game() {
 	});
 	
 	document.body.addEventListener('mousemove', function(eventObj){
-		_mousePos.x = (eventObj.clientX - _mCanvas.offsetLeft) / _scaleRatio;
-		_mousePos.y = (eventObj.clientY - _mCanvas.offsetTop) / _scaleRatio;
+		_mousePos.x = (eventObj.clientX - _allCanvas[1].offsetLeft) / _scaleRatio;
+		_mousePos.y = (eventObj.clientY - _allCanvas[1].offsetTop) / _scaleRatio;
 	});
 	
 	document.body.addEventListener('mousedown', function(eventObj){
@@ -59,17 +65,56 @@ function _13Game() {
 		}
 	});
 	
+	_allCanvas[1].addEventListener('click', function(eventObj) {
+		if(_world.status == 0) {
+			_world.status = 1;
+			_media.sounds.music.play();
+		}
+	});
+	
 	var _camOffset = { x: 0, y: -150 };
 	
 	/*** WORLD INIT ***/
 	
 	var _media = _13MediaGen();
 	
-	var _ctx = _bgCanvas.getContext('2d');
+	var _ctx = _allCanvas[0].getContext('2d');
 	_ctx.drawImage(_media.textures.landscape, 0, 0);
 	
-	window.setTimeout(function () { _media.sounds.music.play(); }, 1000);
+	var _ctx = _allCanvas[1].getContext('2d');
 	
+	_ctx.save();
+	_ctx.beginPath();
+	_ctx.fillStyle = 'black';
+	_ctx.fillRect(0, 0, 1920, 1080);
+	_ctx.fillStyle = '#aaaaaa';
+	
+	_ctx.translate(960, 1080);
+	
+	_ctx.textAlign = 'center';
+	
+	_ctx.font = '24px monospace';
+	_ctx.fillText('Developed for JS13K by morazor - Music by Vincenzo Canfora', 0, -20);
+	
+	_ctx.translate(0, -540);
+	
+	_ctx.font = '64px serif';
+	
+	_ctx.fillText("The cursed", 0, -30);
+	
+	_ctx.font = '96px serif';
+	_ctx.fillText("|", 0, 60);
+	
+	_ctx.font = '96px bold serif';
+	_ctx.fillStyle = 'white';
+	_ctx.textAlign = 'right';
+	_ctx.fillText("Mir", -12, 60);
+	
+	_ctx.fillStyle = 'red';
+	_ctx.textAlign = 'left';
+	_ctx.fillText("roR", 12, 60);
+	_ctx.restore();
+
 	var _world = new _13World(_media);
 	
 	var _player = _13WorldGen(_world);
@@ -80,73 +125,72 @@ function _13Game() {
 	var _liveTime = 0;
 	
 	setInterval(function () {
-		var _act = {
-			move: 0,
-			jump: _keyPressed[38] || _keyPressed[87],
-			attack: _mousePressed.l,
-			shield: _mousePressed.r,
-			watch: {
-				x : _mousePos.x / 1920 - 0.5,
-				y: (_mousePos.y + _camOffset.y) / 1080 - 0.5
+		if(_world.status > 0)
+		{
+			var _act = {
+				move: 0,
+				jump: _keyPressed[38] || _keyPressed[87],
+				attack: _mousePressed.l,
+				shield: _mousePressed.r,
+				watch: {
+					x : _mousePos.x / 1920 - 0.5,
+					y: (_mousePos.y + _camOffset.y) / 1080 - 0.5
+				}
 			}
-		}
+			
+			if(_keyPressed[37] || _keyPressed[65]) {
+				_act.move --;
+			}
+			if(_keyPressed[39] || _keyPressed[68]) {
+				_act.move ++;
+			}
+			
+			_player.action = _act;
 		
-		if(_keyPressed[37] || _keyPressed[65]) {
-			_act.move --;
-		}
-		if(_keyPressed[39] || _keyPressed[68]) {
-			_act.move ++;
-		}
-		
-		_player.action = _act;
 
-		_world.update(_updTime);
+			_world.update(_updTime);
+			
+			var _camPos = { x: _player.pos.x + _camOffset.x, y:  _player.pos.y + _camOffset.y - _player.h * 0.5 }; // adding player height to center on player
+			
+			_world.render(_ctx, _camPos);
+		}
 		
-		var _camPos = { x: _player.pos.x + _camOffset.x, y:  _player.pos.y + _camOffset.y - _player.h * 0.5 }; // adding player height to center on player
-		
-		// LANDSCAPE STUFF COMMENTED OUT :<
-		
-		//var _totalTime = (_updTime * _cycleCount);
-		
-		//var _tp = 1.2 + _totalTime / 100000;
-		//var _tp = 2;
-		_world.render(_mContext, _camPos) //, _tp - 1);
-		
-		//if(_cycleCount % 5 == 0) _13Landscape(_media.textures, _bgCanvas, _tp);
-		
-		if(!_player.dead) _liveTime += _updTime;
-		
-		_13HUD(_mContext, _player, _liveTime);
+		_13HUD(_ctx, _player, _world);
 		
 	}, _updTime);
 }
 
-function _13HUD(_mContext, _player, _totalTime) {
-	_mContext.save();
-	_mContext.translate(_mContext.canvas.width / 2, 0);
-	
-	var _csec = Math.floor(_totalTime / 1000);
-	var _cmin = Math.floor(_csec / 60);
-	_csec = _csec % 60;
-	if(_csec < 10) _csec = '0' + _csec.toString();
-	
-	_mContext.font = '50px monospace';
-	_mContext.fillStyle = 'white';
-	_mContext.fillText(_cmin + ':' + _csec, 0, 50);
-	
-	_mContext.translate(0, _mContext.canvas.height - (_player.revpow == null ? 54 : 81));
-	
-	_mContext.fillStyle = 'black';
-	_mContext.fillRect(-102, 0, 204, 81);	
-
-	_mContext.fillStyle = '#990000';
-	_mContext.fillRect(-100, 2, 200 * _player.health.perc, 50);	
-	
-	if(_player.revpow != null)
+function _13HUD(_ctx, _player, _world) {
+	switch(_world.status)
 	{
-		_mContext.fillStyle = 'white';
-		_mContext.fillRect(-100, 54, 200 * _player.revpow.perc, 25);
-	}	
-	
-	_mContext.restore();
+		case 1: // play
+		{
+			_ctx.save();
+			
+			_ctx.translate(960, 1080 - (_player.revpow == null ? 54 : 81));
+			
+			_ctx.fillStyle = 'black';
+			_ctx.fillRect(-102, 0, 204, 81);	
+
+			_ctx.fillStyle = '#990000';
+			_ctx.fillRect(-100, 2, 200 * _player.health.perc, 50);	
+			
+			if(_player.revpow != null)
+			{
+				_ctx.fillStyle = 'white';
+				_ctx.fillRect(-100, 54, 200 * _player.revpow.perc, 25);
+			}	
+			
+			_ctx.restore();
+		}
+		break;
+		case 2: // game over
+		{
+		}
+		break;
+		case 3: // finished
+		{
+		}
+		break;
+	}
 }

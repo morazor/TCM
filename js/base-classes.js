@@ -1,75 +1,3 @@
-	/* // SPRITESHEET HANDLING
-	function _13Sprite(bTexture, frameW) {
-		var _retObj = {
-			anim: { 
-				list: {}, 
-				current: null, 
-				time: 0 
-			},
-			texture: bTexture,
-			width: frameW,
-			height: bTexture.height,
-			frame: 0,
-			speed: 1
-		};
-		
-		_retObj.anim.add = function(animName, framesArray, loops) {
-			if(loops == null) loops = false;
-			this.list[animName] = { frames: framesArray, loops: loops };
-		}	
-
-		_retObj.anim.play = function(animName, animSpeed) {
-			if(animName != this.current)
-			{
-				this.current = animName;
-				this.time = 0;
-			}
-			
-			if(animSpeed != null) this.speed = animSpeed;
-			else this.speed = 1;
-		}
-		
-		_retObj.update = function(timePassed) {
-			var _frameNum = 0;
-			
-			if(this.anim.current != null)
-			{
-				this.anim.time += timePassed * this.anim.speed;
-				
-				var _frameNum = Math.abs(Math.floor(this.anim.time / 30));
-				var _cAnim = this.anim.list[this.anim.current];
-				
-				if(_cAnim.loops) {
-					if(typeof _cAnim.loops == 'number')
-					{
-						if(_frameNum >= _cAnim.frames.length)
-						{
-							var _loopL = _cAnim.frames.length - _cAnim.loops;
-							_frameNum = _cAnim.loops + (_frameNum - _cAnim.frames.length) % _loopL;
-						}
-					}
-					else
-					{
-						_frameNum = _frameNum % _cAnim.frames.length;
-					}
-				}
-				else if(_frameNum >= _cAnim.frames.length) {
-					_frameNum = _cAnim.frames.length - 1;
-				}
-				
-				_frameNum = _cAnim.frames[_frameNum];
-			}
-
-			this.frame = _frameNum;
-		}
-		
-		_retObj.render = function (tContext, posX, posY) {
-			tContext.drawImage(this.texture, this.width * this.frame, 0, this.width, this.texture.height, posX, posY, this.width, this.height);
-		}
-		
-		return _retObj;
-	}*/
-
 function _13Sprite(bTexture) {
 	if(bTexture == null || bTexture.skel == null) return bTexture;
 	else {
@@ -210,7 +138,7 @@ function _13Body(_world, bName, bW, bH) {
 		var bTexture = _13Sprite(_world.media.textures[bName]); // don't use new, always return empty object if function returns null
 	}
 	else {
-		bTexture = bName;
+		var bTexture = bName;
 		bName = '';
 	}
 	

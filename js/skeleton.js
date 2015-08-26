@@ -25,7 +25,6 @@ var _13Skeleton = {
 				}
 				
 				_ctx.fillStyle = _cPath.c;
-				_ctx.strokeStyle = _cPath.c;
 				_ctx.moveTo(_cPath.p[0].x * tb.size, _cPath.p[0].y * tb.size);
 				
 				for(var i = 1; i < _cPath.p.length; i++)
@@ -40,24 +39,17 @@ var _13Skeleton = {
 					}
 				}
 				
-				if(_cPath.line != null) {
-					_ctx.lineWidth = _cPath.line * tb.size;
-					_ctx.stroke();
-				}
-				else
+				_ctx.closePath();
+				_ctx.fill();
+				
+				if(_cPath.b != null)
 				{
-					_ctx.closePath();
-					_ctx.fill();
+					/*if(_cPath.b > 0) _ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+					else _ctx.strokeStyle = 'rgba(255,255,255,0.5)';*/
 					
-					if(_cPath.b != null)
-					{
-						/*if(_cPath.b > 0) _ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-						else _ctx.strokeStyle = 'rgba(255,255,255,0.5)';*/
-						
-						_ctx.strokeStyle = 'rgba(127,127,127,0.5)';
-						_ctx.lineWidth = 1;
-						_ctx.stroke();
-					}
+					_ctx.strokeStyle = 'rgba(127,127,127,0.5)';
+					_ctx.lineWidth = 1;
+					_ctx.stroke();
 				}
 				
 				_ctx.restore();

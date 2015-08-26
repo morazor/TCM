@@ -8,7 +8,7 @@ function _13WorldGen(_world) {
 		{ x: 0, y: 225, w: 400, h: 300 },
 		{ x: 0, y: 125, w: 200, h: 300 },
 		{ x: 2200, y: 350, w: 1000, h: 2000 },
-		{ x: 1700, y: 200, w: 400, h: 100 },
+		{ x: 1700, y: 150, w: 500, h: 300 }
 	]
 
 	var _maxi = _walls.length;
@@ -100,81 +100,61 @@ function _13WorldGen(_world) {
 		collide: false
 	});
 	
+	for(var i = 0; i < 2; i++)
+	{
+		_13Obj.extend(_world.addBody('bone_pile_' + i), {
+			pos: { x: (i == 0 ? 1575 : -1575), y: -140 },
+			fixed: true,
+			collide: 'player',
+			facing: i != 0,
+			w: 300
+		});
+	}
+	
 	var _spawner = _world.addBody('spawner');
 	_spawner.fixed = true;
 	_spawner.collide = false;
-	
-	var _waveSeq = [
-		{ l: [ 'enemy_wotw_0' ], r: [ ] },
-		{ l: [ ], r: [ 'enemy_skel_0' ] },
-		{ l: [ 'enemy_wotw_0' ], r: [ 'enemy_skel_0' ] },
-		{ l: [ 'enemy_skel_1' ], r: [ ] },
-		{ l: [ 'enemy_skel_0' ], r: [ 'enemy_wotw_1' ] }
-	]
-	
-	for(var i = 0; i < _waveSeq.length; i++)
-	{
-		for(var _i in _waveSeq[i])
-		{
-			for(var j in _waveSeq[i][_i])
-			{
-				_waveSeq[i][_i][j] = _13Obj.extend(_world.addEnemy(_waveSeq[i][_i][j]), {
-					pos: { x: (_i == 'l' ? -1650 : 1650), y: 0 },
-					dead: true
-				});
-			}
-		}
-	}
 	
 	var _waveNum = 0;
 	var _waveTime = 0;
 	var _waveStep = 0;
 	
 	var _finalRound = false;
+	var _finalBoss = null;
 	
 	_spawner.beforeUpdate = function(timePassed) { // must be before update because if i revive mobs after update they will be rendered without a skeleton refresh
-		_waveTime += timePassed;
-		var _cWave = _waveSeq[_waveNum];
-		
-		if(_cWave == null && !_finalRound)
+		if(_world.status == 1)
 		{
-			_finalRound = true;
-			_13Obj.extend(_world.addActorMelee('rev_player'), {
-				pos: { x: 0,y: -100 }
-			});
-			
-			if(_player.revved) _player.rev();
-			_player.revpow = null;
-		}
-		else {
-			if(_waveTime > (_waveStep + 1) * 2500) {			
-				for(var _i in _cWave)
-				{
-					var _cmob = _cWave[_i][_waveStep];
-					if(_cmob != null) {
-						_cmob.undie();
-						_cmob.awake = true;
-						_cmob._spawned = true;
-					}
-				}
+			_waveTime += timePassed;
+
+			if(_finalRound)
+			{
+				if(_finalBoss.dead) _world.status = 3;
+			}
+			else if(_waveStep > 10)
+			{
+				_finalRound = true;
+				_finalBoss = _13Obj.extend(_world.addActorMelee('rev_player'), {
+					pos: { x: 0, y: -100 },
+					health: new _13LimVal(250),
+					revmult: 1.2
+				});
 				
-				_waveStep++;
+				if(_player.revved) _player.rev();
+				_player.revpow = null;
 			}
-			
-			var _someAlive = false;
-			for(var _i in _cWave)
-			{
-				for(var j in _cWave[_i])
-				{
-					if(!_cWave[_i][j].dead || !_cWave[_i][j]._spawned) _someAlive = true;
+			else {
+				if(_waveTime > (_waveStep + 1) * 7000) {
+					var _bName = (Math.random() > 0.5 ? 'enemy_skel_' : 'enemy_wotw_');
+					
+					_13Obj.extend(_world.addEnemy(_bName + (Math.random() > 0.7 ? 1 : 0)), {
+						pos: { x: (Math.random() > 0.5 ? -1650 : 1650), y: -150 },
+						awake: true,
+						revmult: 0.8 + 0.4 * i / 10
+					});				
+					
+					_waveStep++;
 				}
-			}
-			
-			if(!_someAlive)
-			{
-				_waveNum++;
-				_waveStep = 0;
-				_waveTime = 0;
 			}
 		}
 	}

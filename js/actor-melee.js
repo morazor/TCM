@@ -125,7 +125,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 					}
 				}
 			}
-			else _didJump = false;
+			else if(this.block.d) _didJump = false;
 			
 			var _cPVel = ((!this.isshield && ((this.vel.x > 0 && this.facing) || (this.vel.x < 0 && !this.facing))) ? (1) : (0.5)) * _plSpeed;
 			
@@ -207,8 +207,9 @@ function _13ActorMelee(_world, bName, bW, bH) {
 					this.didatk = _atkTime;
 					this.stopatk = false;
 					
-					if(_hbrot > 0.25) _atkType = -1; // low swing
-					else if(_hbrot < -0.2) _atkType = 1; // high swing
+					/*if(_hbrot > 0.25) _atkType = -1; // low swing, removed
+					else */
+					if(_hbrot < (_didJump ? 0 : -0.20)) _atkType = 1; // high swing
 					else { // middle thrust
 						_atkType = _hbrot;
 					}

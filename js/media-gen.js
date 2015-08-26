@@ -187,7 +187,6 @@ function _13TextureGen() {
 
 	_retObj.blood_enemy_skel_0 = _canvas;
 	_retObj.blood_enemy_skel_1 = _canvas;
-	_retObj.blood_enemy_skel_2 = _canvas;
 	
 	// BULLET PLAYER
 	
@@ -742,12 +741,12 @@ function _13TextureGen() {
 							_ckrot = _crot - 1;
 							_cwrot = Math.PI * 0.3 * _ckrot;
 						}
-						else if(_ac == -1) // low swing
+						/*else if(_ac == -1) // low swing, removed
 						{
 							_cshrot = 3.7 - _crot;
 							_ckrot = -_crot;
 							_cwrot = Math.PI * 0.15 * _ckrot;
-						}
+						}*/
 						
 						_frSkel.bones.arm[0].rot = _cshrot * Math.PI * 0.3;
 						
@@ -1032,133 +1031,54 @@ function _13TextureGen() {
 	}
 	
 	_retObj.landscape = _canvas;
-	 
-	/*_retObj.landscape = {
-		sky: [],
-		sun: [],
-		hills: []
-	};
-	
-	var _fw = 1920; // anim width
-	var _fh = 1080; // anim height
-	
-	for(var i = 0; i < 3; i++)
-	{
-		// SKY
-		var _canvas = document.createElement('canvas');
-		_canvas.width = _fw;
-		_canvas.height = _fh;
-		
-		var _ctx = _canvas.getContext('2d');
-		
-		switch(i)
-		{
-			case 0: { // sky - day
-				_ctx.fillStyle = '#ccccff'; 
-			}
-			break;
-			case 1: { // sky - dusk
-				var _grd = _ctx.createRadialGradient(_fw / 2, _fh, _fh * 0.2, _fw / 2, _fh, _fh);
-
-				_grd.addColorStop(0,'rgba(255,100,0,1)');
-				_grd.addColorStop(1,'rgba(255,255,0,0)');
-
-				_ctx.fillStyle = _grd;
-				_ctx.scale(1, 0.8);
-			}
-			break;
-			case 2: { // sky - night
-				_ctx.fillStyle = '#051133';
-			}
-			break;
-		}
-
-		_ctx.fillRect(0, 0, _fw, _fh);
-		
-		if(i == 2) { // sky - night: stars
-			_ctx.fillStyle = 'white';
-
-			for(var i = 0; i < 50; i++)
-			{
-				_ctx.beginPath();
-				_ctx.arc(Math.random() * _fw, Math.random() * _fh, Math.random() * _fh * 0.003, 0, Math.PI * 2);
-				_ctx.fill();
-				_ctx.closePath();
-			}
-		}
-		
-		_retObj.landscape.sky.push(_canvas);
-	}
-	
-	// SUN
-	
-	for(var i = 0; i < 2; i++)
-	{
-		var _sunw = _fh * 0.2;
-		
-		var _canvas = document.createElement('canvas');
-		_canvas.width = _sunw;
-		_canvas.height = _sunw;
-		
-		var _ctx = _canvas.getContext('2d');
-		
-		if(i == 0) _ctx.fillStyle = '#ffdd00';
-		else _ctx.fillStyle = '#ff3300';
-		
-		_ctx.arc(_sunw / 2, _sunw / 2, _sunw / 2, 0, Math.PI * 2);
-		_ctx.fill();
-		
-		_retObj.landscape.sun.push(_canvas)
-	}
-	
-	// HILLS
-	
-	var _hillsrnd = [];
-	for(var i = 0; i < 2; i++)
-	{
-		var _isp = 0.5 * i;
-		
-		_hillsrnd.push({
-			x: -0.3 + _isp, y: 1,
-			x1: 0.1 + _isp + 0.2 * Math.random(), y1: 0.2 + 0.3 * Math.random(),
-			x2: 0.1 + _isp + 0.2 * Math.random(), y2: 0.2 + 0.3 * Math.random(),
-			x3: 0.8 + _isp, y3: 1
-		})
-	}
-	
-	var _hillsc = ['#003200', '#004600', '#051020', '#061224'];
-
-    for(var i = 0; i < 2; i++)
-	{
-		var _canvas = document.createElement('canvas');
-		_canvas.width = _fw;
-		_canvas.height = _fh;
-		
-		var _ctx = _canvas.getContext('2d');
-
-		for(var j = 0; j < 2; j++)
-		{
-			_ctx.beginPath();
-			
-			_ctx.fillStyle = _hillsc[i * 2 + j];
-			
-			var _crnd = _hillsrnd[j];
-			
-			_ctx.moveTo(_crnd.x * _fw, _crnd.y * _fh);
-			_ctx.bezierCurveTo(_crnd.x1 * _fw, _crnd.y1 * _fh, _crnd.x2 * _fw, _crnd.y2 * _fh, _crnd.x3 * _fw, _crnd.y3 * _fh);
-			
-			_ctx.closePath();
-			_ctx.fill();
-		}
-		
-		_retObj.landscape.hills.push(_canvas)
-	}*/
 	
 	/*****************
 	 * LANDSCAPE END *
 	 *****************/
 	 
-	 return _retObj;
+	// BONE PILES
+	 
+	var _bls = 400;
+	
+	for(var i = 0; i < 2; i++)
+	{
+		var _canvas = document.createElement('canvas');
+		_canvas.width = _bls;
+		_canvas.height = _bls;
+		
+		var _ctx = _canvas.getContext('2d');
+		
+		var _blist = [];
+		
+		for(var j = 0; j < 2; j++)
+		{
+			_13Skeleton.AllBones(_retObj['enemy_skel_' + j].skel, function(tb) {
+				if(tb.texture != null && tb.alpha != 0)
+				{
+					_blist.push(tb.texture);
+				}
+			});
+		}
+		
+		_ctx.translate(_bls * 0.2, _bls * 0.07);
+		
+		for(var j = 0; j < 13; j++)
+		{
+			for(var k = 0; k < j * 2; k++)
+			{
+				var _cbt = _13Random.pick(_blist);
+				_ctx.save();
+				_ctx.translate(k * 10, j * 25);
+				_ctx.rotate(Math.PI * 2 * Math.random());
+				_ctx.drawImage(_cbt, - _cbt.width / 2, - _cbt.height / 2);
+				_ctx.restore();
+			}
+		}
+		
+		_retObj['bone_pile_' + i] = _canvas;
+	}
+	
+	return _retObj;
 }
 
 function _13SoundGen() {	

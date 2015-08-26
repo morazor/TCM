@@ -29,7 +29,7 @@ function _13AI(mob, world, timePassed)
 					// RANGED AI
 
 					if(mob.awake && !mob.dead && !_pl.dead) {
-						if(mob.didatk > 500)
+						if(mob.didatk > 500 / mob.revmult)
 						{
 							if(_act.move == null) _act.move = { 
 								x: _pl.pos.x + (_pl.facing ? -1 : 1) * (400 + _13Random.between(0, 100)), 

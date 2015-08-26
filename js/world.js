@@ -18,21 +18,22 @@ function _13World(_media) {
 	var _particles = [];
 	
 	return {
+		status: 0,
 		media: _media,
 		player: null,
 		bodies: [],
 		actors: [],
 	
-	/*
-		SEQUENCE EXPLAINED:
+	/*	SEQUENCE EXPLAINED:
 		
 		beforeUpdate: input handling
 		update: movement & collisions
 		afterUpdate: animations setting
 		refresh: skeletons refresh
 		afterRefresh: stuff needing refreshed skeletons
-	*/
-	
+		onRender: before texture is rendered
+		render: texture is rendered */
+
 	/*** UPDATE ***/
 	
 		update: function (timePassed) {
@@ -114,7 +115,7 @@ function _13World(_media) {
 				_calcPoints(_cBody);
 			}
 			
-			// COLLISIONS
+			// COLLISIONS - incomplete implementation, just for the game's purposes
 			
 			for(var i = 0; i < _livebod.length; i++)
 			{
@@ -128,10 +129,12 @@ function _13World(_media) {
 					((_r1.overlap || _r1.collide == true || _r1.collide == _r2.name) && (_r2.overlap || _r2.collide == true || _r2.collide == _r1.name)) &&
 					(_r1.beforeCollide(_r2) && _r2.beforeCollide(_r1))) {
 					
-						var _overlapX = Math.max(0, Math.min(_r1.right,_r2.right) - Math.max(_r1.left,_r2.left));
-						var _overlapY = Math.max(0, Math.min(_r1.bottom,_r2.bottom) - Math.max(_r1.top,_r2.top));
+						var _overlap = {
+							x: Math.max(0, Math.min(_r1.right,_r2.right) - Math.max(_r1.left,_r2.left)),
+							y: Math.max(0, Math.min(_r1.bottom,_r2.bottom) - Math.max(_r1.top,_r2.top))
+						}
 				
-						if(_overlapX * _overlapY > 0)
+						if(_overlap.x * _overlap.y > 0)
 						{
 							if(_r1.overlap || _r2.overlap)
 							{
@@ -139,86 +142,69 @@ function _13World(_media) {
 								_r2.onOverlap(_r1);
 							}
 							else {
-								var _relVelX = _r1.vel.x - _r2.vel.x;
-								var _relVelY = _r1.vel.y - _r2.vel.y;
-						
-								var _bounceX = ((_relVelX < 0 && _r1.pos.x > _r2.pos.x) || (_relVelX > 0 && _r1.pos.x < _r2.pos.x));
-								var _bounceY = ((_relVelY < 0 && _r1.pos.y > _r2.pos.y) || (_relVelY > 0 && _r1.pos.y < _r2.pos.y));
-							
-								if(_bounceX && _bounceY) // is this check right?
+								if(!_r1.autorot) _r1.rotvel *= _r1.bounce;
+								if(!_r2.autorot) _r2.rotvel *= _r2.bounce;
+								
+								var _relVel = {};
+								var _bounce = {};
+								
+								for(var _i in _overlap)
 								{
-									if(_overlapX < _overlapY)
+									_relVel[_i] = _r1.vel[_i] - _r2.vel[_i];
+									_bounce[_i] = 
+										((_relVel[_i] < 0 && _r1.pos[_i] > _r2.pos[_i]) || 
+										(_relVel[_i] > 0 && _r1.pos[_i] < _r2.pos[_i]));
+								}
+							
+								if(_bounce.x && _bounce.y) // is this check right?
+								{
+									if(_overlap.x < _overlap.y)
 									{
-										_bounceY = false;
+										_bounce.y = false;
 									}
 									else
 									{
-										_bounceX = false;
+										_bounce.x = false;
 									}
 								}
 								
-								if(!_r1.autorot) _r1.rotvel *= _r1.bounce;
-								if(!_r2.autorot) _r2.rotvel *= _r2.bounce;
-						
-								if(_bounceX)
-								{
-									// _r2 is never fixed: all fixed stuff is added first
-									/*if(_r2.fixed) { 
-										_r1.vel.x = -_r1.bounce * _r1.vel.x;
-									
-										if(_relVelX < 0) _r1.pos.x += _overlapX;
-										else _r1.pos.x -= _overlapX;
-										
-										if(_r1.pos.x < _r2.pos.x) _r1.block.r = true;
-										else _r1.block.l = true;
-									}
-									else */
-									
-									if(_r1.fixed) { 
-										_r2.vel.x = -_r2.bounce * _r2.vel.x;
-									
-										if(_relVelX > 0) _r2.pos.x += _overlapX;
-										else _r2.pos.x -= _overlapX;
-										
-										if(_r2.pos.x < _r1.pos.x) _r2.block.r = true;
-										else _r2.block.l = true;
-									}
-									else
-									{
-										var _r1Vel = _r1.vel.x;
-										_r1.vel.x = _r1.bounce * _r2.vel.x;
-										_r2.vel.x = _r2.bounce * _r1Vel;
-									}
+								var _sides = {
+									x: [ 'l', 'r' ],
+									y: [ 'u', 'd' ]
 								}
-						
-								if(_bounceY)
+								
+								for(var _i in _bounce)
 								{
-									// _r2 is never fixed: all fixed stuff is added first
-									/*if(_r2.fixed) {
-										_r1.vel.y = -_r1.bounce * _r1.vel.y;
-									
-										if(_relVelY < 0) _r1.pos.y += _overlapY;
-										else _r1.pos.y -= _overlapY;
-										
-										if(_r1.pos.y < _r2.pos.y) _r1.block.d = true;
-										else _r1.block.u = true;
-									}
-									else */
-									
-									if(_r1.fixed) { 
-										_r2.vel.y = -_r2.bounce * _r2.vel.y;
-									
-										if(_relVelY > 0) _r2.pos.y += _overlapY;
-										else _r2.pos.y -= _overlapY;
-										
-										if(_r2.pos.y < _r1.pos.y) _r2.block.d = true;
-										else _r2.block.u = true;
-									}
-									else
+									if(_bounce[_i])
 									{
-										var _r1Vel = _r1.vel.y;
-										_r1.vel.y = _r1.bounce * _r2.vel.y;
-										_r2.vel.y = _r2.bounce *_r1Vel;
+										
+										// _r2 is never fixed: all fixed stuff is added first
+										/*if(_r2.fixed) { 
+											_r1.vel.x = -_r1.bounce * _r1.vel.x;
+										
+											if(_relVelX < 0) _r1.pos.x += _overlapX;
+											else _r1.pos.x -= _overlapX;
+											
+											if(_r1.pos.x < _r2.pos.x) _r1.block.r = true;
+											else _r1.block.l = true;
+										}
+										else */
+									
+										if(_r1.fixed) { 
+											_r2.vel[_i] = -_r2.bounce * _r2.vel[_i];
+										
+											if(_relVel[_i] > 0) _r2.pos[_i] += _overlap[_i];
+											else _r2.pos[_i] -= _overlap[_i];
+											
+											if(_r2.pos[_i] < _r1.pos[_i]) _r2.block[_sides[_i][1]] = true; // left or up
+											else _r2.block[_sides[_i][0]] = true; // right or down
+										}
+										else
+										{
+											var _r1Vel = _r1.vel[_i];
+											_r1.vel[_i] = _r1.bounce * _r2.vel[_i];
+											_r2.vel[_i] = _r2.bounce * _r1Vel;
+										}
 									}
 								}
 

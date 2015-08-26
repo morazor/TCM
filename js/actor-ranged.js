@@ -52,7 +52,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 			watch: { x: 0, y: 0 },
 			attack: false
 		},
-		health: new _13LimVal(15),
+		health: new _13LimVal(10),
 		damval: 25,
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
@@ -78,17 +78,17 @@ function _13ActorRanged(_world, bName, bW, bH) {
 			{
 				for(var _i in this.acc)
 				{
-					this.acc[_i] = timePassed * 0.2 * ((_act.move[_i] - this.pos[_i]) - this.vel[_i]);
+					this.acc[_i] = timePassed * this.revmult * 0.2 * ((_act.move[_i] - this.pos[_i]) - this.vel[_i]);
 				}
 			}
 			
 			if(this.level > 0) this.alpha = 1 - Math.min(0.97, _13Geom.dist(this.vel, { x: 0, y: 0}) / 500);
 			
 			if(!this.awake) this.didatk = _atkTime;
-		
+
 			if(this.didatk <= 0 && _act.attack)
 			{
-				this.didatk = _atkTime; // RANGED ATTACK
+				this.didatk = _atkTime / this.revmult; // RANGED ATTACK
 
 				for(var i = 0; i < this.bullets.length; i++)
 				{

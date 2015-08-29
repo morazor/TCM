@@ -9,7 +9,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 	}
 	
 	var _aura = _world.addParticles('aura_' + bName, 10);	
-	_13Obj.extend(_aura, _auraProps);
+	_13ObjExtend(_aura, _auraProps);
 	
 	_aura.min.pos = { x: -5, y: -5 }
 	_aura.max.pos = { x: 5, y: 5 }
@@ -24,27 +24,25 @@ function _13ActorRanged(_world, bName, bW, bH) {
 	var _bulLife = 2500;
 	var _bulVel = 500;
 	
-	for(var i = 0; i < _retObj.bullets.length; i++)
-	{
-		var _cbul = _retObj.bullets[i];
+	_13Each(_retObj.bullets, function(_cbul) {
 		_cbul.w = 20;
 		_cbul.h = 20;
 		
 		var _aura = _world.addParticles('aura_bullet_' + bName, 20);	
-		_13Obj.extend(_aura, _auraProps);
+		_13ObjExtend(_aura, _auraProps);
 		_aura.lifespan = 400;
 		_aura.freq = 60;
 		_aura.min.vel.y = -50;
 		_aura.max.vel.y = 50;
 	
 		_aura.link = _cbul;
-	}
+	})
 	
 	var _atkTime = 2000;
 	
-	return _13Obj.extend(_retObj, {
-		w: 50,
-		h: 50,
+	return _13ObjExtend(_retObj, {
+		w: 60,
+		h: 60,
 		grav: 0,
 		collide: 'bullet_player',
 		action: {
@@ -52,7 +50,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 			watch: { x: 0, y: 0 },
 			attack: false
 		},
-		health: new _13LimVal(10),
+		health: new _13LimVal(10 + 60 * _retObj.level),
 		damval: 25,
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
@@ -76,13 +74,13 @@ function _13ActorRanged(_world, bName, bW, bH) {
 			
 			if(_act.move != null) // MOVING
 			{
-				for(var _i in this.acc)
+				for(var i in this.acc)
 				{
-					this.acc[_i] = timePassed * this.revmult * 0.2 * ((_act.move[_i] - this.pos[_i]) - this.vel[_i]);
+					this.acc[i] = timePassed * this.revmult * 0.2 * ((_act.move[i] - this.pos[i]) - this.vel[i]);
 				}
 			}
 			
-			if(this.level > 0) this.alpha = 1 - Math.min(0.97, _13Geom.dist(this.vel, { x: 0, y: 0}) / 500);
+			this.alpha = 1 - Math.min(0.5 * this.level + 0.49, _13Geom.dist(this.vel, { x: 0, y: 0}) / 500);
 			
 			if(!this.awake) this.didatk = _atkTime;
 
@@ -90,24 +88,23 @@ function _13ActorRanged(_world, bName, bW, bH) {
 			{
 				this.didatk = _atkTime / this.revmult; // RANGED ATTACK
 
-				for(var i = 0; i < this.bullets.length; i++)
-				{
-					var _cbul = this.bullets[i];
+				var _this = this;
+				_13Each(this.bullets, function (_cbul) {
 					if(_cbul.dead)
 					{
 						var _adir = _wdir;
 						
 						_cbul.undie(_bulLife);
 						
-						_cbul.pos.x = this.pos.x;
-						_cbul.pos.y = this.pos.y;
+						_cbul.pos.x = _this.pos.x;
+						_cbul.pos.y = _this.pos.y;
 						
 						_cbul.vel.x = Math.cos(_adir) * _bulVel;
 						_cbul.vel.y = Math.sin(_adir) * _bulVel;
 						
-						break;
+						return true;
 					}
-				}
+				});
 			}
 		}
 	});

@@ -7,12 +7,9 @@ function _13World(_media) {
 		cBody.bottom = cBody.pos.y + cBody.h / 2;
 	}
 	
-	var _lCanv = document.createElement('canvas');
-	_lCanv.width = 1920;
-	_lCanv.height = 1080;
+	var _lCanv = _13Canv(1920, 1080);
 	var _lCtx = _lCanv.getContext('2d');
-	//_lCtx.fillStyle = 'black';
-	
+
 	var _lastUpdate = 0;
 
 	var _particles = [];
@@ -49,9 +46,8 @@ function _13World(_media) {
 			
 			var _livebod = [];
 			
-			for(var i = 0; i < this.bodies.length; i++)
-			{
-				var _cBody = this.bodies[i]; // killing stuff that must die
+			_13Each(this.bodies, function(_cBody) {
+				// killing stuff that must die
 				
 				if(_cBody.lifespan != null) {
 					_cBody.lifespan -= timePassed;
@@ -64,13 +60,11 @@ function _13World(_media) {
 				if(!_cBody.dead)
 				{
 					_cBody.beforeUpdate(timePassed);
-					_livebod.push(this.bodies[i]);
+					_livebod.push(_cBody);
 				}
-			}
+			});
 			
-			for(var i = 0; i < _livebod.length; i++)
-			{
-				var _cBody = _livebod[i];
+			_13Each(_livebod, function(_cBody) {
 				
 				// MOVEMENT
 
@@ -87,10 +81,10 @@ function _13World(_media) {
 						y: _cBody.frict * Math.sin(_velang) * timePassed * 0.1
 					}
 					
-					for(var _i in _frict)
+					for(var i in _frict)
 					{
-						if(Math.abs(_frict[_i]) > Math.abs(_cBody.vel[_i])) _cBody.vel[_i] = 0;
-						else _cBody.vel[_i] -= _frict[_i];
+						if(Math.abs(_frict[i]) > Math.abs(_cBody.vel[i])) _cBody.vel[i] = 0;
+						else _cBody.vel[i] -= _frict[i];
 					}
 
 					_cBody.pos.x += _cBody.vel.x * timePassed / 1000;
@@ -109,19 +103,19 @@ function _13World(_media) {
 					
 					_cBody.rot += _cBody.rotvel * timePassed / 1000;
 					
-					for(var _i in _cBody.block) _cBody.block[_i] = false;
+					for(var i in _cBody.block) _cBody.block[i] = false;
 				}
 				
 				_calcPoints(_cBody);
-			}
+			});
 			
 			// COLLISIONS - incomplete implementation, just for the game's purposes
 			
-			for(var i = 0; i < _livebod.length; i++)
+			for(var k = 0; k < _livebod.length; k++)
 			{
-				var _r1 = _livebod[i];
+				var _r1 = _livebod[k];
 				
-				for(var j = i + 1; j < _livebod.length; j++)
+				for(var j = k + 1; j < _livebod.length; j++)
 				{
 					var _r2 = _livebod[j];
 					
@@ -148,12 +142,12 @@ function _13World(_media) {
 								var _relVel = {};
 								var _bounce = {};
 								
-								for(var _i in _overlap)
+								for(var i in _overlap)
 								{
-									_relVel[_i] = _r1.vel[_i] - _r2.vel[_i];
-									_bounce[_i] = 
-										((_relVel[_i] < 0 && _r1.pos[_i] > _r2.pos[_i]) || 
-										(_relVel[_i] > 0 && _r1.pos[_i] < _r2.pos[_i]));
+									_relVel[i] = _r1.vel[i] - _r2.vel[i];
+									_bounce[i] = 
+										((_relVel[i] < 0 && _r1.pos[i] > _r2.pos[i]) || 
+										(_relVel[i] > 0 && _r1.pos[i] < _r2.pos[i]));
 								}
 							
 								if(_bounce.x && _bounce.y) // is this check right?
@@ -173,9 +167,9 @@ function _13World(_media) {
 									y: [ 'u', 'd' ]
 								}
 								
-								for(var _i in _bounce)
+								for(var i in _bounce)
 								{
-									if(_bounce[_i])
+									if(_bounce[i])
 									{
 										
 										// _r2 is never fixed: all fixed stuff is added first
@@ -191,19 +185,19 @@ function _13World(_media) {
 										else */
 									
 										if(_r1.fixed) { 
-											_r2.vel[_i] = -_r2.bounce * _r2.vel[_i];
+											_r2.vel[i] = -_r2.bounce * _r2.vel[i];
 										
-											if(_relVel[_i] > 0) _r2.pos[_i] += _overlap[_i];
-											else _r2.pos[_i] -= _overlap[_i];
+											if(_relVel[i] > 0) _r2.pos[i] += _overlap[i];
+											else _r2.pos[i] -= _overlap[i];
 											
-											if(_r2.pos[_i] < _r1.pos[_i]) _r2.block[_sides[_i][1]] = true; // left or up
-											else _r2.block[_sides[_i][0]] = true; // right or down
+											if(_r2.pos[i] < _r1.pos[i]) _r2.block[_sides[i][1]] = true; // left or up
+											else _r2.block[_sides[i][0]] = true; // right or down
 										}
 										else
 										{
-											var _r1Vel = _r1.vel[_i];
-											_r1.vel[_i] = _r1.bounce * _r2.vel[_i];
-											_r2.vel[_i] = _r2.bounce * _r1Vel;
+											var _r1Vel = _r1.vel[i];
+											_r1.vel[i] = _r1.bounce * _r2.vel[i];
+											_r2.vel[i] = _r2.bounce * _r1Vel;
 										}
 									}
 								}
@@ -219,9 +213,8 @@ function _13World(_media) {
 				_calcPoints(_r2);
 			}
 			
-			for(var i = 0; i < _livebod.length; i++)
-			{
-				var _cBody = _livebod[i];
+			// REFRESHING skeletons
+			_13Each(_livebod, function(_cBody) {
 				
 				_cBody.afterUpdate(timePassed);
 				if(_cBody.texture != null && _cBody.texture.refresh != null)
@@ -229,15 +222,15 @@ function _13World(_media) {
 					_cBody.texture.refresh(timePassed);
 					_cBody.afterRefresh(timePassed);
 				}
-			}
+			})
 			
 			/* AI */
-			for(var i = 0; i < this.actors.length; i++)
-			{
-				_13AI(this.actors[i], this, timePassed);
-			}
+			var _world = this;
+			_13Each(this.actors, function(_cact) {
+				_13AI(_cact, _world, timePassed);
+			});
 		},
-		render: function (tCtx, cameraPos) { //, darkness) {
+		render: function (tCtx, cameraPos) {
 			tCtx.save();
 			
 			var _cc = [Math.round(-cameraPos.x + tCtx.canvas.width / 2), Math.round(-cameraPos.y + tCtx.canvas.height / 2)];
@@ -247,7 +240,6 @@ function _13World(_media) {
 			
 			_lCtx.save();
 			_lCtx.clearRect(0, 0, _lCtx.canvas.width, _lCtx.canvas.height);
-			//_lCtx.fillRect(0, 0, _lCtx.canvas.width, _lCtx.canvas.height);
 			_lCtx.translate(_cc[0], _cc[1]);
 			
 			var _cameraRect = { 
@@ -260,9 +252,7 @@ function _13World(_media) {
 			
 			var _lscl = -Math.sin((_lastUpdate % 150) / 300 * Math.PI) * 0.07; // flickering lights		
 			
-			for(var i = 0; i < this.bodies.length; i++)
-			{
-				var _cBody = this.bodies[i];
+			_13Each(this.bodies, function(_cBody) {
 				
 				if(!_cBody.dead && _13Geom.inters(_cBody, _cameraRect))
 				{
@@ -306,7 +296,7 @@ function _13World(_media) {
 						_lCtx.restore();
 					}
 				}
-			}
+			});
 			
 			// BODY DEBUG
 			/*for(var i = 0; i < this.bodies.length; i++)
@@ -339,14 +329,10 @@ function _13World(_media) {
 			
 			tCtx.restore();
 			
-			//if(darkness > 0)
-			//{			
 			tCtx.save();
-			//tCtx.globalAlpha = Math.min(1, darkness) * 0.4;
-			tCtx.globalAlpha = 0.5;
+			tCtx.globalAlpha = 0.5; // lights layer
 			tCtx.drawImage(_lCanv, 0, 0);
 			tCtx.restore();
-			//}
 			
 			_lCtx.restore();
 		},

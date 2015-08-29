@@ -2,28 +2,23 @@ function _13Sprite(bTexture) {
 	if(bTexture == null || bTexture.skel == null) return bTexture;
 	else {
 		var _retObj = {
-			texture: document.createElement('canvas'),
+			texture: _13Canv(bTexture.w, bTexture.h),
 			width: bTexture.w,
 			height: bTexture.h,
 			skel: _13Skeleton.Clone(bTexture.skel),
-			anim: _13Obj.clone(bTexture.anim, true),
+			anim: _13ObjClone(bTexture.anim, true),
 			trail: bTexture.trail
 		}
 		
-		_retObj.texture.width = bTexture.w;
-		_retObj.texture.height = bTexture.h;
-		
-		var _fxCanv = document.createElement('canvas');
-		_fxCanv.width = bTexture.w;
-		_fxCanv.height = bTexture.h;
+		var _fxCanv = _13Canv(bTexture.w, bTexture.h)
 		var _fxctx = _fxCanv.getContext('2d');
 		
-		return _13Obj.extend(_retObj, {
+		return _13ObjExtend(_retObj, {
 			play: function(animName, animSpeed, animCoeff) {
-				for(var _i in this.anim)
+				for(var i in this.anim)
 				{
-					var _cAnim = this.anim[_i];
-					if(_i != animName) {
+					var _cAnim = this.anim[i];
+					if(i != animName) {
 						if(_cAnim.layer == this.anim[animName].layer) _cAnim.on = false;
 					}
 					else {
@@ -47,9 +42,9 @@ function _13Sprite(bTexture) {
 			refresh: function(timePassed) {
 				var _frSkel = _13Skeleton.Clone(this.skel);
 
-				for(var _i in this.anim)
+				for(var i in this.anim)
 				{
-					var _cAnim = this.anim[_i];
+					var _cAnim = this.anim[i];
 					
 					if(_cAnim.on) {
 						_cAnim.time += timePassed * _cAnim.speed;
@@ -57,7 +52,7 @@ function _13Sprite(bTexture) {
 						var _ap = _cAnim.time / _cAnim.dur;
 						
 						if (_cAnim.reset && _ap > 1) {
-							this.stop(_i);
+							this.stop(i);
 						}
 						else {
 							if(_cAnim.loop) {
@@ -77,10 +72,7 @@ function _13Sprite(bTexture) {
 							if(_cAnim.chain)
 							{
 								var _splSum = 0;
-								for(var i = 0; i < _cAnim.chain.split.length; i++)
-								{
-									var _cspl = _cAnim.chain.split[i];
-									
+								_13Each(_cAnim.chain.split, function(_cspl, i) {
 									if(_splSum + _cspl >= _ap)
 									{
 										_ap -= _splSum;
@@ -88,10 +80,10 @@ function _13Sprite(bTexture) {
 					
 										_cAnim.chain.trans[i](_frSkel, _ap, _ac);
 										
-										break;
+										return true;
 									}
 									else _splSum += _cspl;
-								}
+								});
 							}
 							else
 							{
@@ -107,10 +99,10 @@ function _13Sprite(bTexture) {
 			render: function(tContext, posX, posY) {
 				var _ctx = this.texture.getContext('2d');
 				
-				if(this.trail)
+				if(this.trail != null)
 				{
 					_ctx.save();
-					_ctx.fillStyle = '#770000';
+					_ctx.fillStyle = this.trail;
 					_ctx.globalCompositeOperation = 'source-atop';
 					_ctx.fillRect(0, 0, this.texture.width, this.texture.height);
 					_ctx.restore();
@@ -157,25 +149,23 @@ function _13Body(_world, bName, bW, bH) {
 		}
 	}
 	else if(bTexture != null) { // repeat texture on size
-		var _cCanvas = document.createElement('canvas');
-		_cCanvas.width = bW;
-		_cCanvas.height = bH;
+		var _cCanvas = _13Canv(bW, bH);
 		
 		var _cContext = _cCanvas.getContext('2d');
 		
-		_cContext.drawImage(bTexture, 0, 0, 100, 100, 0, 0, 100, 100);
-		_cContext.drawImage(bTexture, bTexture.width - 100, 0, 100, 100, _cCanvas.width - 100, 0, 100, 100);
+		_cContext.drawImage(bTexture, 0, 0, 50, 50, 0, 0, 50, 50);
+		_cContext.drawImage(bTexture, bTexture.width - 50, 0, 50, 50, _cCanvas.width - 50, 0, 50, 50);
 		
-		for(var i = 100; i < _cCanvas.width - 100; i += 100)
+		for(var i = 50; i < _cCanvas.width - 50; i += 50)
 		{
-			_cContext.drawImage(bTexture, 100, 0, 100, 100, i, 0, 100, 100);
+			_cContext.drawImage(bTexture, 50, 0, 50, 50, i, 0, 50, 50);
 		}
 		
-		for(var i = 0; i < _cCanvas.width; i += 100)
+		for(var i = 0; i < _cCanvas.width; i += 50)
 		{
-			for(var j = 100; j < _cCanvas.height; j += 100)
+			for(var j = 50; j < _cCanvas.height; j += 50)
 			{
-				_cContext.drawImage(bTexture, 100, 100, 100, 100, i, j, 100, 100);
+				_cContext.drawImage(bTexture, 50, 50, 50, 50, i, j, 50, 50);
 			}
 		}
 	}
@@ -184,14 +174,11 @@ function _13Body(_world, bName, bW, bH) {
 	
 	var lightC = [_world.media.lights[bName], _world.media.lights['rev_' + bName]];
 	
-	for(var i = 0; i < 2; i++)
-	{
+	_13Rep(2, function(i) {
 		if(lightC[i] != null)
 		{
 			var _cs = lightC[i].r;
-			_lCanv = document.createElement('canvas');
-			_lCanv.width = _cs;
-			_lCanv.height = _cs;
+			_lCanv = _13Canv(_cs, _cs);
 			
 			var _lCtx = _lCanv.getContext('2d');
 			
@@ -212,7 +199,7 @@ function _13Body(_world, bName, bW, bH) {
 			
 			lightC[i] = _lCanv;
 		}
-	}
+	});
 	
 	var revTexture = _13Sprite(_world.media.textures['rev_' + bName]);
 	if(revTexture != null) {
@@ -271,7 +258,7 @@ function _13Body(_world, bName, bW, bH) {
 
 			if(this.revved) {
 				this.texture = this.baserev.texture[1];
-				this.texture.skip = 5;
+				if(this.texture != null) this.texture.skip = 5;
 				this.light = this.baserev.light[1];
 			}
 			else

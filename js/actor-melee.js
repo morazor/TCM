@@ -4,12 +4,13 @@ function _13ActorMelee(_world, bName, bW, bH) {
 	_retObj.w *= 0.17;
 	_retObj.h *= 0.45;
 	
-	var _bulLife = 150;
+	var _bulLife = 60;
 	
-	for(var i = 0; i < _retObj.bullets.length; i++)
-		_retObj.bullets[i].afterUpdate = function () {
+	_13Each(_retObj.bullets, function(_cbul) {
+		_cbul.afterUpdate = function () {
 			this.scale = this.lifespan / _bulLife;
 		}
+	});
 	
 	var _didJump = false;
 	var _plSpeed = 0;
@@ -23,23 +24,24 @@ function _13ActorMelee(_world, bName, bW, bH) {
 	
 	if(bName == 'player')
 	{
-		_13Obj.extend(_retObj, {
+		_13ObjExtend(_retObj, {
 			atkspeed: 1.2,
-			damval: 10,
+			damval: 5,
 			health: new _13LimVal(250),
 			revpow: new _13LimVal(100, 0),
 			onRev: function() {
-				for(var i = 0; i < this.bullets.length; i++)
-				{
-					this.bullets[i].rev();
-				}
-			},
+				_13Each(this.bullets, function(_cbul) {
+					_cbul.rev();
+				});
+			}
 		});
 	}
 
-	return _13Obj.extend(_retObj, {
+	return _13ObjExtend(_retObj, {
 		onDie: function(bullet) {
-			for(var i = 0; i < this.bullets.length; i++) this.bullets[i].die();
+			_13Each(this.bullets, function(_cbul) {
+				_cbul.die();
+			});
 
 			var _vx = this.vel.x * 0.5;
 			var _mob = this;
@@ -47,7 +49,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			_13Skeleton.AllBones(this.texture.skel, function (tb) {		
 				if(tb.texture != null && tb.alpha != 0)
 				{
-					var _cBone = _13Obj.extend(_world.addBody(tb.texture), {
+					var _cBone = _13ObjExtend(_world.addBody(tb.texture), {
 						name: 'bone',
 						dead: false,
 						w: tb.size * 0.5,
@@ -85,31 +87,27 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		lastgy: 0,
 		isattack: false,
 		isshield: false,
-		canshield: (bName != 'enemy_skel_0'),
+		canshield: _retObj.level != 0,
 		beforeUpdate: function(timePassed) {
 			// REV CHECK
 			
 			if(this.revpow != null)
 			{
-				var _revbase = timePassed / 250;
 				if(this.revved)
 				{
-					this.revpow.add(-_revbase * (0.5 + this.health.perc));
-					if(this.revpow.perc == 0) {
-						this.rev();
-					}
+					if(this.revpow.perc == 0) this.rev();
 				}
 				else
 				{
-					this.revpow.add(_revbase * (1.5 - this.health.perc));
+					this.revpow.add(timePassed / 400);
 					if(this.revpow.perc == 1) {
 						this.rev();
 					}
-				}	
+				}
+				
+				this.revmult = (this.revved ? 1.5 : 1);
 			}			
-			
-			this.revmult = (this.revved ? 1.5 : 1);
-			
+
 			_plSpeed = this.speed * this.revmult;
 		
 			var _act = this.action;
@@ -139,7 +137,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			
 			if(_absx > _brakeTo)
 			{
-				var _brakeM = Math.max(_brakeTo, _absx - timePassed);
+				var _brakeM = Math.max(_brakeTo, _absx - timePassed * 2);
 				this.vel.x = (this.vel.x < 0 ? -_brakeM : _brakeM);
 			}
 		},
@@ -167,9 +165,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			
 			// WATCH
 			
-			for(var j = 0; j < this.baserev.texture.length; j++)
-			{
-				var _csk = this.baserev.texture[j];
+			_13Each(this.baserev.texture, function (_csk) {
 				
 				if(_csk != null)
 				{
@@ -184,12 +180,11 @@ function _13ActorMelee(_world, bName, bW, bH) {
 					else _headbone.x = 0;
 					
 					var _bbone =  _csk.skel.bones.body;
-					for(var i = 0; i < _bbone.length; i++)
-					{
-						_bbone[i].rot = _headbone.rot;
-					}
+					_13Each(_bbone, function(_cb) {
+						_cb.rot = _headbone.rot;
+					});
 				}
-			}
+			});
 			
 			// ATTACK
 			
@@ -237,6 +232,8 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			}
 		},
 		afterRefresh: function(timePassed) {
+			var _this = this;
+			
 			if(this.didatk > 0 && !this.stopatk && 
 				this.didatk < _atkTime - _preAtkTime) { // let the attack telegraph end
 				var _bulnum = 3;
@@ -247,8 +244,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				var _pde = { x:0, y: 0}; // ending sword point
 				
 				var _dn = ((this.facing) ? (-1) : (1));
-				for(var i = 0; i < 4; i++)
-				{
+				_13Rep(4, function() {
 					_pds = { x: _pde.x, y: _pde.y };					
 					
 					_cSkel = _cSkel.link[0];
@@ -256,36 +252,27 @@ function _13ActorMelee(_world, bName, bW, bH) {
 					
 					_pde.x += _dn * (_cSkel.x + Math.sin(_rotSum) * _cSkel.size);
 					_pde.y += _cSkel.y + Math.cos(_rotSum) * _cSkel.size;
-				}
+				})
 						
-				for(var i = 0; i < this.bullets.length; i++)
-				{ // BULLETS SPRAY
-					var _cbul = this.bullets[i];
-					
+				_13Each(this.bullets, function(_cbul) {
 					if(_cbul.dead)
 					{
 						_cbul.undie(_bulLife);
 						
-						for(var _i in _pds)
-						{
-							var _pdd = (_pde[_i] - _pds[_i]) * (0.1 + 0.3 * _bulnum); // _bulnum is 3 to 1
-							_cbul.pos[_i] = this.pos[_i] + _pds[_i] + _pdd;
+						for(var i in _pds)  {
+							var _pdd = (_pde[i] - _pds[i]) * (0.1 + 0.3 * _bulnum); // _bulnum is 3 to 1
+							_cbul.pos[i] = _this.pos[i] + _pds[i] + _pdd;
 						}
-						
-						_cbul.alpha = (_bulnum < 3 ? 0 : 1);
-						_cbul.dammod = 0.2 * _bulnum;
 
-						if(--_bulnum <= 0) break;
+						if(--_bulnum <= 0) return true;
 					}
-				}
+				});
 			}
 			
-			for(var i = 0; i < this.bullets.length; i++)
-			{
-				var _cbul = this.bullets[i];
-				_cbul.vel.x = this.vel.x
-				_cbul.vel.y = this.vel.y
-			}
+			_13Each(this.bullets, function(_cbul) {
+				_cbul.vel.x = _this.vel.x
+				_cbul.vel.y = _this.vel.y
+			});
 		}
 	});
 }

@@ -85,48 +85,45 @@ function _13Particles(_world, bName, maxNum) {
 					}
 				}
 
-				for(var j = 0; j < _pnum; j++)
-				{
-					for(var k = 0; k < this.list.length; k++)
-					{
-						var _cP = this.list[k];
+				_13Rep(_pnum, function () {
+					_13Each(_em.list, function (_cP) {
 						if(_cP.dead)
 						{
-							this.beforeEmit(_cP);
-							_13Obj.extend(_cP, {
+							_em.beforeEmit(_cP);
+							_13ObjExtend(_cP, {
 								dead: false,
-								lifespan: this.lifespan,
-								grav: this.grav,
-								collide: this.collide,
-								bounce: this.bounce,
-								autorot: this.autorot,
+								lifespan: _em.lifespan,
+								grav: _em.grav,
+								collide: _em.collide,
+								bounce: _em.bounce,
+								autorot: _em.autorot,
 								start: {},
 								beforeUpdate: function () {
-									for(var _i in _em.fx)
+									for(var i in _em.fx)
 									{
 										var _bp = this.lifespan / _em.lifespan; // 1 to 0
-										this[_i] = this.start[_i] * Math.pow((_em.fx) ? (_bp) : (1 -_bp), 0.5); // 0 to 1 if is false
+										this[i] = this.start[i] * Math.pow((_em.fx) ? (_bp) : (1 -_bp), 0.5); // 0 to 1 if is false
 									}
 								}
 							});
 							
-							for(var _i in this.min)
+							for(var i in _em.min)
 							{
-								if(_cP[_i].x != null)
+								if(_cP[i].x != null)
 								{
-									_cP[_i].x = this[_i].x + _13Random.between(this.min[_i].x, this.max[_i].x);
-									_cP[_i].y = this[_i].y + _13Random.between(this.min[_i].y, this.max[_i].y);
+									_cP[i].x = _em[i].x + _13Random.between(_em.min[i].x, _em.max[i].x);
+									_cP[i].y = _em[i].y + _13Random.between(_em.min[i].y, _em.max[i].y);
 								}
 								else {
-									_cP[_i] = this[_i] + _13Random.between(this.min[_i], this.max[_i]);
-									_cP.start[_i] = _cP[_i];
+									_cP[i] = _em[i] + _13Random.between(_em.min[i], _em.max[i]);
+									_cP.start[i] = _cP[i];
 								}
 							}
 							
-							break;
+							return true;
 						}
-					}
-				}
+					});
+				});
 			}
 		},
 		beforeEmit: function(_cP)

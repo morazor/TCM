@@ -8,12 +8,14 @@ function _13AI(mob, world, timePassed)
 		
 		mob._lastAI -= timePassed;
 		
-		var _act = mob.action;
+		if(mob._naction == null) mob._naction = _13ObjClone(mob.action, true);
+		mob.action = mob._naction;
+		var _act = mob._naction = _13ObjClone(mob.action, true);
 		
 		_act.watch = {
-				x : _pl.pos.x - mob.pos.x,
-				y: _pl.pos.y - mob.pos.y
-			}
+			x : _pl.pos.x - mob.pos.x,
+			y: _pl.pos.y - mob.pos.y
+		}
 		
 		if(mob._lastAI < 0)
 		{
@@ -47,13 +49,11 @@ function _13AI(mob, world, timePassed)
 						_act.move = null;
 						_act.attack = false;
 					}
-
-					mob._lastAI = 100;
 				}
 				else {
 					// MELEE AI
 					
-					_13Obj.extend(_act, {
+					_13ObjExtend(_act, {
 						move: 0,
 						shield: false,
 						attack: false,
@@ -71,7 +71,7 @@ function _13AI(mob, world, timePassed)
 								if((_pl.isattack && mob.isshield) ||
 									(_pl.isattack && Math.random() > 0.8) || 
 									(mob.isshield && Math.random() > 0.5) ||
-									Math.random() > 0.8) _act.shield = true;
+									Math.random() > 0.9) _act.shield = true;
 							}
 							
 							if(!_act.shield && Math.random() > 0.7) _act.attack = true;
@@ -82,8 +82,9 @@ function _13AI(mob, world, timePassed)
 							_act.move = 0;
 						}
 					}
-					mob._lastAI = 200;
 				}
+				
+				mob._lastAI = 200 / mob.revmult;
 			}
 		}
 	}

@@ -2,15 +2,12 @@ function _13Game() {
 	
 	var _allCanvas = [];
 	
-	for(var i = 0; i < 2; i++)
-	{
-		var _canvas = document.createElement('canvas')
-		_canvas.width = 1920;
-		_canvas.height = 1080;
+	_13Rep(2, function() {
+		var _canvas = _13Canv(1920, 1080);
 		_allCanvas.push(_canvas);
 		
 		document.body.appendChild(_canvas);
-	}
+	});
 	
 	/*** SCALE HANDLING ***/
 	
@@ -19,13 +16,12 @@ function _13Game() {
 	window.onresize = function () {
 		_scaleRatio = window.innerHeight / 1080;
 		
-		for(var i = 0; i < _allCanvas.length; i++)
-		{
-			_allCanvas[i].style.height = 1080 * _scaleRatio;
-			_allCanvas[i].style.width = 1920 * _scaleRatio;
-			_allCanvas[i].style.display = 'block';
-			_allCanvas[i].style.left = (window.innerWidth / 2 - _allCanvas[i].offsetWidth / 2) + 'px';
-		}
+		_13Each(_allCanvas, function(_cvs) {
+			_cvs.style.height = 1080 * _scaleRatio;
+			_cvs.style.width = 1920 * _scaleRatio;
+			_cvs.style.display = 'block';
+			_cvs.style.left = (window.innerWidth / 2 - _cvs.offsetWidth / 2) + 'px';
+		});
 	}
 	
 	window.onresize();
@@ -83,37 +79,7 @@ function _13Game() {
 	
 	var _ctx = _allCanvas[1].getContext('2d');
 	
-	_ctx.save();
-	_ctx.beginPath();
-	_ctx.fillStyle = 'black';
-	_ctx.fillRect(0, 0, 1920, 1080);
-	_ctx.fillStyle = '#aaaaaa';
 	
-	_ctx.translate(960, 1080);
-	
-	_ctx.textAlign = 'center';
-	
-	_ctx.font = '24px monospace';
-	_ctx.fillText('Developed for JS13K by morazor - Music by Vincenzo Canfora', 0, -20);
-	
-	_ctx.translate(0, -540);
-	
-	_ctx.font = '64px serif';
-	
-	_ctx.fillText("The cursed", 0, -30);
-	
-	_ctx.font = '96px serif';
-	_ctx.fillText("|", 0, 60);
-	
-	_ctx.font = '96px bold serif';
-	_ctx.fillStyle = 'white';
-	_ctx.textAlign = 'right';
-	_ctx.fillText("Mir", -12, 60);
-	
-	_ctx.fillStyle = 'red';
-	_ctx.textAlign = 'left';
-	_ctx.fillText("roR", 12, 60);
-	_ctx.restore();
 
 	var _world = new _13World(_media);
 	
@@ -123,6 +89,8 @@ function _13Game() {
 	
 	var _updTime = 30;
 	var _liveTime = 0;
+	
+	_13HUD(_ctx, _player, _world);
 	
 	setInterval(function () {
 		if(_world.status > 0)
@@ -153,44 +121,113 @@ function _13Game() {
 			var _camPos = { x: _player.pos.x + _camOffset.x, y:  _player.pos.y + _camOffset.y - _player.h * 0.5 }; // adding player height to center on player
 			
 			_world.render(_ctx, _camPos);
+			
+			if(_player.dead) _world.status = 2;
+			
+			_13HUD(_ctx, _player, _world);
 		}
-		
-		_13HUD(_ctx, _player, _world);
-		
 	}, _updTime);
 }
 
 function _13HUD(_ctx, _player, _world) {
-	switch(_world.status)
+	if(_world.status == 1)
 	{
-		case 1: // play
-		{
-			_ctx.save();
-			
-			_ctx.translate(960, 1080 - (_player.revpow == null ? 54 : 81));
-			
+		_ctx.save();
+		
+		_ctx.translate(860, 0);
+		
+		var _topd = 54;
+		
+		if(_player.revpow != null) {
+			_topd = 81;
+		
 			_ctx.fillStyle = 'black';
-			_ctx.fillRect(-102, 0, 204, 81);	
+			_ctx.fillRect(-2, 0, 204, 54);
+			if(_world.adv > 0) _ctx.drawImage(_world.media.textures.bone_pile_0, 90, 280, 200 * _world.adv, 50, 0, 2, 200 * _world.adv, 50);
+		}
+		
+		_ctx.translate(0, 1080 - _topd);
 
-			_ctx.fillStyle = '#990000';
-			_ctx.fillRect(-100, 2, 200 * _player.health.perc, 50);	
-			
-			if(_player.revpow != null)
-			{
-				_ctx.fillStyle = 'white';
-				_ctx.fillRect(-100, 54, 200 * _player.revpow.perc, 25);
-			}	
-			
-			_ctx.restore();
-		}
-		break;
-		case 2: // game over
+		_ctx.fillRect(-2, 0, 204, 81);	
+
+		_ctx.fillStyle = '#990000';
+		_ctx.fillRect(0, 2, 200 * _player.health.perc, 50);	
+
+		if(_player.revpow != null)
 		{
-		}
-		break;
-		case 3: // finished
+			_ctx.fillStyle = 'white';
+			_ctx.fillRect(0, 54, 200 * _player.revpow.perc, 25);
+		}	
+
+		_ctx.restore();
+	}
+	else
+	{
+		var _text = [ // intro
+			'Developed for JS13K by morazor',
+			'[click to start]',
+			'The cursed',
+			'Mir',
+			'Ror'
+		]
+		
+		if(_world.status == 2) // game over
 		{
+			_text = [ 
+				'',
+				'[reload to try again]',
+				'You died fighting for the right to be yourself',
+				'Game',
+				'Revo'
+			]
 		}
-		break;
+		else if(_world.status == 3) // finished
+		{
+			_text = [ 
+				'',
+				'[reload to try again]',
+				'You are finally free to live your life',
+				'Your',
+				'Yaw'
+			]
+		}
+	
+		_ctx.save();
+		_ctx.beginPath();
+		
+		_ctx.fillStyle = 'rgba(0,0,0,' + (_world.status == 0 ? 1 : 0.5) + ')';
+		_ctx.fillRect(0, 0, 1920, 1080);
+
+		_ctx.fillStyle = '#aaaaaa';
+		
+		_ctx.translate(960, 1080);
+		
+		_ctx.textAlign = 'center';
+		
+		_ctx.font = '24px monospace';
+		_ctx.fillText(_text[0], 0, -20);
+		
+		_ctx.translate(0, -340);
+		
+		_ctx.fillText(_text[1], 0, -20);
+		
+		_ctx.translate(0, -200);
+		
+		if(_world.status == 0) _ctx.font = '64px serif';
+		
+		_ctx.fillText(_text[2], 0, -30);
+		
+		_ctx.font = '96px serif';
+		_ctx.fillText("|", 0, 60);
+		
+		_ctx.font = '96px bold serif';
+		_ctx.fillStyle = 'white';
+		_ctx.textAlign = 'right';
+		_ctx.fillText(_text[3], -12, 60);
+		
+		_ctx.scale(-1, 1);
+		if(_world.status != 3) _ctx.fillStyle = 'red';
+		_ctx.fillText(_text[4], -12, 60);
+		_ctx.restore();
 	}
 }

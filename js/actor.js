@@ -4,7 +4,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	var _spnam = (bType == 'melee' ? 'sparks' : 'sparks_' + bName);
 	
 	var _sparks = _world.addParticles(_spnam, 10);
-	_13Obj.extend(_sparks, {
+	_13ObjExtend(_sparks, {
 		rotvel: 10,
 		grav: 0,
 		lifespan: 250,
@@ -46,38 +46,36 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	}
 	
 	_retObj.bullets = [];
-	for(var i = 0; i < 20; i++)
-	{
+	_13Rep(20, function() {
 		var _cbul = _world.addBody('bullet_' + bName);
-		_13Obj.extend(_cbul, {
+		_13ObjExtend(_cbul, {
 			grav: 0,
-			w: 20,
-			h: 20,
+			w: 25,
+			h: 25,
 			dead: true,
 			collide: false,
 			overlap: true,
 			owner: _retObj,
-			dammod: 1,
 			onOverlap: function (tbod) {
 				_retObj.onHit(tbod, this);
 			}
 		});
 		
 		_retObj.bullets.push(_cbul);
-	}
+	});
 	
 	var _lev = bName.match(/\d$/);
 	if(_lev != null) _lev = parseInt(_lev[0], 10);
 	
-	_13Obj.extend(_retObj, {
+	_13ObjExtend(_retObj, {
 		type: bType,
 		level: _lev,
 		faction: (bName == 'player' ? 'good' : 'evil'),
 		awake: false,
 		stopatk: false,
 		didatk: 0,
-		health: new _13LimVal(100),
-		damval: 5,
+		health: new _13LimVal(100 + 100 * _lev), // should go in melee-actor
+		damval: 2,
 		atkspeed: 1,
 		speed: 400,
 		revmult: 1,
@@ -85,7 +83,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 			// DAMAGE
 			if(!this.dead)
 			{
-				var _cdam = bullet.owner.damval * bullet.dammod * bullet.owner.revmult;
+				var _cdam = bullet.owner.damval * bullet.owner.revmult;
 				
 				if(this.revved) {
 					var _maxh = Math.min(this.revpow.c, _cdam); // maximum convertible damage is current rewpow
@@ -111,8 +109,8 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		},
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
-			this.vel.x = (this.pos.x > tbod.pos.x) ? (400) : (-400) * _pushc;
-			this.vel.y = -200 * _pushc;
+			this.vel.x = (this.pos.x > tbod.pos.x) ? (300) : (-300) * _pushc;
+			this.vel.y = -150 * _pushc;
 		},
 		onHit: function(tbod, bullet)
 		{
@@ -129,21 +127,21 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				{
 					if(tbod.isshield && tbod.facing != this.facing) { // MELEE ATTACK BLOCKED
 						_stopped = true;
-						this.pushback(tbod, 0.5);
-						tbod.pushback(this, 0.5);
+						this.pushback(tbod, 0.5 * tbod.revmult);
+						tbod.pushback(this, 0.5 * this.revmult);
 					}
 					else {
-						tbod.pushback(this, 1);
+						tbod.pushback(this, this.revmult);
 						tbod.damage(bullet);
 					}
 				}
 				else{
 					if(tbod.isshield && tbod.facing == (bullet.pos.x > tbod.pos.x)) { // RANGED ATTACK BLOCKED
 						_stopped = true;
-						tbod.pushback(bullet, 0.5);
+						tbod.pushback(bullet, 0.5 * this.revmult);
 					}
 					else {
-						tbod.pushback(bullet, 1);
+						tbod.pushback(bullet, this.revmult);
 						tbod.damage(bullet);
 					}
 				}

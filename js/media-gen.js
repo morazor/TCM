@@ -38,9 +38,7 @@ function _13TextureGen() {
 	var _pw = 4; // pattern size
 	var _plw = 1; // pattern line width
 
-	var _chainc = document.createElement('canvas');
-	_chainc.width = _pw;
-	_chainc.height = _pw;
+	var _chainc = _13Canv(_pw, _pw);
 
 	var _cpctx = _chainc.getContext('2d');
 	_cpctx.fillStyle = '#444444';
@@ -61,9 +59,7 @@ function _13TextureGen() {
 	// MIRROR
 	var _bls = 250;
 	
-	var _canvas = document.createElement('canvas');
-	_canvas.width = _bls;
-	_canvas.height = _bls;
+	var _canvas = _13Canv(_bls, _bls);
 	
 	var _ctx = _canvas.getContext('2d');
 	
@@ -86,8 +82,7 @@ function _13TextureGen() {
 	_ctx.fill();*/
 	
 	_ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-	for(var i = 0; i < 3; i++)
-	{
+	_13Rep(3, function(i) {
 		_ctx.save();
 		_ctx.rotate(Math.random() / 2 + Math.PI * 1.5 * i); // Math.PI * 2 / 3
 		
@@ -112,13 +107,11 @@ function _13TextureGen() {
 		}
 		
 		_ctx.restore();
-	}
+	})
 		
 	_retObj.mirror = _canvas;
 	
-	var _canvas = document.createElement('canvas');
-	_canvas.width = _bls;
-	_canvas.height = _bls;
+	var _canvas = _13Canv(_bls, _bls);
 	
 	var _ctx = _canvas.getContext('2d');
 	
@@ -138,9 +131,7 @@ function _13TextureGen() {
 	
 	var _bls = 25;
 	
-	var _canvas = document.createElement('canvas');
-	_canvas.width = _bls;
-	_canvas.height = _bls;
+	var _canvas = _13Canv(_bls, _bls);
 	
 	var _ctx = _canvas.getContext('2d');
 
@@ -165,9 +156,7 @@ function _13TextureGen() {
 	
 	var _bls = 25;
 	
-	var _canvas = document.createElement('canvas');
-	_canvas.width = _bls;
-	_canvas.height = _bls;
+	var _canvas = _13Canv(_bls, _bls);
 	
 	var _ctx = _canvas.getContext('2d');
 	_ctx.translate(_bls / 2, 0);
@@ -188,90 +177,27 @@ function _13TextureGen() {
 	_retObj.blood_enemy_skel_0 = _canvas;
 	_retObj.blood_enemy_skel_1 = _canvas;
 	
-	// BULLET PLAYER
-	
-	for(var i = 0; i < 2; i++)
-	{
-		var _bls = 30;
-		
-		var _canvas = document.createElement('canvas');
-		_canvas.width = _bls;
-		_canvas.height = _bls;
-		
-		var _ctx = _canvas.getContext('2d');
-		_ctx.translate(_bls / 2, _bls / 2)
-
-		var _grd = _ctx.createRadialGradient(0, 0, _bls * 0.2, 0, 0, _bls);
-
-		if(i > 0) {
-			_grd.addColorStop(0,'rgba(190,0,0,0.5)');
-			_grd.addColorStop(1,'rgba(0,0,0,0)');
-		}
-		else
-		{
-			_grd.addColorStop(0,'rgba(255,255,255,0.5)');
-			_grd.addColorStop(1,'rgba(255,190,0,0)');
-		}
-
-		_ctx.fillStyle = _grd;
-		
-		_ctx.arc(0, 0, _bls / 2, 0, Math.PI * 2);
-		_ctx.fill();
-
-		if(i > 0) {
-			_retObj.rev_bullet_player = _canvas;
-			_retObj.bullet_rev_player = _canvas;
-		}
-		else _retObj.bullet_player = _canvas;
-	}
-	
 	// SPARK
-	
-	var _sps = 10;
-	
-	var _canvas = document.createElement('canvas');
-	_canvas.width = _sps;
-	_canvas.height = _sps;
+	var _canvas = _13Canv(4, 4);
 	
 	var _ctx = _canvas.getContext('2d');
-
-	_ctx.translate(_sps / 2, _sps / 2);
-	_ctx.scale(_sps, _sps);
-	
-	
 	_ctx.fillStyle = 'yellow';
-	
-	for(var i = 0; i < 4; i++)
-	{
-		_ctx.beginPath();
-		
-		_ctx.moveTo(-0.1, 0);
-		_ctx.lineTo(0, 0.5);
-		_ctx.lineTo(0.1, 0);
-		
-		_ctx.closePath();
-		_ctx.fill();
-		
-		_ctx.rotate(Math.PI / 2);
-	}
-	
+	_ctx.arc(2, 2, 2, 0, Math.PI * 2);
+	_ctx.fill();
+
 	_retObj.sparks = _canvas;
 	
 	// AURAS
 	var _bls = 80;
 	
 	var _aurac = [ [ 'rgba(0,50,255,1)', 'rgba(0,0,255,0)' ], [ 'rgba(100,0,255,1)', 'rgba(50,0,255,0)' ] ];
-	for(var i = 0; i < _aurac.length; i++)
-	{
-		var _canvas = document.createElement('canvas');
-		_canvas.width = _bls;
-		_canvas.height = _bls;
+	_13Each(_aurac, function(_cau, i) {
+		var _canvas = _13Canv(_bls, _bls);
 		
 		var _ctx = _canvas.getContext('2d');
 		_ctx.translate(_bls / 2, _bls / 2)
 
 		var _grd = _ctx.createRadialGradient(0, 0, _bls * 0.2, 0, 0, _bls / 2);
-		var _cau = _aurac[i];
 
 		_grd.addColorStop(0, _cau[0]);
 		_grd.addColorStop(1, _cau[1]);
@@ -285,9 +211,7 @@ function _13TextureGen() {
 		
 		var _bcanvas = _canvas;
 		
-		var _canvas = document.createElement('canvas');
-		_canvas.width = _bls / 2;
-		_canvas.height = _bls / 2;
+		var _canvas = _13Canv(_bls / 2, _bls / 2);
 		
 		var _ctx = _canvas.getContext('2d');
 		_ctx.scale(0.5, 0.5);
@@ -297,12 +221,10 @@ function _13TextureGen() {
 		_retObj['aura_bullet_enemy_wotw_' + i] = _canvas;
 		_retObj['blood_enemy_wotw_' + i] = _canvas;
 		_retObj['sparks_enemy_wotw_' + i] = _canvas;
-	}
+	});
 
 	// WALL
-	var _canvas = document.createElement('canvas');
-	_canvas.width = 300;
-	_canvas.height = 300;
+	var _canvas = _13Canv(300, 300);
 	
 	var _ctx = _canvas.getContext('2d');
 	
@@ -793,31 +715,28 @@ function _13TextureGen() {
 	var _skelRev = _13Skeleton.Clone(_cSkel);
 
 	_13Skeleton.AllBones(_skelRev, function (tb) {
-	 	if(tb.path != null) 
-	 	{
-	 		for(var i = 0; i < tb.path.length; i++)
-	 		{
-	 			switch(tb.path[i].c) {
-	 				case _platec:
-	 				{
-	 					tb.path[i].c = '#222233';
-	 				}
-	 				break;
-	 				case _goldc:
-	 				case 'black':
-	 				{
-		 				tb.path[i].c = '#990000';
-	 				}
-	 				break;
-	 				
-	 			}
-	 			
-	 			if(tb.path[i].b != null)
-	 			{
-		 			tb.path[i].b = -tb.path[i].b;
-	 			}
-	 		}
-	 	}
+	 	
+	 	_13Each(tb.path, function(_cp) {
+			switch(_cp.c) {
+				case _platec:
+				{
+					_cp.c = '#222233';
+				}
+				break;
+				case _goldc:
+				case 'black':
+				{
+					_cp.c = '#990000';
+				}
+				break;
+				
+			}
+			
+			if(_cp.b != null)
+			{
+				_cp.b = -_cp.b;
+			}
+		});
 	});
 	 
 	var _skelObjRev = {
@@ -825,7 +744,7 @@ function _13TextureGen() {
 		anim: _skelObj.anim,
 		w: _fw,
 		h: _fh,
-		trail: true
+		trail: '#770000'
 	};
 	 
 	_13Skeleton.Init(_skelRev);
@@ -932,27 +851,27 @@ function _13TextureGen() {
 					break;
 				}
 					
-				for(var i = 0; i < tb.path.length; i++)
+				_13Each(tb.path, function(_cp) 
 				{
-					switch(tb.path[i].c) {
+					switch(_cp.c) {
 						case _platec:
 						{
-							tb.path[i].c = _ironc;
+							_cp.c = _ironc;
 						}
 						break;
 						case _chainc:
 						{
-							tb.path[i].c = _bonec;
-							tb.path[i].b = 1;
+							_cp.c = _bonec;
+							_cp.b = 1;
 						}
 						break;
 						case _goldc:
 						{
-							tb.path[i].c = _rustc;
+							_cp.c = _rustc;
 						}
 						break;	 				
 					}
-				}
+				})
 			}
 		 });
 		
@@ -980,9 +899,7 @@ function _13TextureGen() {
 	var _fw = 1920; // anim width
 	var _fh = 1080; // anim height
 	 
-	var _canvas = document.createElement('canvas');
-	_canvas.width = _fw;
-	_canvas.height = _fh;
+	var _canvas = _13Canv(_fw, _fh);
 	
 	_ctx = _canvas.getContext('2d');
 	
@@ -992,24 +909,21 @@ function _13TextureGen() {
 		
 	_ctx.fillStyle = 'white'; // sky - night: stars
 
-	for(var i = 0; i < 50; i++)
-	{
+	_13Rep(50, function() {
 		_ctx.beginPath();
 		_ctx.arc(Math.random() * _fw, Math.random() * _fh, Math.random() * _fh * 0.003, 0, Math.PI * 2);
 		_ctx.fill();
 		_ctx.closePath();
-	}
+	});
 	
 	var _hillsrnd = [];
-	for(var i = 0; i < 2; i++)
+	for(var i = 0; i < 1; i+=0.5)
 	{
-		var _isp = 0.5 * i;
-		
 		_hillsrnd.push({
-			x: -0.3 + _isp, y: 1,
-			x1: 0.1 + _isp + 0.2 * Math.random(), y1: 0.2 + 0.3 * Math.random(),
-			x2: 0.1 + _isp + 0.2 * Math.random(), y2: 0.2 + 0.3 * Math.random(),
-			x3: 0.8 + _isp, y3: 1
+			x: -0.3 + i, y: 1,
+			x1: 0.1 + i + 0.2 * Math.random(), y1: 0.2 + 0.3 * Math.random(),
+			x2: 0.1 + i + 0.2 * Math.random(), y2: 0.2 + 0.3 * Math.random(),
+			x3: 0.8 + i, y3: 1
 		})
 	}
 	
@@ -1042,9 +956,7 @@ function _13TextureGen() {
 	
 	for(var i = 0; i < 2; i++)
 	{
-		var _canvas = document.createElement('canvas');
-		_canvas.width = _bls;
-		_canvas.height = _bls;
+		var _canvas = _13Canv(_bls, _bls);
 		
 		var _ctx = _canvas.getContext('2d');
 		
@@ -1060,11 +972,11 @@ function _13TextureGen() {
 			});
 		}
 		
-		_ctx.translate(_bls * 0.2, _bls * 0.07);
+		_ctx.translate(_bls * 0.5, _bls * 0.07);
 		
 		for(var j = 0; j < 13; j++)
 		{
-			for(var k = 0; k < j * 2; k++)
+			for(var k = -j * 1.5; k < j * 1.5; k++)
 			{
 				var _cbt = _13Random.pick(_blist);
 				_ctx.save();

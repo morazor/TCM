@@ -5,21 +5,16 @@ var _13Skeleton = {
 			var _cw = tb.size * 2;
 			var _ch = tb.size * 3;
 			
-			tb.texture = document.createElement('canvas');
-			tb.texture.width = _cw;
-			tb.texture.height = _ch;
+			tb.texture = _13Canv(_cw, _ch);
 			
 			var _ctx = tb.texture.getContext('2d');
 			
 			_ctx.translate(_cw / 2, _ch / 3); // paths goes -0.5 < x < 0.5, 0 < y < 1
 
-			for(var k = 0; k < tb.path.length; k++)
-			{
+			_13Each(tb.path, function(_cPath) {
 				_ctx.save();
 				_ctx.beginPath();
 			
-				var _cPath = tb.path[k];
-				
 				if(typeof _cPath.c == 'object') {
 					_cPath.c = _ctx.createPattern(_cPath.c, 'repeat');
 				}
@@ -27,9 +22,7 @@ var _13Skeleton = {
 				_ctx.fillStyle = _cPath.c;
 				_ctx.moveTo(_cPath.p[0].x * tb.size, _cPath.p[0].y * tb.size);
 				
-				for(var i = 1; i < _cPath.p.length; i++)
-				{
-					var _cp = _cPath.p[i];
+				_13Each(_cPath.p, function(_cp) {
 					switch(_cp.form)
 					{
 						case 'arc': _ctx.arc(_cp.x * tb.size, _cp.y * tb.size, _cp.r * tb.size, _cp.as, _cp.ae, _cp.rev); break;
@@ -37,23 +30,20 @@ var _13Skeleton = {
 						case 'bez': _ctx.bezierCurveTo(_cp.x1 * tb.size, _cp.y1 * tb.size, _cp.x2 * tb.size, _cp.y2 * tb.size, _cp.x * tb.size, _cp.y * tb.size); break;
 						default: _ctx.lineTo(_cp.x * tb.size, _cp.y * tb.size); break;
 					}
-				}
+				});
 				
 				_ctx.closePath();
 				_ctx.fill();
 				
 				if(_cPath.b != null)
 				{
-					/*if(_cPath.b > 0) _ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-					else _ctx.strokeStyle = 'rgba(255,255,255,0.5)';*/
-					
 					_ctx.strokeStyle = 'rgba(127,127,127,0.5)';
 					_ctx.lineWidth = 1;
 					_ctx.stroke();
 				}
 				
 				_ctx.restore();
-			}
+			});
 			
 			tb.path = null;
 			
@@ -63,19 +53,17 @@ var _13Skeleton = {
 				_ctx.fillStyle = 'rgba(0,0,0,0.1)';
 				_ctx.globalCompositeOperation = 'source-atop';
 				
-				for(var i = 0; i < tb.z; i++)
-				{
+				_13Rep(tb.z, function () {
 					_ctx.fillRect(-_cw / 2, -_ch / 2, _cw, _ch);
-				}
+				});
 			}
 		}
 	
 		if(tb.link != null)
 		{
-			for(var i = 0; i < tb.link.length; i++)
-			{
-				this.Init(tb.link[i], true);
-			}
+			_13Each(tb.link, function(_tl) {
+				_13Skeleton.Init(_tl, true);
+			});
 		}
 		
 		if(!skipIndex)
@@ -97,10 +85,9 @@ var _13Skeleton = {
 		
 		if(tb.link != null)
 		{
-			for(var i = 0; i < tb.link.length; i++)
-			{
-				this._Index(tb.link[i], rootBone);
-			}
+			_13Each(tb.link, function(_tl) {
+				_13Skeleton._Index(_tl, rootBone);
+			});
 		}
 	},
 	Draw: function (tctx, tb) {
@@ -115,13 +102,9 @@ var _13Skeleton = {
 		
 		tctx.translate(0, tb.size);
 		
-		if(tb.link != null)
-		{
-			for(var i = 0; i < tb.link.length; i++)
-			{
-				if(tb.link[i].under) this.Draw(tctx, tb.link[i]);
-			}
-		}
+		_13Each(tb.link, function(_tl) {
+			if(_tl.under) _13Skeleton.Draw(tctx, _tl);
+		})
 		
 		tctx.translate(0, -tb.size);
 
@@ -129,13 +112,9 @@ var _13Skeleton = {
 		
 		tctx.translate(0, tb.size);
 		
-		if(tb.link != null)
-		{
-			for(var i = 0; i < tb.link.length; i++)
-			{
-				if(!tb.link[i].under) this.Draw(tctx, tb.link[i]);
-			}
-		}
+		_13Each(tb.link, function(_tl) {
+			if(!_tl.under) _13Skeleton.Draw(tctx, _tl);
+		})
 		
 		tctx.restore();
 	},
@@ -153,24 +132,22 @@ var _13Skeleton = {
 		}
 	},
 	Clone: function(tb) {
-		var _retVal = _13Obj.clone(tb);
+		var _retVal = _13ObjClone(tb);
 
 		if(tb.path != null)
 		{
 			_retVal.path = [];
-			for(var i = 0; i < tb.path.length; i++)
-			{
-				_retVal.path.push(_13Obj.clone(tb.path[i]));
-			}
+			_13Each(tb.path, function(_tp) {
+				_retVal.path.push(_13ObjClone(_tp));
+			});
 		}
 		
 		if(tb.link != null)
 		{
 			_retVal.link = [];
-			for(var i = 0; i < tb.link.length; i++)
-			{
-				_retVal.link.push(this.Clone(tb.link[i]));
-			}
+			_13Each(tb.link, function(_tl) {
+				_retVal.link.push(_13Skeleton.Clone(_tl));
+			});
 		}
 		
 		if(tb.bones != null)
@@ -185,10 +162,9 @@ var _13Skeleton = {
 		
 		if(tb.link != null)
 		{
-			for(var i = 0; i < tb.link.length; i++)
-			{
-				this.AllBones(tb.link[i], onBone);
-			}
+			_13Each(tb.link, function(_tl) {
+				_13Skeleton.AllBones(_tl, onBone);
+			});
 		}
 	},
 	Average: function(tb, sb, tc) {
@@ -199,10 +175,9 @@ var _13Skeleton = {
 		
 		if(tb.link != null)
 		{
-			for(var i = 0; i < tb.link.length; i++)
-			{
-				this.Average(tb.link[i], sb.link[i], tc);
-			}
+			_13Rep(tb.link.length, function(i) {
+				_13Skeleton.Average(tb.link[i], sb.link[i], tc);
+			});
 		}
 		
 		return tb;

@@ -15,7 +15,7 @@ function _13WorldGen(_world) {
 		_13Rep(5, function(i) {
 			var _cw = (i % 3 == 0 ? 600 : 200) + 50 * Math.round(Math.random() * 5);
 			
-			_walls.push({x: _cx +_cw / 2 * _dir, y: _cy, w: _cw, h: 500, t: Math.random() > 0.4, g: Math.random() > 0.4 });
+			_walls.push({x: _cx +_cw / 2 * _dir, y: _cy, w: _cw, h: 500, t: Math.random() > 0.4, g: Math.random() > 0.3 });
 			
 			_cx += _dir * (_cw - 50);
 			_cy += _13RandPick([-1, 1, 2]) * 50;
@@ -30,7 +30,7 @@ function _13WorldGen(_world) {
 	});
 
 	// FIXED STUFF MUST BE ADDED FIRST!
-	var _im = { t: Math.floor(Math.random() * 7), g: Math.floor(Math.random() * 7) };
+	var _im = { t: 0, g: 0 };
 	
 	_13Each(_walls, function(_bw) {
 		_13ObjExtend(_world.addBody('wall', _bw.w, _bw.h), {
@@ -175,6 +175,8 @@ function _13WorldGen(_world) {
 						});
 						
 						if(_player.revved) _player.rev();
+						else _13MediaSounds.rev.play();
+						
 						_player.health.add(_player.health.max);
 						_player.revpow = null;
 						_player.revmult = 1.3;

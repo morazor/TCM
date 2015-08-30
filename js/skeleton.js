@@ -12,37 +12,7 @@ var _13Skel = {
 			_ctx.translate(_cw / 2, _ch / 3); // paths goes -0.5 < x < 0.5, 0 < y < 1
 
 			_13Each(tb.path, function(_cPath) {
-				_ctx.save();
-				_ctx.beginPath();
-			
-				if(typeof _cPath.c == 'object') {
-					_cPath.c = _ctx.createPattern(_cPath.c, 'repeat');
-				}
-				
-				_ctx.fillStyle = _cPath.c;
-				_ctx.moveTo(_cPath.p[0].x * tb.size, _cPath.p[0].y * tb.size);
-				
-				_13Each(_cPath.p, function(_cp) {
-					switch(_cp.form)
-					{
-						case 'arc': _ctx.arc(_cp.x * tb.size, _cp.y * tb.size, _cp.r * tb.size, _cp.as, _cp.ae, _cp.rev); break;
-						case 'rect': _ctx.rect(_cp.x * tb.size, _cp.y * tb.size, _cp.w * tb.size, _cp.h * tb.size); break;
-						case 'bez': _ctx.bezierCurveTo(_cp.x1 * tb.size, _cp.y1 * tb.size, _cp.x2 * tb.size, _cp.y2 * tb.size, _cp.x * tb.size, _cp.y * tb.size); break;
-						default: _ctx.lineTo(_cp.x * tb.size, _cp.y * tb.size); break;
-					}
-				});
-				
-				_ctx.closePath();
-				_ctx.fill();
-				
-				if(_cPath.b != null)
-				{
-					_ctx.strokeStyle = 'rgba(127,127,127,0.5)';
-					_ctx.lineWidth = 1;
-					_ctx.stroke();
-				}
-				
-				_ctx.restore();
+				_13Path(_ctx, _cPath, tb.size);
 			});
 			
 			tb.path = null;

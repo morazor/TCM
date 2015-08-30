@@ -13,12 +13,13 @@ function _13ActorMelee(_world, bName, bW, bH) {
 	});
 	
 	var _didJump = false;
-	var _plSpeed = 0;
+	var _plSpeed;
 	var _plJump = 600;
 	
-	var _atkType = 0
-	var _atkTime = 0;
-	var _preAtkTime = 0;
+	var _atkType;
+	var _atkTime;
+	var _preAtkTime;
+	var _atkSpeed;
 
 	var _revMult = 1;
 	
@@ -110,7 +111,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 					}
 				}
 				
-				this.revmult = (this.revved ? 1.5 : 1);
+				this.revmult = (this.revved ? 1.3 : 1);
 			}			
 
 			_plSpeed = this.speed * this.revmult;
@@ -195,7 +196,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			
 			this.didatk -= timePassed;
 			
-			var _atkSpeed = this.atkspeed * this.revmult;
+			_atkSpeed = this.atkspeed * this.revmult;
 			
 			var _animatk = this.texture.anim.attack;
 			_atkTime = _animatk.dur / _atkSpeed;
@@ -275,6 +276,16 @@ function _13ActorMelee(_world, bName, bW, bH) {
 						for(var i in _pds)  {
 							var _pdd = (_pde[i] - _pds[i]) * (0.1 + 0.3 * _bulnum); // _bulnum is 3 to 1
 							_cbul.pos[i] = _this.pos[i] + _pds[i] + _pdd;
+							
+							/*** 
+							now i have this problem:
+							an attack does damage for each animation frame
+							slower attacks last more frames, so overall they do more damage
+							it shouln't be this way, usually you expect the same damage per attack
+							so i have to normalize damage to get the same damage per attack
+							***/
+							
+							_cbul.dammod = _atkSpeed;
 						}
 
 						if(--_bulnum <= 0) return true;

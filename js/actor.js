@@ -6,43 +6,42 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	var _sparks = _world.addParticles(_spnam, 10);
 	_13ObjExtend(_sparks, {
 		rotvel: 10,
-		grav: 0,
-		lifespan: 250,
+		grav: 1,
+		lifespan: 350,
 		freq: 0,
-		collide: 'wall'
+		collide: 'wall',
+		fx: { scale: true, alpha: false }
 	});
 	
-	_sparks.min.vel = { x: -250, y: -250 };
-	_sparks.max.vel = { x: 250, y: 250 };
+	_sparks.min.vel = { x: -350, y: -350 };
+	_sparks.max.vel = { x: 350, y: 350 };
 
-	var _blood = _world.addParticles('blood_' + bName, 5);
+	var _blood = _13ObjExtend(_world.addParticles('blood_' + bName, 5), {
+		lifespan: 350,
+		freq: 0,
+		grav: 1,
+		scale: 0.5,
+		fx: { scale: true }
+	});
 	
-	_blood.lifespan = 300;
-	_blood.freq = 0;
-	
-	_blood.scale = 0.5;
 	_blood.min.scale = 0.5;
 	_blood.max.scale = 1;
 
 	if(bName == 'player' || bName == 'rev_player') {
 		_blood.autorot = true;
-		_blood.grav = 1;
 	}
 	else {
 		_blood.min.rot = 0;
 		_blood.max.rot = 2.8;
 		_blood.min.rotvel = -10;
 		_blood.max.rotvel = 10;
-		_blood.grav = 0.2;
 	}
 	
-	_blood.fx = { scale: true };
-	_blood.min.vel = { x: -100, y: -100 };
-	_blood.max.vel = { x: 100, y: 100 };
+	_blood.min.vel = { x: -200, y: -200 };
+	_blood.max.vel = { x: 200, y: 200 };
 	
 	if(bType == 'ranged') {
-		_blood.fx.fade = true;
-		_sparks.fx = { scale: true, alpha: false };
+		_blood.fx.alpha = false;
 	}
 	
 	_retObj.bullets = [];
@@ -56,6 +55,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 			collide: false,
 			overlap: true,
 			owner: _retObj,
+			dammod: 1, // useful for damage normalization for different speed swing animations
 			onOverlap: function (tbod) {
 				_retObj.onHit(tbod, this);
 			}
@@ -83,7 +83,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 			// DAMAGE
 			if(!this.dead)
 			{
-				var _cdam = bullet.owner.damval * bullet.owner.revmult;
+				var _cdam = bullet.owner.damval * bullet.owner.revmult * bullet.dammod;
 				
 				if(this.revved) {
 					var _maxh = Math.min(this.revpow.c, _cdam); // maximum convertible damage is current rewpow
@@ -93,8 +93,8 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				}
 				else this.health.add(-_cdam);
 				
-				_blood.pos.x = (bullet.pos.x + this.pos.x) / 2;
-				_blood.pos.y = (bullet.pos.y + this.pos.y) / 2;
+				_blood.pos.x = (bullet.pos.x + this.pos.x * 2) / 3;
+				_blood.pos.y = (bullet.pos.y + this.pos.y * 2) / 3;
 				
 				_blood.vel.x = this.vel.x * 1.5;
 				_blood.vel.y = this.vel.y * 1.5;
@@ -169,7 +169,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 					}
 				}
 				else {
-					_13MediaSounds.block.play();
+					_13MediaSounds.miss.play();
 				}
 			}
 		},

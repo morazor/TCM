@@ -33,25 +33,17 @@ function _13TextureGen() {
 	/*** COLORS AND PATTERNS ***/
 	
 	var _pw = 4; // pattern size
-	var _plw = 1; // pattern line width
 
 	var _chainc = _13Canv(_pw, _pw);
 
-	var _cpctx = _chainc.getContext('2d');
-	_cpctx.fillStyle = '#444444';
-	_cpctx.fillRect(0, 0, _pw, _pw);
-
-	_cpctx.lineWidth = _plw;
-	_cpctx.strokeStyle = '#aaaadd';
-	_cpctx.arc(_pw / 2, _pw / 2, _pw / 2 - _plw / 2, 0, Math.PI * 2);
-	_cpctx.stroke();
+	_13Path(_chainc, { c: '#444444', p: [ [ 'rect', 0, 0, _pw, _pw ] ]});
+	_13Path(_chainc, { c: '#aaaadd', l: 1, p: [ [ 'arc', _pw / 2, _pw / 2, _pw / 2 - 1 / 2, 0, Math.PI * 2 ] ]});
 
 	var _platec = '#f5f5ff';
 	var _goldc = '#ffdd77';
 	var _ironc = '#c0c0c0'; 
 	var _bonec = '#ffffee'; 
 	var _rustc = '#dd9977';
-	var _borderc = 'rgba(127,127,127,0.5)';
 	
 	// MIRROR
 	var _bls = 250;
@@ -63,34 +55,25 @@ function _13TextureGen() {
 	_ctx.translate(_bls / 2, _bls / 2);
 	_ctx.scale(0.7, 1);
 	
-	_ctx.fillStyle = '#777777';
-	_ctx.beginPath();
-	_ctx.moveTo(_bls / 2, 0);
-	_ctx.arc(0, 0, _bls / 2 - 1, 0, Math.PI * 2);
-	_ctx.arc(0, 0, _bls / 2 - 15, 0, Math.PI * 2, true);
-	_ctx.closePath();
-	_ctx.fill();
-
-	/*_ctx.fillStyle = '#333333';
-	_ctx.beginPath();
-	_ctx.moveTo(_bls / 2, 0);
-	_ctx.arc(0, 0, _bls / 2 - 15, 0, Math.PI * 2);
-	_ctx.closePath();
-	_ctx.fill();*/
+	_13Path(_ctx, { c: '#777777', p: [
+		[ _bls / 2, 0],
+		[ 'arc', 0, 0, _bls / 2 - 1, 0, Math.PI * 2 ],
+		[ 'arc', 0, 0, _bls / 2 - 15, 0, Math.PI * 2, true ]
+	]});
 	
 	_ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-	_13Rep(3, function(i) {
+	_13Rep(3, function(i) { // BROKEN MIRROR
 		_ctx.save();
 		_ctx.rotate(Math.random() / 2 + Math.PI * 1.5 * i); // Math.PI * 2 / 3
 		
 		var _mstep = -_bls / 2 + 15;
 		
 		_ctx.translate(0, -_mstep);
-		_ctx.beginPath();
-		_ctx.moveTo(0, 0);
-		_ctx.lineTo(0, _mstep);
-		_ctx.stroke();
-		_ctx.closePath();
+		
+		_13Path(_ctx, { l: 1, p: [
+			[ 0, 0 ],
+			[ 0, _mstep ]
+		]});
 		
 		if(i > 0) {
 			_ctx.beginPath();
@@ -115,12 +98,10 @@ function _13TextureGen() {
 	_ctx.translate(_bls / 2, _bls / 2);
 	_ctx.scale(0.7, 1);
 
-	_ctx.fillStyle = '#333333';
-	_ctx.beginPath();
-	_ctx.moveTo(_bls / 2, 0);
-	_ctx.arc(0, 0, _bls / 2 - 15, 0, Math.PI * 2);
-	_ctx.closePath();
-	_ctx.fill();
+	_13Path(_ctx, { c: '#333333', p: [
+		[ _bls / 2, 0 ],
+		[ 'arc', 0, 0, _bls / 2 - 15, 0, Math.PI * 2 ]
+	]});
 	
 	_retObj.mirror_inner = _canvas;
 	
@@ -131,20 +112,13 @@ function _13TextureGen() {
 	var _canvas = _13Canv(_bls, _bls);
 	
 	var _ctx = _canvas.getContext('2d');
-
-	_ctx.fillStyle = '#ee0000';
-	_ctx.lineWidth = 1;
-	_ctx.strokeStyle = _borderc;
 	
 	_ctx.translate(0, _bls / 2);
-	
-	_ctx.beginPath();
-	_ctx.moveTo(0, 0);
-	_ctx.arc(_bls * 0.7, 0, _bls * 0.3 - 1, -1.4, 1.4);
-	_ctx.closePath();
 
-	_ctx.fill();
-	_ctx.stroke();
+	_13Path(_ctx, { c: '#ee0000', b: 1, p: [
+		[ 0, 0 ],
+		[ 'arc', _bls * 0.7, 0, _bls * 0.3 - 1, -1.4, 1.4 ]
+	]});
 
 	_retObj.blood_player = _canvas;
 	_retObj.blood_rev_player = _canvas;
@@ -158,18 +132,11 @@ function _13TextureGen() {
 	var _ctx = _canvas.getContext('2d');
 	_ctx.translate(_bls / 2, 0);
 
-	_ctx.fillStyle = _bonec;
-	_ctx.lineWidth = 1;
-	_ctx.strokeStyle = _borderc;
-	
-	_ctx.beginPath();
-	_ctx.moveTo(1, 1);
-	_ctx.lineTo(- _bls / 3 + 1, _bls - 1);
-	_ctx.lineTo(_bls / 3 - 1, _bls - 1);
-	_ctx.closePath();
-
-	_ctx.fill();
-	_ctx.stroke();
+	_13Path(_ctx, { c: _bonec, b: 1, p: [
+		[ 1, 1 ],
+		[ - _bls / 3 + 1, _bls - 1 ],
+		[ _bls / 3 - 1, _bls - 1 ]
+	]})
 
 	_retObj.blood_enemy_skel_0 = _canvas;
 	_retObj.blood_enemy_skel_1 = _canvas;
@@ -177,11 +144,10 @@ function _13TextureGen() {
 	// SPARK
 	var _canvas = _13Canv(4, 4);
 	
-	var _ctx = _canvas.getContext('2d');
-	_ctx.fillStyle = 'yellow';
-	_ctx.arc(2, 2, 2, 0, Math.PI * 2);
-	_ctx.fill();
-
+	_13Path(_canvas, { c: 'yellow', b: 1, p: [
+		[ 'arc', 2, 2, 2, 0, Math.PI * 2 ]
+	]});
+	
 	_retObj.sparks = _canvas;
 	
 	// AURAS
@@ -223,17 +189,13 @@ function _13TextureGen() {
 	// WALL
 	var _canvas = _13Canv(300, 300);
 	
-	var _ctx = _canvas.getContext('2d');
-	
-	_ctx.fillStyle = '#261f1f';
-	_ctx.beginPath();
-	_ctx.moveTo(0, 300);
-	_ctx.arc(25, 25, 25, Math.PI, Math.PI * 1.5);
-	_ctx.arc(275, 25, 25, Math.PI * 1.5, Math.PI * 2);
-	_ctx.lineTo(300, 300);
-	_ctx.closePath();
-	_ctx.fill();
-	
+	_13Path(_canvas, { c: '#261f1f', p: [
+		[ 0, 300 ],
+		[ 'arc', 25, 25, 25, Math.PI, Math.PI * 1.5 ],
+		[ 'arc', 275, 25, 25, Math.PI * 1.5, Math.PI * 2 ],
+		[ 300, 300 ]
+	]});
+
 	_retObj.wall = _canvas;
 	
 	// skeletal textures paths goes -0.5 < x < 0.5, 0 < y < 1
@@ -261,37 +223,37 @@ function _13TextureGen() {
 			under: true,
 			path: [
 				{ c: _chainc, p: [ // body
-					{ x: 0.25, y: 1 },
-					{ form: 'arc', x: 0, y: 1, r: 0.25, as: 0, ae: Math.PI },
-					{ form: 'arc', x: 0, y: 0, r: 0.2, as: Math.PI, ae: 0 }
+					[ 0.25, 1 ],
+					[ 'arc', 0, 1, 0.25, 0, Math.PI ],
+					[ 'arc', 0, 0, 0.2, Math.PI, 0 ]
 				] },
 				{ c: _platec, b: 1, p: [ // chest - back
-					{ x: 0.25, y: 1 },
-					{ form: 'arc', x: 0, y: 1, r: 0.25, as: 0, ae: Math.PI * 0.5 },
-					{ x: 0, y: 1 },
-					{ x: 0.1, y: 1 },
-					{ x: -0.05, y: 0.45 },
-					{ x: 0.25, y: 0.45 }
+					[ 0.25, 1 ],
+					[ 'arc', 0, 1, 0.25, 0, Math.PI * 0.5 ],
+					[ 0, 1 ],
+					[ 0.1, 1 ],
+					[ -0.05, 0.45 ],
+					[ 0.25, 0.45 ]
 				] },
 				{ c: _platec, b: 1, p: [ // chest - front
-					{ x: 0, y: 1.25 },
-					{ form: 'arc', x: 0, y: 1, r: 0.25, as: Math.PI * 0.5, ae: Math.PI * 0.9 },
-					{ x: -0.3, y: 0.9 },
-					{ x: -0.3, y: 0.6 },
-					{ x: -0.2, y: 0.15 },
-					{ x: -0.1, y: 0.25 },
-					{ x: 0, y: 0.4 },
-					{ x: 0.1, y: 0.45 },
-					{ x: 0.1, y: 0.5 },
-					{ x: 0, y: 0.55 },
-					{ x: -0.1, y: 1 },
-					{ x: 0, y: 1 }
+					[ 0, 1.25 ],
+					[ 'arc', 0, 1, 0.25, Math.PI * 0.5, Math.PI * 0.9 ],
+					[ -0.3, 0.9 ],
+					[ -0.3, 0.6 ],
+					[ -0.2, 0.15 ],
+					[ -0.1, 0.25 ],
+					[ 0, 0.4 ],
+					[ 0.1, 0.45 ],
+					[ 0.1, 0.5 ],
+					[ 0, 0.55 ],
+					[ -0.1, 1 ],
+					[ 0, 1 ]
 				] },
 				{ c: _platec, b: 1, p: [ // neck
-					{ x: -0.15, y: 1.2 },
-					{ x: -0.15, y: 1.5 },
-					{ x: 0.07, y: 1.5 },
-					{ x: 0.1, y: 1.2 }
+					[ -0.15, 1.2 ],
+					[ -0.15, 1.5 ],
+					[ 0.07, 1.5 ],
+					[ 0.1, 1.2 ]
 				] }
 			], 
 			link: [ { // head
@@ -302,16 +264,16 @@ function _13TextureGen() {
 				name: 'head',
 				path: [
 					{ c: _platec, b: 1, p: [ // head
-						{ x: 0.3, y: 0 },
-						{ form: 'arc', x: 0, y: 0, r: 0.3, as: 0, ae: Math.PI, rev: true  },
-						{ x: -0.3, y: 0.3 },
-						{ x: 0.4, y: 0.35 }
+						[ 0.3, 0 ],
+						[ 'arc', 0, 0, 0.3, 0, Math.PI, true  ],
+						[ -0.3, 0.3 ],
+						[ 0.4, 0.35 ]
 					] },
 					{ c: 'black', p: [ // eye 
-						{ x: 0.1, y: -0.04 },
-						{ x: 0.25, y: -0.04 },
-						{ x: 0.3, y: 0.02 },
-						{ x: 0.1, y: 0.02 }
+						[ 0.1, -0.04 ],
+						[ 0.25, -0.04 ],
+						[ 0.3, 0.02 ],
+						[ 0.1, 0.02 ]
 					] }
 				]
 			} ]
@@ -324,16 +286,16 @@ function _13TextureGen() {
 			under: true,
 			path: [
 				{ c: _chainc, p: [
-					{ x: 0.35, y: 0 },
-					{ form: 'arc', x: 0, y: 0, r: 0.35, as: -Math.PI * 0.8, ae: Math.PI * 0.8, rev: true },
-					{ form: 'arc', x: 0, y: 1, r: 0.2, as: Math.PI, ae: 0, rev: true }
+					[ 0.35, 0 ],
+					[ 'arc', 0, 0, 0.35, -Math.PI * 0.8, Math.PI * 0.8, true ],
+					[ 'arc', 0, 1, 0.2, Math.PI, 0, true ]
 				] },
 				{ c: _platec, b: 1, p: [
-					{ x: -0.05, y: 0.1 },
-					{ x: 0.38, y: -0.1 },
-					{ x: 0.38, y: 0.15 },
-					{ x: 0.25, y: 1 },
-					{ x: -0.05, y: 0.8 }
+					[ -0.05, 0.1 ],
+					[ 0.38, -0.1 ],
+					[ 0.38, 0.15 ],
+					[ 0.25, 1 ],
+					[ -0.05, 0.8 ]
 				] }
 			],
 			link: [
@@ -345,24 +307,24 @@ function _13TextureGen() {
 					name: 'leg_lk',
 					path: [
 						{ c: _chainc, p: [
-							{ x: 0.2, y: 0 },
-							{ form: 'arc', x: 0, y: 0, r: 0.2, as: 0, ae: Math.PI, rev: true },
-							{ x: 0, y: 1 },
-							{ x: 0.15, y: 1 }
+							[ 0.2, 0 ],
+							[ 'arc', 0, 0, 0.2, 0, Math.PI, true ],
+							[ 0, 1 ],
+							[ 0.15, 1 ]
 						] },
 						{ c: _platec, b: 1, p: [ // calf
-							{ x: -0.05, y: 0 },
-							{ x: 0.15, y: -0.1 },
-							{ x: 0.3, y: -0.3 },
-							{ x: 0.2, y: 1 },
-							{ x: 0.1, y: 1 }
+							[ -0.05, 0 ],
+							[ 0.15, -0.1 ],
+							[ 0.3, -0.3 ],
+							[ 0.2, 1 ],
+							[ 0.1, 1 ]
 						] },
 						{ c: _platec, b: 1, p: [ // feet
-							{ x: 0.2, y: 0.9 },
-							{ x: -0.05, y: 1 },
-							{ x: -0.05, y: 1.15 },
-							{ x: 0.65, y: 1.15 },
-							{ x: 0.65, y: 1.1 }
+							[ 0.2, 0.9 ],
+							[ -0.05, 1 ],
+							[ -0.05, 1.15 ],
+							[ 0.65, 1.15 ],
+							[ 0.65, 1.1 ]
 						] }
 					]
 				}
@@ -383,20 +345,20 @@ function _13TextureGen() {
 		name: 'arm',
 		path: [
 			{ c: _chainc, p: [
-				{ x: 0.35, y: 0 },
-				{ form: 'arc', x: 0, y: 0, r: 0.35, as: 0, ae: Math.PI, rev: true },
-				{ form: 'arc', x: 0, y: 1, r: 0.2, as: Math.PI, ae: 0, rev: true }
+				[ 0.35, 0 ],
+				[ 'arc', 0, 0, 0.35, 0, Math.PI, true ],
+				[ 'arc', 0, 1, 0.2, Math.PI, 0, true ]
 			] },
 			{ c: _platec, b: 1, p: [
-				{ x: -0.35, y: 0.15 },
-				{ x: 0.35, y: 0.15 },
-				{ x: 0.25, y: 0.8 },
-				{ x: -0.25, y: 0.8 }
+				[ -0.35, 0.15 ],
+				[ 0.35, 0.15 ],
+				[ 0.25, 0.8 ],
+				[ -0.25, 0.8 ]
 			] },
 			{ c: _platec, b: 1, p: [
-				{ x: 0.38, y: 0 },
-				{ form: 'arc', x: 0, y: 0, r: 0.38, as: 0, ae: Math.PI, rev: true },
-				{ x: 0, y: 0.3 }
+				[ 0.38, 0 ],
+				[ 'arc', 0, 0, 0.38, 0, Math.PI, true ],
+				[ 0, 0.3 ]
 			] }
 		],
 		link: [ {
@@ -407,26 +369,26 @@ function _13TextureGen() {
 				name: 'arm_lk',
 				path: [
 					{ c: _chainc, p: [ 
-						{ x: 0.2, y: 0 },
-						{ form: 'arc', x: 0, y: 0, r: 0.2, as: 0, ae: Math.PI, rev: true },
-						{ x: 0, y: 1 },
-						{ x: 0.15, y: 1 }
+						[ 0.2, 0 ],
+						[ 'arc', 0, 0, 0.2, 0, Math.PI, true ],
+						[ 0, 1 ],
+						[ 0.15, 1 ]
 					] },
 					{ c: _platec, b: 1, p: [ // hand
-						{ x: -0.1, y: 0.9 },
-						{ x: 0.2, y: 0.9 },
-						{ x: 0.25, y: 1.2 },
-						{ x: 0.20, y: 1.3 },
-						{ x: -0.05, y: 1.3 },
-						{ x: -0.1, y: 1.2 }
+						[ -0.1, 0.9 ],
+						[ 0.2, 0.9 ],
+						[ 0.25, 1.2 ],
+						[ 0.20, 1.3 ],
+						[ -0.05, 1.3 ],
+						[ -0.1, 1.2 ]
 					] },
 					{ c: _platec, b: 1, p: [ // vanbrace
-						{ x: -0.22, y: 0.15 },
-						{ x: 0, y: -0.1 },
-						{ x: 0.22, y: 0.15 },
-						{ x: 0.22, y: 0.9 },
-						{ x: 0.12, y: 1.1 },
-						{ x: -0.12, y: 0.9 }
+						[ -0.22, 0.15 ],
+						[ 0, -0.1 ],
+						[ 0.22, 0.15 ],
+						[ 0.22, 0.9 ],
+						[ 0.12, 1.1 ],
+						[ -0.12, 0.9 ]
 					] }
 				],
 				link: [ {
@@ -438,17 +400,17 @@ function _13TextureGen() {
 					under: true,
 					path: [ // weapon path y must be 1 at max for hit calculations
 						{ c: _platec, b: 1, p: [ // blade
-							{ x: 0.05, y: 0 },
-							{ x: -0.05, y: 0 },
-							{ x: -0.05, y: 0.85 },
-							{ x: 0, y: 1 },
-							{ x: 0.05, y: 0.85 }
+							[ 0.05, 0 ],
+							[ -0.05, 0 ],
+							[ -0.05, 0.85 ],
+							[ 0, 1 ],
+							[ 0.05, 0.85 ]
 						] },
 						{ c: _goldc, b: 1, p: [ // hilt
-							{ x: 0.07, y: 0.1 },
-							{ x: -0.07, y: 0.1 },
-							{ x: -0.14, y: 0.17 },
-							{ x: 0.14, y: 0.17 }
+							[ 0.07, 0.1 ],
+							[ -0.07, 0.1 ],
+							[ -0.14, 0.17 ],
+							[ 0.14, 0.17 ]
 						] }
 					]
 				} ]
@@ -485,19 +447,19 @@ function _13TextureGen() {
 		name: 'shield',
 		path: [
 			{ c: _platec, b: 1, p: [ // base
-				{ x: 0.4, y: 0 },
-				{ form: 'bez', x1: 0.4, y1: 0.6, x2: 0.5, y2: 1, x: 0, y: 1.4 },
-				{ form: 'bez', x1: -0.5, y1: 1, x2: -0.4, y2: 0.6, x: -0.4, y: 0 }
+				[ 0.4, 0 ],
+				[ 'bez', 0.4, 0.6, 0.5, 1, 0, 1.4 ],
+				[ 'bez', -0.5, 1, -0.4, 0.6, -0.4, 0 ]
 			] },
 			{ c: _goldc, b: 1, p: [ // cross
-				{ x: 0, y: 0.1 },
-				{ x: 0.05, y: 0.45 },
-				{ x: 0.35, y: 0.5 },
-				{ x: 0.05, y: 0.55 },
-				{ x: 0, y: 1.3 },
-				{ x: -0.05, y: 0.55 },
-				{ x: -0.35, y: 0.5 },
-				{ x: -0.05, y: 0.45 }
+				[ 0, 0.1 ],
+				[ 0.05, 0.45 ],
+				[ 0.35, 0.5 ],
+				[ 0.05, 0.55 ],
+				[ 0, 1.3 ],
+				[ -0.05, 0.55 ],
+				[ -0.35, 0.5 ],
+				[ -0.05, 0.45 ]
 			] }
 		]
 	};
@@ -506,10 +468,10 @@ function _13TextureGen() {
 	_cshield2.name = 'shieldside';
 	_cshield2.alpha = 0;
 	_cshield2.path = [{ c: _platec, b: 1, p: [ // sideways
-		{ x: -0.1, y: 0 },
-		{ x: 0.2, y: 0 },
-		{ x: 0.2, y: 1.4 },
-		{ x: -0.1, y: 1.4 }
+		[ -0.1, 0 ],
+		[ 0.2, 0 ],
+		[ 0.2, 1.4 ],
+		[ -0.1, 1.4 ]
 	] }];
 
 	_farm.link[0].link[0].link = [_cshield, _cshield2];
@@ -728,11 +690,6 @@ function _13TextureGen() {
 				break;
 				
 			}
-			
-			if(_cp.b != null)
-			{
-				_cp.b = -_cp.b;
-			}
 		});
 	});
 	 
@@ -752,7 +709,7 @@ function _13TextureGen() {
 	 for(var k = 0; k < 2; k++)
 	 {
 		var _skelSkel = _13Skel.Clone(_cSkel);
-		
+
 		_13Skel.AllBones(_skelSkel, function (tb) {
 			if(tb.path != null) 
 			{
@@ -761,33 +718,33 @@ function _13TextureGen() {
 					case 'head':
 					{
 						tb.path[0].p = [
-							{ x: 0.3, y: 0 },
-							{ form: 'arc', x: 0, y: 0, r: 0.3, as: 0, ae: Math.PI * 0.8, rev: true  },
-							{ x: 0.1, y: 0.25 },
-							{ x: 0.2, y: 0.4 },
-							{ x: 0.4, y: 0.4 }
+							[ 0.3, 0 ],
+							[ 'arc', 0, 0, 0.3, 0, Math.PI * 0.8, true  ],
+							[ 0.1, 0.25 ],
+							[ 0.2, 0.4 ],
+							[ 0.4, 0.4 ]
 						]
 						
 						tb.path[1].p = [ 
-							{ x: 0.05, y: -0.07 },
-							{ x: 0.25, y: -0.07 },
-							{ x: 0.3, y: 0.04 }
+							[ 0.05, -0.07 ],
+							[ 0.25, -0.07 ],
+							[ 0.3, 0.04 ]
 						]
 					}
 					break;
 					case 'body':
 					{					
 						tb.path[0].p = [
-							{ x: 0.1, y: 1 },
-							{ 'form': 'arc', x: 0.05, y: 0, r: 0.15, as: Math.PI * 0.4, ae: Math.PI * 2.2 },
-							{ x: 0.2, y: 0.2 },
-							{ x: 0.2, y: 1 }
+							[ 0.1, 1 ],
+							[ 'arc', 0.05, 0, 0.15, Math.PI * 0.4, Math.PI * 2.2 ],
+							[ 0.2, 0.2 ],
+							[ 0.2, 1 ]
 						]
 						
 						tb.path[3].c = _chainc;
 						tb.path[3].p = [
-							{ x: -0.1, y: 0.9 },
-							{ 'form': 'rect', x: -0.05, y: 1.2, w: 0.1, h: 0.3 }
+							[ -0.1, 0.9 ],
+							[ 'rect', -0.05, 1.2, 0.1, 0.3 ]
 						]
 					}
 					break;
@@ -801,9 +758,9 @@ function _13TextureGen() {
 						if(k < 1) tb.path.splice(1, 1);
 						
 						tb.path[0].p = [
-							{ x: -0.13, y: 0.5 },
-							{ 'form': 'arc', x: 0, y: 0, r: 0.1, as: Math.PI * 0.8, ae: Math.PI * 2.2 },
-							{ 'form': 'arc', x: 0, y: 1, r: 0.1, as: -Math.PI * 0.3, ae: -Math.PI * 0.7 }
+							[ -0.13, 0.5 ],
+							[ 'arc', 0, 0, 0.1, Math.PI * 0.8, Math.PI * 2.2 ],
+							[ 'arc', 0, 1, 0.1, -Math.PI * 0.3, -Math.PI * 0.7 ]
 						]
 					}
 					break;
@@ -811,9 +768,9 @@ function _13TextureGen() {
 					case 'arm_lk':
 					{
 						tb.path[0].p = [
-							{ x: -0.1, y: 0.5 },
-							{ 'form': 'arc', x: 0, y: 0, r: 0.1, as: Math.PI * 0.6, ae: Math.PI * 2.4 },
-							{ 'form': 'arc', x: 0, y: 1, r: 0.1, as: -Math.PI * 0.4, ae: -Math.PI * 0.6 }
+							[ -0.1, 0.5 ],
+							[ 'arc', 0, 0, 0.1, Math.PI * 0.6, Math.PI * 2.4 ],
+							[ 'arc', 0, 1, 0.1, -Math.PI * 0.4, -Math.PI * 0.6 ]
 						]
 					}
 					break;
@@ -825,13 +782,13 @@ function _13TextureGen() {
 						}
 						else{
 							tb.path[0].p = [
-								{ x: 0.6, y: 0.5 },
-								{ 'form': 'arc', x: 0, y: 0.5, r: 0.6, as: 0, ae: Math.PI * 2 }
+								[ 0.6, 0.5 ],
+								[ 'arc', 0, 0.5, 0.6, 0, Math.PI * 2 ]
 							]
 							
 							tb.path[1].p = [
-								{ x: 0.5, y: 0.5 },
-								{ 'form': 'arc', x: 0, y: 0.5, r: 0.5, as: 0, ae: Math.PI * 2 }
+								[ 0.5, 0.5 ],
+								[ 'arc', 0, 0.5, 0.5, 0, Math.PI * 2 ]
 							]
 						}
 					}
@@ -839,10 +796,10 @@ function _13TextureGen() {
 					case 'shieldside':
 					{
 						tb.path[0].p = [
-							{ x: -0.1, y: -0.1 },
-							{ x: 0.2, y: -0.1 },
-							{ x: 0.2, y: 1.1 },
-							{ x: -0.1, y: 1.1 }
+							[ -0.1, -0.1 ],
+							[ 0.2, -0.1 ],
+							[ 0.2, 1.1 ],
+							[ -0.1, 1.1 ]
 						]
 					}
 					break;
@@ -898,47 +855,31 @@ function _13TextureGen() {
 	 
 	var _canvas = _13Canv(_fw, _fh);
 	
-	_ctx = _canvas.getContext('2d');
-	
-	_ctx.fillStyle = '#020408'; // sky - night
-	
-	_ctx.fillRect(0, 0, _fw, _fh);
-		
-	_ctx.fillStyle = 'white'; // sky - night: stars
+	_13Path(_canvas, { c: '#020408', p: [
+		[ 'rect', 0, 0, _fw, _fh ]
+	]});
 
 	_13Rep(50, function() {
-		_ctx.beginPath();
-		_ctx.arc(Math.random() * _fw, Math.random() * _fh, Math.random() * _fh * 0.003, 0, Math.PI * 2);
-		_ctx.fill();
-		_ctx.closePath();
+		_13Path(_canvas, { c: 'white', p: [
+			[ 'arc', Math.random() * _fw, Math.random() * _fh, Math.random() * _fh * 0.003, 0, Math.PI * 2 ]
+		]});
 	});
-	
-	var _hillsrnd = [];
-	for(var i = 0; i < 1; i+=0.5)
-	{
-		_hillsrnd.push({
-			x: -0.3 + i, y: 1,
-			x1: 0.1 + i + 0.2 * Math.random(), y1: 0.2 + 0.3 * Math.random(),
-			x2: 0.1 + i + 0.2 * Math.random(), y2: 0.2 + 0.3 * Math.random(),
-			x3: 0.8 + i, y3: 1
-		})
-	}
 	
 	var _hillsc = ['#04091a', '#050b21'];
 
 	for(var j = 0; j < 2; j++)
 	{
-		_ctx.beginPath();
-		
-		_ctx.fillStyle = _hillsc[j];
-		
-		var _crnd = _hillsrnd[j];
-		
-		_ctx.moveTo(_crnd.x * _fw, _crnd.y * _fh);
-		_ctx.bezierCurveTo(_crnd.x1 * _fw, _crnd.y1 * _fh, _crnd.x2 * _fw, _crnd.y2 * _fh, _crnd.x3 * _fw, _crnd.y3 * _fh);
-		
-		_ctx.closePath();
-		_ctx.fill();
+		var i = j / 2;
+
+		_13Path(_canvas, { c: _hillsc[j], p: [
+			[ -0.3 + i, 0.6 ],
+			[
+				'bez',
+				0.1 + i + 0.2 * Math.random(), 0.1 + 0.2 * Math.random(),
+				0.1 + i + 0.2 * Math.random(), 0.1 + 0.2 * Math.random(),
+				0.8 + i, 0.6
+			]
+		]}, _fw);
 	}
 	
 	_retObj.landscape = _canvas;
@@ -1038,16 +979,14 @@ function _13TextureGen() {
 		var _ctx = _canvas.getContext('2d');
 		
 		_ctx.translate(_bls / 2, _bls);
-		_ctx.fillStyle = '#444444';
-		
+
 		_ctx.rotate(_13RandBetween(-0.2, 0.2));
 		
-		_ctx.beginPath();
-		_ctx.moveTo(-25, 25);
-		_ctx.lineTo(25, 25);
-		_ctx.arc(0, -40, 25, 0, Math.PI, true);
-		_ctx.closePath();
-		_ctx.fill();
+		_13Path(_ctx, { c: '#444444', p: [
+			[ -25, 25 ],
+			[ 25, 25 ],
+			[ 'arc', 0, -40, 25, 0, Math.PI, true ]
+		]});
 		
 		_ctx.fillStyle = 'rgba(0,0,0,0.5)';
 		
@@ -1140,7 +1079,7 @@ var SBData = {
       songData: [
         { // Instrument 0
           i: [
-          0, // OSC1_WAVEFORM
+		  0, // OSC1_WAVEFORM
           0, // OSC1_VOL
           92, // OSC1_SEMI
           0, // OSC1_XENV
@@ -1149,10 +1088,10 @@ var SBData = {
           92, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
-          255, // NOISE_VOL
-          12, // ENV_ATTACK
+          180, // NOISE_VOL
+          28, // ENV_ATTACK
           0, // ENV_SUSTAIN
-          52, // ENV_RELEASE
+          39, // ENV_RELEASE
           0, // ARP_CHORD
           0, // ARP_SPEED
           0, // LFO_WAVEFORM
@@ -1160,10 +1099,10 @@ var SBData = {
           0, // LFO_FREQ
           1, // LFO_FX_FREQ
           2, // FX_FILTER
-          27, // FX_FREQ
-          166, // FX_RESONANCE
+          24, // FX_FREQ
+          157, // FX_RESONANCE
           0, // FX_DIST
-          116, // FX_DRIVE
+          255, // FX_DRIVE
           0, // FX_PAN_AMT
           0, // FX_PAN_FREQ
           0, // FX_DELAY_AMT
@@ -1179,35 +1118,35 @@ var SBData = {
         }
       ],
       rowLen: 5513,   // In sample lengths
-      patternLen: 2,  // Rows per pattern
-      endPattern: 3  // End pattern
+      patternLen: 3,  // Rows per pattern
+      endPattern: 2  // End pattern
     },
 	'hit': {
 	  songData: [
         { // Instrument 0
           i: [
-          2, // OSC1_WAVEFORM
-          255, // OSC1_VOL
+          0, // OSC1_WAVEFORM
+          0, // OSC1_VOL
           92, // OSC1_SEMI
           0, // OSC1_XENV
-          3, // OSC2_WAVEFORM
+          0, // OSC2_WAVEFORM
           0, // OSC2_VOL
           92, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
           255, // NOISE_VOL
           0, // ENV_ATTACK
-          39, // ENV_SUSTAIN
-          20, // ENV_RELEASE
+          17, // ENV_SUSTAIN
+          44, // ENV_RELEASE
           0, // ARP_CHORD
           0, // ARP_SPEED
           2, // LFO_WAVEFORM
           0, // LFO_AMT
           0, // LFO_FREQ
-          1, // LFO_FX_FREQ
+          0, // LFO_FX_FREQ
           2, // FX_FILTER
-          17, // FX_FREQ
-          0, // FX_RESONANCE
+          18, // FX_FREQ
+          28, // FX_RESONANCE
           0, // FX_DIST
           255, // FX_DRIVE
           0, // FX_PAN_AMT
@@ -1225,34 +1164,34 @@ var SBData = {
         }
       ],
       rowLen: 5513,   // In sample lengths
-      patternLen: 2,  // Rows per pattern
-      endPattern: 3  // End pattern
+      patternLen: 3,  // Rows per pattern
+      endPattern: 2  // End pattern
     },
 	'block': {
 	  songData: [
         { // Instrument 0
           i: [
-          3, // OSC1_WAVEFORM
-          255, // OSC1_VOL
-          161, // OSC1_SEMI
+		  2, // OSC1_WAVEFORM
+          5, // OSC1_VOL
+          128, // OSC1_SEMI
           0, // OSC1_XENV
           3, // OSC2_WAVEFORM
           0, // OSC2_VOL
           92, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
-          31, // NOISE_VOL
+          20, // NOISE_VOL
           0, // ENV_ATTACK
-          15, // ENV_SUSTAIN
-          33, // ENV_RELEASE
-          104, // ARP_CHORD
-          4, // ARP_SPEED
-          1, // LFO_WAVEFORM
+          9, // ENV_SUSTAIN
+          47, // ENV_RELEASE
+          19, // ARP_CHORD
+          5, // ARP_SPEED
+          0, // LFO_WAVEFORM
           0, // LFO_AMT
           0, // LFO_FREQ
-          1, // LFO_FX_FREQ
+          0, // LFO_FX_FREQ
           1, // FX_FILTER
-          0, // FX_FREQ
+          8, // FX_FREQ
           0, // FX_RESONANCE
           0, // FX_DIST
           255, // FX_DRIVE
@@ -1265,24 +1204,24 @@ var SBData = {
           p: [1],
           // Columns
           c: [
-            {n: [206],
+            {n: [180],
              f: []}
           ]
         }
       ],
       rowLen: 5513,   // In sample lengths
-      patternLen: 2,  // Rows per pattern
-      endPattern: 3  // End pattern
+      patternLen: 6,  // Rows per pattern
+      endPattern: 5  // End pattern
     },
 	'shoot': {
 	  songData: [
         { // Instrument 0
           i: [
-          1, // OSC1_WAVEFORM
+          0, // OSC1_WAVEFORM
           0, // OSC1_VOL
           92, // OSC1_SEMI
           0, // OSC1_XENV
-          3, // OSC2_WAVEFORM
+          0, // OSC2_WAVEFORM
           0, // OSC2_VOL
           92, // OSC2_SEMI
           0, // OSC2_DETUNE
@@ -1290,18 +1229,18 @@ var SBData = {
           255, // NOISE_VOL
           0, // ENV_ATTACK
           0, // ENV_SUSTAIN
-          59, // ENV_RELEASE
+          61, // ENV_RELEASE
           0, // ARP_CHORD
           0, // ARP_SPEED
-          3, // LFO_WAVEFORM
-          87, // LFO_AMT
-          11, // LFO_FREQ
+          0, // LFO_WAVEFORM
+          131, // LFO_AMT
+          10, // LFO_FREQ
           1, // LFO_FX_FREQ
           2, // FX_FILTER
-          96, // FX_FREQ
+          24, // FX_FREQ
           0, // FX_RESONANCE
           0, // FX_DIST
-          255, // FX_DRIVE
+          194, // FX_DRIVE
           0, // FX_PAN_AMT
           0, // FX_PAN_FREQ
           0, // FX_DELAY_AMT
@@ -1317,54 +1256,100 @@ var SBData = {
         }
       ],
       rowLen: 5513,   // In sample lengths
-      patternLen: 2,  // Rows per pattern
-      endPattern: 3  // End pattern
+      patternLen: 3,  // Rows per pattern
+      endPattern: 2  // End pattern
     },
-	'rev': {
+	'miss': {
 	  songData: [
         { // Instrument 0
           i: [
-          1, // OSC1_WAVEFORM
-          255, // OSC1_VOL
-          92, // OSC1_SEMI
+		  0, // OSC1_WAVEFORM
+          0, // OSC1_VOL
+          128, // OSC1_SEMI
           0, // OSC1_XENV
           0, // OSC2_WAVEFORM
-          134, // OSC2_VOL
-          92, // OSC2_SEMI
-          255, // OSC2_DETUNE
+          0, // OSC2_VOL
+          119, // OSC2_SEMI
+          0, // OSC2_DETUNE
           0, // OSC2_XENV
-          255, // NOISE_VOL
-          0, // ENV_ATTACK
-          33, // ENV_SUSTAIN
-          59, // ENV_RELEASE
+          70, // NOISE_VOL
+          20, // ENV_ATTACK
+          0, // ENV_SUSTAIN
+          64, // ENV_RELEASE
           0, // ARP_CHORD
           0, // ARP_SPEED
-          3, // LFO_WAVEFORM
+          0, // LFO_WAVEFORM
           0, // LFO_AMT
           0, // LFO_FREQ
-          1, // LFO_FX_FREQ
+          0, // LFO_FX_FREQ
           2, // FX_FILTER
-          96, // FX_FREQ
+          39, // FX_FREQ
           0, // FX_RESONANCE
           0, // FX_DIST
-          255, // FX_DRIVE
+          39, // FX_DRIVE
           0, // FX_PAN_AMT
           0, // FX_PAN_FREQ
-          55, // FX_DELAY_AMT
-          6 // FX_DELAY_TIME
+          0, // FX_DELAY_AMT
+          0 // FX_DELAY_TIME
           ],
           // Patterns
           p: [1],
           // Columns
           c: [
-            {n: [135],
+            {n: [123],
              f: []}
           ]
         }
       ],
       rowLen: 5513,   // In sample lengths
-      patternLen: 2,  // Rows per pattern
-      endPattern: 3  // End pattern
+      patternLen: 3,  // Rows per pattern
+      endPattern: 2  // End pattern
+    },
+	'rev': {
+	  songData: [
+        { // Instrument 0
+          i: [
+		  3, // OSC1_WAVEFORM
+          255, // OSC1_VOL
+          128, // OSC1_SEMI
+          0, // OSC1_XENV
+          1, // OSC2_WAVEFORM
+          255, // OSC2_VOL
+          119, // OSC2_SEMI
+          0, // OSC2_DETUNE
+          0, // OSC2_XENV
+          138, // NOISE_VOL
+          43, // ENV_ATTACK
+          0, // ENV_SUSTAIN
+          119, // ENV_RELEASE
+          0, // ARP_CHORD
+          0, // ARP_SPEED
+          0, // LFO_WAVEFORM
+          124, // LFO_AMT
+          9, // LFO_FREQ
+          1, // LFO_FX_FREQ
+          2, // FX_FILTER
+          82, // FX_FREQ
+          33, // FX_RESONANCE
+          28, // FX_DIST
+          255, // FX_DRIVE
+          0, // FX_PAN_AMT
+          0, // FX_PAN_FREQ
+          0, // FX_DELAY_AMT
+          0 // FX_DELAY_TIME
+          ],
+          // Patterns
+          p: [1],
+          // Columns
+          c: [
+            {n: [110],
+             f: []}
+          ]
+        }
+      ],
+      rowLen: 5513,   // In sample lengths
+      patternLen: 6,  // Rows per pattern
+      endPattern: 5  // End pattern
     }
 }
 

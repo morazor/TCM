@@ -81,7 +81,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 				}
 			}
 			
-			this.alpha = 1 - Math.min(0.5 * this.level + 0.49, _13Dist(this.vel, { x: 0, y: 0}) / 500);
+			this.alpha = 1 - Math.min(0.5 * this.level + 0.49, _13Dist(this.vel, { x: 0, y: 0}) / 600);
 			
 			if(this.didatk <= 0 && _act.attack)
 			{

@@ -76,3 +76,68 @@ function _13Canv(w, h) {
 	_canvas.height = h;
 	return _canvas;
 }
+
+function _13Path(_ctx, _cPath, size)
+{
+	if(size == null) size = 1;
+	if(_ctx.canvas == null) _ctx = _ctx.getContext('2d');
+	
+	_ctx.save();
+	_ctx.beginPath();
+
+	if(typeof _cPath.c == 'object') {
+		_cPath.c = _ctx.createPattern(_cPath.c, 'repeat');
+	}
+	
+	_ctx.fillStyle = _cPath.c;
+	_ctx.strokeStyle = _cPath.c;
+	
+	_13Each(_cPath.p, function(_ca, _ci) {
+		_ca = _13ObjClone(_ca);
+		var _cform = null;
+		
+		if(typeof _ca[0] == 'string') {
+			_cform = _ca[0];
+			_ca.splice(0, 1);
+		}
+		
+		var _prm = [];
+
+		_13Each(_ca, function(_p, _pi) 
+		{
+			if(_cform != 'arc' || _pi < 3)
+			{
+				_p *= size;
+			}
+			
+			_prm.push(_p);
+		});
+		
+		switch(_cform)
+		{
+			case 'arc': _ctx.arc(_prm[0], _prm[1], _prm[2], _prm[3], _prm[4], _prm[5]); break;
+			case 'rect': _ctx.rect(_prm[0], _prm[1], _prm[2], _prm[3]); break;
+			case 'bez': _ctx.bezierCurveTo(_prm[0], _prm[1], _prm[2], _prm[3], _prm[4], _prm[5]); break;
+			default: 
+				if(_ci == 0) _ctx.moveTo(_prm[0], _prm[1]); 
+				else _ctx.lineTo(_prm[0], _prm[1]); 
+				break;
+		}
+	});
+	
+	_ctx.closePath();
+	if(_cPath.l != null) {
+		_ctx.lineWidth = _cPath.l;
+		_ctx.stroke();
+	}
+	else _ctx.fill();
+	
+	if(_cPath.b != null)
+	{
+		_ctx.strokeStyle = 'rgba(127,127,127,0.5)';
+		_ctx.lineWidth = 1;
+		_ctx.stroke();
+	}
+	
+	_ctx.restore();
+}

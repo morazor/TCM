@@ -3,31 +3,59 @@ function _13WorldGen(_world) {
 	var _player;
 	
 	var _walls = [
-		{ x: 0, y: 370, w: 5000, h: 300 }
 	]
 	
-	var _spawnp = {
-		l: { x: -2075, y: 80 },
-		r: { x: 2075, y: 80 }
-	}
+	var _spawnp = [
+	]
 	
-	_13Rep(5, function(i) {
-		_walls.push({ x : 0, y: 125 + 50 * i, w: 150 + 50 * Math.round(Math.pow(i, 1.5)), h: 300 });
+	_13Each([-1, 1], function(_dir) {
+		var _cy = 370;
+		var _cx = 250 * _dir;
+		
+		_13Rep(5, function(i) {
+			var _cw = (i % 3 == 0 ? 600 : 200) + 50 * Math.round(Math.random() * 5);
+			
+			_walls.push({x: _cx +_cw / 2 * _dir, y: _cy, w: _cw, h: 500, t: Math.random() > 0.4, g: Math.random() > 0.4 });
+			
+			_cx += _dir * (_cw - 50);
+			_cy += _13RandPick([-1, 1, 2]) * 50;
+		});
+		
+		_walls.push({x: _cx + 500 *_dir, y: _cy, w: 1000, h: 500});
+		_spawnp.push({ x: _cx + 500 *_dir, y: _cy -390 });
 	});
 
-	_13Each(_walls, function(_bw) {
-		if(_bw.x != 0) {
-			var _cwall = _13ObjClone(_bw);
-			_cwall.x = -_bw.x;
-			_walls.push(_cwall);
-		}
-	})
-	
+	_13Rep(3, function(i) {
+		_walls.push({ x : 0, y: 225 + 50 * i, w: 150 + 100 * i * i, h: 500 });
+	});
+
 	// FIXED STUFF MUST BE ADDED FIRST!
+	var _im = { t: Math.floor(Math.random() * 7), g: Math.floor(Math.random() * 7) };
+	
 	_13Each(_walls, function(_bw) {
 		_13ObjExtend(_world.addBody('wall', _bw.w, _bw.h), {
 			pos: { x: _bw.x, y: _bw.y },
 			fixed: true
+		});
+		
+		_13Each(['t','g'], function (i) {
+			if(_bw[i]) {
+				
+				var _cName = 'tree';
+				var _cOffY = 200;
+				if(i == 'g') {
+					_cName = 'grave';
+					_cOffY = 50;
+				}
+				
+				_13ObjExtend(_world.addBody(_cName +'_' + _im[i]), {
+					pos: { x: _bw.x + _13RandBetween(-1, 1) * _bw.w / 4, y: _bw.y - _bw.h / 2 - _cOffY },
+					fixed: true,
+					collide: false
+				});
+				
+				_im[i] = (_im[i] + 1) % 7;
+			}
 		});
 	})
 	
@@ -96,13 +124,13 @@ function _13WorldGen(_world) {
 		collide: false
 	});
 	
-	_13Rep(2, function(i) {
+	_13Each(_spawnp, function(_spp, i) {
 		_13ObjExtend(_world.addBody('bone_pile_' + i), {
-			pos: _13ObjClone(i == 0 ? _spawnp.r : _spawnp.l),
+			pos: _spp,
 			fixed: true,
 			collide: 'player',
-			facing: i != 0,
-			w: 300
+			w: 300,
+			h:400
 		});
 	})
 	
@@ -141,7 +169,7 @@ function _13WorldGen(_world) {
 					if(_alldead)
 					{
 						_finalBoss = _13ObjExtend(_world.addActorMelee('rev_player'), {
-							pos: { x: 0, y: -100 },
+							pos: { x: 0, y: -200 },
 							health: new _13LimVal(450),
 							revmult: 1.3
 						});
@@ -174,7 +202,7 @@ function _13WorldGen(_world) {
 						
 							var _bName = (Math.random() > 0.5 ? 'enemy_skel_' : 'enemy_wotw_');
 							_13ObjExtend(_world.addEnemy(_bName + _mobLvl), {
-								pos: _13ObjClone(Math.random() > 0.5 ? _spawnp.r : _spawnp.l),
+								pos: _13ObjClone(_13RandPick(_spawnp)),
 								awake: true,
 								revmult: (_mobLvl == 0 ? 0.8 : 1.1)
 							});
@@ -191,7 +219,7 @@ function _13WorldGen(_world) {
 	}
 	
 	_player = _13ObjExtend(_world.addActorMelee('player'), {
-		pos: { x: 0,y: -100 }
+		pos: { x: 0,y: -200 }
 	});
 	
 	return _player;

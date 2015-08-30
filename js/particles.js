@@ -111,11 +111,11 @@ function _13Particles(_world, bName, maxNum) {
 							{
 								if(_cP[i].x != null)
 								{
-									_cP[i].x = _em[i].x + _13Random.between(_em.min[i].x, _em.max[i].x);
-									_cP[i].y = _em[i].y + _13Random.between(_em.min[i].y, _em.max[i].y);
+									_cP[i].x = _em[i].x + _13RandBetween(_em.min[i].x, _em.max[i].x);
+									_cP[i].y = _em[i].y + _13RandBetween(_em.min[i].y, _em.max[i].y);
 								}
 								else {
-									_cP[i] = _em[i] + _13Random.between(_em.min[i], _em.max[i]);
+									_cP[i] = _em[i] + _13RandBetween(_em.min[i], _em.max[i]);
 									_cP.start[i] = _cP[i];
 								}
 							}

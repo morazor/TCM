@@ -34,8 +34,8 @@ function _13AI(mob, world, timePassed)
 						if(mob.didatk > 500 / mob.revmult)
 						{
 							if(_act.move == null) _act.move = { 
-								x: _pl.pos.x + (_pl.facing ? -1 : 1) * (400 + _13Random.between(0, 100)), 
-								y: _pl.lastgy + _13Random.between(-300, -250)
+								x: _pl.pos.x + (_pl.facing ? -1 : 1) * (400 + _13RandBetween(0, 100)), 
+								y: _pl.lastgy + _13RandBetween(-300, -250)
 							}
 							_act.attack = false;
 						}
@@ -78,8 +78,8 @@ function _13AI(mob, world, timePassed)
 						}
 						
 						if(_act.move == -1 && mob.block.l || _act.move == 1 && mob.block.r) {
-							_act.jump = true;
-							_act.move = 0;
+							mob.action.jump = true; // no delay in jumps
+							mob.action.move = 0;
 						}
 					}
 				}

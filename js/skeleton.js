@@ -1,4 +1,4 @@
-var _13Skeleton = {
+var _13Skel = {
 	Init: function (tb, skipIndex) {
 		if(tb.path != null)
 		{
@@ -62,7 +62,7 @@ var _13Skeleton = {
 		if(tb.link != null)
 		{
 			_13Each(tb.link, function(_tl) {
-				_13Skeleton.Init(_tl, true);
+				_13Skel.Init(_tl, true);
 			});
 		}
 		
@@ -86,7 +86,7 @@ var _13Skeleton = {
 		if(tb.link != null)
 		{
 			_13Each(tb.link, function(_tl) {
-				_13Skeleton._Index(_tl, rootBone);
+				_13Skel._Index(_tl, rootBone);
 			});
 		}
 	},
@@ -103,7 +103,7 @@ var _13Skeleton = {
 		tctx.translate(0, tb.size);
 		
 		_13Each(tb.link, function(_tl) {
-			if(_tl.under) _13Skeleton.Draw(tctx, _tl);
+			if(_tl.under) _13Skel.Draw(tctx, _tl);
 		})
 		
 		tctx.translate(0, -tb.size);
@@ -113,7 +113,7 @@ var _13Skeleton = {
 		tctx.translate(0, tb.size);
 		
 		_13Each(tb.link, function(_tl) {
-			if(!_tl.under) _13Skeleton.Draw(tctx, _tl);
+			if(!_tl.under) _13Skel.Draw(tctx, _tl);
 		})
 		
 		tctx.restore();
@@ -146,7 +146,7 @@ var _13Skeleton = {
 		{
 			_retVal.link = [];
 			_13Each(tb.link, function(_tl) {
-				_retVal.link.push(_13Skeleton.Clone(_tl));
+				_retVal.link.push(_13Skel.Clone(_tl));
 			});
 		}
 		
@@ -163,7 +163,7 @@ var _13Skeleton = {
 		if(tb.link != null)
 		{
 			_13Each(tb.link, function(_tl) {
-				_13Skeleton.AllBones(_tl, onBone);
+				_13Skel.AllBones(_tl, onBone);
 			});
 		}
 	},
@@ -176,7 +176,7 @@ var _13Skeleton = {
 		if(tb.link != null)
 		{
 			_13Rep(tb.link.length, function(i) {
-				_13Skeleton.Average(tb.link[i], sb.link[i], tc);
+				_13Skel.Average(tb.link[i], sb.link[i], tc);
 			});
 		}
 		

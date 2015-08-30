@@ -125,7 +125,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				
 				if(this.type == 'melee')
 				{
-					if(tbod.isshield && tbod.facing != this.facing) { // MELEE ATTACK BLOCKED
+					if(tbod.isshield && tbod.facing != this.facing) { // MELEE ATTACK
 						_stopped = true;
 						this.pushback(tbod, 0.5 * tbod.revmult);
 						tbod.pushback(this, 0.5 * this.revmult);
@@ -133,16 +133,22 @@ function _13Actor(_world, bName, bW, bH, bType) {
 					else {
 						tbod.pushback(this, this.revmult);
 						tbod.damage(bullet);
+						
+						if(!bullet.owner._sndatk.hit) {
+							bullet.owner._sndatk.hit = true;
+							_13MediaSounds.hit.play();
+						}
 					}
 				}
 				else{
-					if(tbod.isshield && tbod.facing == (bullet.pos.x > tbod.pos.x)) { // RANGED ATTACK BLOCKED
+					if(tbod.isshield && tbod.facing == (bullet.pos.x > tbod.pos.x)) { // RANGED ATTACK
 						_stopped = true;
 						tbod.pushback(bullet, 0.5 * this.revmult);
 					}
 					else {
 						tbod.pushback(bullet, this.revmult);
 						tbod.damage(bullet);
+						_13MediaSounds.hit.play();
 					}
 				}
 			}
@@ -155,6 +161,16 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				this.stopatk = true;
 				
 				_sparks.pos = { x: bullet.pos.x, y: bullet.pos.y };
+				
+				if(this.type == 'melee') {
+					if(!bullet.owner._sndatk.block) {
+						bullet.owner._sndatk.block = true;
+						_13MediaSounds.block.play();
+					}
+				}
+				else {
+					_13MediaSounds.block.play();
+				}
 			}
 		},
 		beforeCollide: function (tbod) {

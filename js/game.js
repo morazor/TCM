@@ -64,7 +64,6 @@ function _13Game() {
 	_allCanvas[1].addEventListener('click', function(eventObj) {
 		if(_world.status == 0) {
 			_world.status = 1;
-			_media.sounds.music.play();
 		}
 	});
 	
@@ -72,16 +71,16 @@ function _13Game() {
 	
 	/*** WORLD INIT ***/
 	
-	var _media = _13MediaGen();
+	_13MediaGen();
 	
 	var _ctx = _allCanvas[0].getContext('2d');
-	_ctx.drawImage(_media.textures.landscape, 0, 0);
+	_ctx.drawImage(_13MediaTextures.landscape, 0, 0);
 	
 	var _ctx = _allCanvas[1].getContext('2d');
 	
 	
 
-	var _world = new _13World(_media);
+	var _world = new _13World();
 	
 	var _player = _13WorldGen(_world);
 	
@@ -138,12 +137,19 @@ function _13HUD(_ctx, _player, _world) {
 		
 		var _topd = 54;
 		
+		_ctx.fillStyle = 'black';
+		
 		if(_player.revpow != null) {
 			_topd = 81;
-		
-			_ctx.fillStyle = 'black';
+
+			_ctx.save();
 			_ctx.fillRect(-2, 0, 204, 54);
-			if(_world.adv > 0) _ctx.drawImage(_world.media.textures.bone_pile_0, 90, 280, 200 * _world.adv, 50, 0, 2, 200 * _world.adv, 50);
+
+			_ctx.globalAlpha = 0.7;
+			_ctx.drawImage(_13MediaTextures.bone_pile_0, 90, 280, 200, 50, 0, 2, 200, 50);
+			_ctx.fillStyle = 'red';
+			_ctx.fillRect(0, 2, 200 * _world.adv, 50);
+			_ctx.restore();
 		}
 		
 		_ctx.translate(0, 1080 - _topd);
@@ -166,7 +172,7 @@ function _13HUD(_ctx, _player, _world) {
 		var _text = [ // intro
 			'Developed for JS13K by morazor',
 			'[click to start]',
-			'The cursed',
+			'The Cursed',
 			'Mir',
 			'Ror'
 		]
@@ -175,20 +181,20 @@ function _13HUD(_ctx, _player, _world) {
 		{
 			_text = [ 
 				'',
-				'[reload to try again]',
-				'You died fighting for the right to be yourself',
-				'Game',
-				'Revo'
+				'[reload to play again]',
+				'You have died, fighting for the right to be',
+				'Your',
+				'Self'
 			]
 		}
 		else if(_world.status == 3) // finished
 		{
 			_text = [ 
 				'',
-				'[reload to try again]',
+				'[reload to play again]',
 				'You are finally free to live your life',
 				'Your',
-				'Yaw'
+				'Way'
 			]
 		}
 	
@@ -198,7 +204,7 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.fillStyle = 'rgba(0,0,0,' + (_world.status == 0 ? 1 : 0.5) + ')';
 		_ctx.fillRect(0, 0, 1920, 1080);
 
-		_ctx.fillStyle = '#aaaaaa';
+		_ctx.fillStyle = '#bbbbbb';
 		
 		_ctx.translate(960, 1080);
 		
@@ -213,21 +219,27 @@ function _13HUD(_ctx, _player, _world) {
 		
 		_ctx.translate(0, -200);
 		
-		if(_world.status == 0) _ctx.font = '64px serif';
+		_ctx.font = '64px serif';
+		var _topm = -30;
 		
-		_ctx.fillText(_text[2], 0, -30);
+		if(_world.status != 0)
+		{
+			_ctx.font = '28px monospace';
+			_topm = -40;
+		}
+
+		_ctx.fillText(_text[2], 0, _topm);
+		
+		_ctx.fillRect(-1, -12, 2, 96);
 		
 		_ctx.font = '96px serif';
-		_ctx.fillText("|", 0, 60);
-		
-		_ctx.font = '96px bold serif';
 		_ctx.fillStyle = 'white';
 		_ctx.textAlign = 'right';
-		_ctx.fillText(_text[3], -12, 60);
+		_ctx.fillText(_text[3], -20, 60);
 		
 		_ctx.scale(-1, 1);
 		if(_world.status != 3) _ctx.fillStyle = 'red';
-		_ctx.fillText(_text[4], -12, 60);
+		_ctx.fillText(_text[4], -20, 60);
 		_ctx.restore();
 	}
 }

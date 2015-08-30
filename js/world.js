@@ -1,4 +1,4 @@
-function _13World(_media) {	
+function _13World() {	
 
 	function _calcPoints(cBody) {
 		cBody.left = cBody.pos.x - cBody.w / 2;
@@ -16,7 +16,6 @@ function _13World(_media) {
 	
 	return {
 		status: 0,
-		media: _media,
 		player: null,
 		bodies: [],
 		actors: [],
@@ -244,8 +243,8 @@ function _13World(_media) {
 			
 			var _cameraRect = { 
 				pos: cameraPos,
-				w: 1920,
-				h: 1080
+				w: 2120, // some items have textures larger than body
+				h: 1280  // should be handled in a better way
 			}
 
 			_calcPoints(_cameraRect);
@@ -254,7 +253,7 @@ function _13World(_media) {
 			
 			_13Each(this.bodies, function(_cBody) {
 				
-				if(!_cBody.dead && _13Geom.inters(_cBody, _cameraRect))
+				if(!_cBody.dead && _13RectInters(_cBody, _cameraRect))
 				{
 					if(_cBody.texture != null)
 					{

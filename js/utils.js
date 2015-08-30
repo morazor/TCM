@@ -43,6 +43,7 @@ function _13ObjClone (cobj, deep)
 	
 	return _retVal;
 }
+
 function _13ObjExtend(bobj, eobj)
 {
 	if(eobj != null) for(var i in eobj) bobj[i] = eobj[i];
@@ -50,26 +51,24 @@ function _13ObjExtend(bobj, eobj)
 }
 
 
-var _13Geom = {
-	inters: function(r1, r2) {
-		return !(r2.left > r1.right || 
-			   r2.right < r1.left || 
-			   r2.top > r1.bottom ||
-			   r2.bottom < r1.top);
-	},
-	dist: function(p1, p2) {
-		return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
-	}
-};
+function _13RectInters(r1, r2) {
+	return !(r2.left > r1.right || 
+		   r2.right < r1.left || 
+		   r2.top > r1.bottom ||
+		   r2.bottom < r1.top);
+}
 
-var _13Random = {
-	between: function(minV, maxV) {
-		return minV + Math.random() * (maxV - minV);
-	},
-	pick: function(listV) {
-		return listV[Math.floor(Math.random() * listV.length)];
-	}
-};
+function _13Dist(p1, p2) {
+	return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+}
+
+function _13RandBetween(minV, maxV) {
+	return minV + Math.random() * (maxV - minV);
+}
+
+function _13RandPick(listV) {
+	return listV[Math.floor(Math.random() * listV.length)];
+}
 
 function _13Canv(w, h) {
 	var _canvas = document.createElement('canvas');

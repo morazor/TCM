@@ -52,6 +52,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		},
 		health: new _13LimVal(10 + 60 * _retObj.level),
 		damval: 25,
+		didatk: 2500,
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
 			var _pusha = Math.atan2(this.pos.y - tbod.pos.y, this.pos.x - tbod.pos.x);
@@ -80,10 +81,8 @@ function _13ActorRanged(_world, bName, bW, bH) {
 				}
 			}
 			
-			this.alpha = 1 - Math.min(0.5 * this.level + 0.49, _13Geom.dist(this.vel, { x: 0, y: 0}) / 500);
+			this.alpha = 1 - Math.min(0.5 * this.level + 0.49, _13Dist(this.vel, { x: 0, y: 0}) / 500);
 			
-			if(!this.awake) this.didatk = _atkTime;
-
 			if(this.didatk <= 0 && _act.attack)
 			{
 				this.didatk = _atkTime / this.revmult; // RANGED ATTACK
@@ -105,6 +104,8 @@ function _13ActorRanged(_world, bName, bW, bH) {
 						return true;
 					}
 				});
+				
+				_13MediaSounds.shoot.play();
 			}
 		}
 	});

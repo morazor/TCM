@@ -46,7 +46,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			var _vx = this.vel.x * 0.5;
 			var _mob = this;
 			
-			_13Skeleton.AllBones(this.texture.skel, function (tb) {		
+			_13Skel.AllBones(this.texture.skel, function (tb) {		
 				if(tb.texture != null && tb.alpha != 0)
 				{
 					var _cBone = _13ObjExtend(_world.addBody(tb.texture), {
@@ -64,15 +64,15 @@ function _13ActorMelee(_world, bName, bW, bH) {
 							if(this.lifespan <= 2500) this.alpha = this.lifespan / 2500;
 						},
 						vel: { 
-							x: _13Random.between(_vx - 50, _vx + 50), 
-							y: _13Random.between(-100, 0)
+							x: _13RandBetween(_vx - 50, _vx + 50), 
+							y: _13RandBetween(-100, 0)
 						},
 						pos: {
-							x: _mob.pos.x + _13Random.between(-0.5, 0.5) * _mob.w,
-							y: _mob.pos.y + _13Random.between(-0.5, 0.5) * _mob.h
+							x: _mob.pos.x + _13RandBetween(-0.5, 0.5) * _mob.w,
+							y: _mob.pos.y + _13RandBetween(-0.5, 0.5) * _mob.h
 						},
-						rot: _13Random.between(0, 2.8),
-						rotvel: _13Random.between(-10, 10)
+						rot: _13RandBetween(0, 2.8),
+						rotvel: _13RandBetween(-10, 10)
 					});
 				}
 			});			
@@ -88,6 +88,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		isattack: false,
 		isshield: false,
 		canshield: _retObj.level != 0,
+		_sndatk: {},
 		beforeUpdate: function(timePassed) {
 			// REV CHECK
 			
@@ -95,13 +96,17 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			{
 				if(this.revved)
 				{
-					if(this.revpow.perc == 0) this.rev();
+					if(this.revpow.perc == 0) {
+						this.rev();
+						_13MediaSounds.rev.play();
+					}
 				}
 				else
 				{
 					this.revpow.add(timePassed / 400);
 					if(this.revpow.perc == 1) {
 						this.rev();
+						_13MediaSounds.rev.play();
 					}
 				}
 				
@@ -197,6 +202,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			_preAtkTime = _animatk.dur * _animatk.chain.split[0] / _atkSpeed;
 			
 			if(this.didatk <= -_atkTime * 0.2) { // attack delay
+				this._sndatk = {};
 				this.isattack = false;
 				if(_act.attack) {
 					this.didatk = _atkTime;
@@ -210,6 +216,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 					}
 				
 					this.texture.play('attack', _atkSpeed, _atkType);
+					
 					this.isattack = true;
 				}
 			}
@@ -236,6 +243,12 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			
 			if(this.didatk > 0 && !this.stopatk && 
 				this.didatk < _atkTime - _preAtkTime) { // let the attack telegraph end
+				
+				if(!this._sndatk.swing) {
+					_13MediaSounds.swing.play();
+					this._sndatk.swing= true;
+				}
+				
 				var _bulnum = 3;
 				
 				var _cSkel = this.texture.lastFrame;

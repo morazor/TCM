@@ -5,7 +5,7 @@ function _13Sprite(bTexture) {
 			texture: _13Canv(bTexture.w, bTexture.h),
 			width: bTexture.w,
 			height: bTexture.h,
-			skel: _13Skeleton.Clone(bTexture.skel),
+			skel: _13Skel.Clone(bTexture.skel),
 			anim: _13ObjClone(bTexture.anim, true),
 			trail: bTexture.trail
 		}
@@ -40,7 +40,7 @@ function _13Sprite(bTexture) {
 				this.anim[animName].on = false;
 			},
 			refresh: function(timePassed) {
-				var _frSkel = _13Skeleton.Clone(this.skel);
+				var _frSkel = _13Skel.Clone(this.skel);
 
 				for(var i in this.anim)
 				{
@@ -93,7 +93,7 @@ function _13Sprite(bTexture) {
 					}
 				}
 			
-				if(this.lastFrame != null) _13Skeleton.Average(_frSkel, this.lastFrame, 0.7);
+				if(this.lastFrame != null) _13Skel.Average(_frSkel, this.lastFrame, 0.7);
 				this.lastFrame = _frSkel;
 			},
 			render: function(tContext, posX, posY) {
@@ -108,13 +108,13 @@ function _13Sprite(bTexture) {
 					_ctx.restore();
 					
 					_fxctx.clearRect(0, 0, this.texture.width, this.texture.height);
-					_fxctx.drawImage(this.texture, _13Random.between(-5, 5), _13Random.between(-5, 5));
+					_fxctx.drawImage(this.texture, _13RandBetween(-5, 5), _13RandBetween(-5, 5));
 					tContext.drawImage(_fxCanv, posX, posY);
 				}
 				
 				_ctx.clearRect(0, 0, this.texture.width, this.texture.height);
 				
-				_13Skeleton.Draw(_ctx, this.lastFrame);
+				_13Skel.Draw(_ctx, this.lastFrame);
 				
 				if(this.skip > 0) this.skip--;
 				else tContext.drawImage(this.texture, posX, posY);
@@ -127,7 +127,7 @@ function _13Body(_world, bName, bW, bH) {
 
 	if(typeof bName == 'string')
 	{
-		var bTexture = _13Sprite(_world.media.textures[bName]); // don't use new, always return empty object if function returns null
+		var bTexture = _13Sprite(_13MediaTextures[bName]); // don't use new, always return empty object if function returns null
 	}
 	else {
 		var bTexture = bName;
@@ -172,7 +172,7 @@ function _13Body(_world, bName, bW, bH) {
 	
 	var _lCanv = null;
 	
-	var lightC = [_world.media.lights[bName], _world.media.lights['rev_' + bName]];
+	var lightC = [_13MediaLights[bName], _13MediaLights['rev_' + bName]];
 	
 	_13Rep(2, function(i) {
 		if(lightC[i] != null)
@@ -201,7 +201,7 @@ function _13Body(_world, bName, bW, bH) {
 		}
 	});
 	
-	var revTexture = _13Sprite(_world.media.textures['rev_' + bName]);
+	var revTexture = _13Sprite(_13MediaTextures['rev_' + bName]);
 	if(revTexture != null) {
 		revTexture.anim = _cCanvas.anim;
 	}

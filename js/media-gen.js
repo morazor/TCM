@@ -1,7 +1,6 @@
-window._13Media = {
-	textures: {},
-	sounds: {}
-}
+var _13MediaTextures = {};
+var _13MediaLights = {};
+var _13MediaSounds = {};
 
 function _13MediaGen() {
 	var _lights = {
@@ -23,11 +22,9 @@ function _13MediaGen() {
 	_lights.bullet_rev_player = _lights.rev_bullet_player;
 	_lights.sparks = { c: '#ffdd99', r: 30 }
 	
-	return {
-		textures: _13TextureGen(),
-		sounds: _13SoundGen(),
-		lights: _lights
-	}
+	_13MediaTextures = _13TextureGen();
+	_13MediaLights = _lights;
+	_13MediaSounds =_13SoundGen();
 }
 
 function _13TextureGen() {
@@ -306,7 +303,7 @@ function _13TextureGen() {
 				path: [
 					{ c: _platec, b: 1, p: [ // head
 						{ x: 0.3, y: 0 },
-						{ form: 'arc', x: 0, y: 0, r: 0.3, as: 0, ae: Math.PI * 1, rev: true  },
+						{ form: 'arc', x: 0, y: 0, r: 0.3, as: 0, ae: Math.PI, rev: true  },
 						{ x: -0.3, y: 0.3 },
 						{ x: 0.4, y: 0.35 }
 					] },
@@ -374,7 +371,7 @@ function _13TextureGen() {
 	}
 
 	// FAKE BODY avoids layers handling
-	var _farm = _13Skeleton.Clone(_cSkel.link[0]);
+	var _farm = _13Skel.Clone(_cSkel.link[0]);
 	_farm.under = false;
 	_farm.path = null;
 	_farm.link = [];
@@ -462,7 +459,7 @@ function _13TextureGen() {
 	_cSkel.link.push(_farm);
 
 	// other leg
-	var _bleg = _13Skeleton.Clone(_cSkel.link[1])
+	var _bleg = _13Skel.Clone(_cSkel.link[1])
 	_bleg.rot = -_bleg.rot;
 	_bleg.under = true;
 	_bleg.z = 4;
@@ -471,7 +468,7 @@ function _13TextureGen() {
 	_cSkel.link.splice(0, 0, _bleg);
 
 	// other arm
-	var _barm = _13Skeleton.Clone(_farm)
+	var _barm = _13Skel.Clone(_farm)
 	_barm.link[0].rot = Math.PI - 0.15;
 	_barm.under = true;
 	_barm.link[0].z = 4;
@@ -505,7 +502,7 @@ function _13TextureGen() {
 		]
 	};
 
-	var _cshield2 = _13Skeleton.Clone(_cshield);
+	var _cshield2 = _13Skel.Clone(_cshield);
 	_cshield2.name = 'shieldside';
 	_cshield2.alpha = 0;
 	_cshield2.path = [{ c: _platec, b: 1, p: [ // sideways
@@ -550,7 +547,7 @@ function _13TextureGen() {
 				}
 			},
 			'run': {
-				dur: 1000,
+				dur: 800,
 				loop: true,
 				trans: function (_frSkel, _ap, _ac) {
 				
@@ -641,8 +638,8 @@ function _13TextureGen() {
 				layer: 1,
 				chain: { split: [ 0.5, 0.5 ], trans: [ // everybody loves parallel arrays <3
 					function (_frSkel, _ap, _ac) { // first part of attack is charging
-						var _endpos = this[1](_13Skeleton.Clone(_frSkel), 0, _ac);
-						_frSkel = _13Skeleton.Average(_frSkel, _endpos, 1 - _ap);
+						var _endpos = this[1](_13Skel.Clone(_frSkel), 0, _ac);
+						_frSkel = _13Skel.Average(_frSkel, _endpos, 1 - _ap);
 				
 						return _frSkel;
 					}, function (_frSkel, _ap, _ac) {
@@ -712,9 +709,9 @@ function _13TextureGen() {
 	 
 	// PLAYER REVERSE
 	
-	var _skelRev = _13Skeleton.Clone(_cSkel);
+	var _skelRev = _13Skel.Clone(_cSkel);
 
-	_13Skeleton.AllBones(_skelRev, function (tb) {
+	_13Skel.AllBones(_skelRev, function (tb) {
 	 	
 	 	_13Each(tb.path, function(_cp) {
 			switch(_cp.c) {
@@ -747,16 +744,16 @@ function _13TextureGen() {
 		trail: '#770000'
 	};
 	 
-	_13Skeleton.Init(_skelRev);
+	_13Skel.Init(_skelRev);
 	
 	_retObj.rev_player = _skelObjRev;
 	 
 	 // SKELETONS
 	 for(var k = 0; k < 2; k++)
 	 {
-		var _skelSkel = _13Skeleton.Clone(_cSkel);
+		var _skelSkel = _13Skel.Clone(_cSkel);
 		
-		_13Skeleton.AllBones(_skelSkel, function (tb) {
+		_13Skel.AllBones(_skelSkel, function (tb) {
 			if(tb.path != null) 
 			{
 				switch(tb.name)
@@ -882,13 +879,13 @@ function _13TextureGen() {
 			h: _fh
 		};
 		
-		_13Skeleton.Init(_skelSkel);
+		_13Skel.Init(_skelSkel);
 		
 		_retObj['enemy_skel_' + k] = _skelObjSkel;
 	}
 	
 	// player initialized at the end (the other clone the skeleton)
-	_13Skeleton.Init(_cSkel);
+	_13Skel.Init(_cSkel);
 	
 	_retObj.player = _skelObj;
 	
@@ -952,11 +949,11 @@ function _13TextureGen() {
 	 
 	// BONE PILES
 	 
-	var _bls = 400;
+	var _bls = 450;
 	
 	for(var i = 0; i < 2; i++)
 	{
-		var _canvas = _13Canv(_bls, _bls);
+		var _canvas = _13Canv(_bls * 1.2, _bls);
 		
 		var _ctx = _canvas.getContext('2d');
 		
@@ -964,7 +961,7 @@ function _13TextureGen() {
 		
 		for(var j = 0; j < 2; j++)
 		{
-			_13Skeleton.AllBones(_retObj['enemy_skel_' + j].skel, function(tb) {
+			_13Skel.AllBones(_retObj['enemy_skel_' + j].skel, function(tb) {
 				if(tb.texture != null && tb.alpha != 0)
 				{
 					_blist.push(tb.texture);
@@ -972,13 +969,13 @@ function _13TextureGen() {
 			});
 		}
 		
-		_ctx.translate(_bls * 0.5, _bls * 0.07);
+		_ctx.translate(_bls * 0.6, _bls * 0.07);
 		
-		for(var j = 0; j < 13; j++)
+		for(var j = 0; j < 14; j++)
 		{
 			for(var k = -j * 1.5; k < j * 1.5; k++)
 			{
-				var _cbt = _13Random.pick(_blist);
+				var _cbt = _13RandPick(_blist);
 				_ctx.save();
 				_ctx.translate(k * 10, j * 25);
 				_ctx.rotate(Math.PI * 2 * Math.random());
@@ -990,21 +987,148 @@ function _13TextureGen() {
 		_retObj['bone_pile_' + i] = _canvas;
 	}
 	
+	// TREES
+	
+	var _bls = 400;
+		
+	function _treebr(_ctx, j)
+	{
+		_ctx.save();
+		_ctx.rotate(_13RandBetween(-0.1, 0.1));
+		_ctx.beginPath();
+		_ctx.arc(0, 0, 2 * j, 0, Math.PI);
+		_ctx.translate(0, - 10 - _13RandBetween(15, 25) * j);
+		_ctx.lineTo(- 2 * (j - 1), 0);
+		_ctx.lineTo(2 * (j - 1), 0);
+		_ctx.closePath();
+		_ctx.fill();
+		
+		if(j > 1) {
+			var _spn = _13RandPick([1, 2, 2, 2]);
+			_ctx.rotate(0.4 * (_spn - 1));
+			for(var i = 0; i < _spn; i++)
+			{
+				_ctx.rotate(-0.8 * i + _13RandBetween(-0.2, 0.2)); 
+				_treebr(_ctx, j - 1);
+			}
+		}
+		
+		_ctx.restore();
+	}
+	
+	for(var i = 0; i < 7; i++) {
+		var _canvas = _13Canv(_bls, _bls);
+		
+		var _ctx = _canvas.getContext('2d');
+		
+		_ctx.translate(_bls / 2, _bls);
+		_ctx.fillStyle = '#443322';
+		_treebr(_ctx, 5);
+		
+		_retObj['tree_' + i] = _canvas;
+	}
+	
+	// GRAVES
+	
+	var _bls = 100;
+	
+	for(var i = 0; i < 7; i++) {
+		var _canvas = _13Canv(_bls, _bls);
+		
+		var _ctx = _canvas.getContext('2d');
+		
+		_ctx.translate(_bls / 2, _bls);
+		_ctx.fillStyle = '#444444';
+		
+		_ctx.rotate(_13RandBetween(-0.2, 0.2));
+		
+		_ctx.beginPath();
+		_ctx.moveTo(-25, 25);
+		_ctx.lineTo(25, 25);
+		_ctx.arc(0, -40, 25, 0, Math.PI, true);
+		_ctx.closePath();
+		_ctx.fill();
+		
+		_ctx.fillStyle = 'rgba(0,0,0,0.5)';
+		
+		for(var j = 0; j < 3; j++)
+		{
+			_ctx.translate(0, -10);
+			if(Math.random() > 0.4) {
+				var _splt = _13RandPick([1,2,3]);
+				var _sx = -18;
+				
+				for(var k = 0; k < _splt; k++)
+				{
+					if(k >= _splt - 1) var _cspl = 18 - _sx;
+					else var _cspl = 36 / _splt * _13RandBetween(0.7, 1);
+					_ctx.fillRect(_sx, 0, _cspl, 2);
+					_sx += _cspl + 4;
+				}
+			}
+		}
+		
+		_ctx.translate(0, -20);
+		
+		if(i % 2 == 0)
+		{
+			_ctx.globalCompositeOperation = 'destination-out';
+			_ctx.fillStyle = 'black';
+			_ctx.beginPath();
+			_ctx.moveTo(-25, 0);
+			var _splt = _13RandPick([2,3]);
+			for(var j = 0; j < _splt;j++)
+			{
+				_ctx.lineTo((j + 1) * 50 / _splt - 25, _13RandBetween(-20, 20))
+			}
+			_ctx.lineTo(35, -50);
+			_ctx.lineTo(-35, -50);
+			_ctx.closePath();
+			_ctx.fill();
+		}
+		else {
+			_ctx.fillRect(-5, 0, 10, 2);
+			_ctx.fillRect(-1, -5, 2, 15);
+		}
+
+		_retObj['grave_' + i] = _canvas;
+	}
+	
 	return _retObj;
 }
-
+	
 function _13SoundGen() {	
 	var _retObj = {};
 	
-	for(var _i in SBData)
+	for(var i in SBData)
 	{
 		var _player = new CPlayer();
-		var _song = SBData[_i]
+		var _song = SBData[i]
+		
+		for(var j = _song.songData.length; j < 8; j++)
+		{
+			_song.songData.push(_song.songData[0]);
+		}
+		
 		_player.init(_song);
 		while(_player.generate() < 1) {};
+		
+		var _src = URL.createObjectURL(new Blob([_player.createWave()], {type: "audio/wav"}));
 	
-		_retObj[_i] = new Audio(URL.createObjectURL(new Blob([_player.createWave()], {type: "audio/wav"})));
-		if(_i == 'music') _retObj[_i].loop = true
+		var _audioarr = [];
+		
+		_13Rep(10, function () {
+			_audioarr.push(new Audio(_src));
+		})
+		
+		_retObj[i] = {
+			arr: _audioarr,
+			ind: 0,
+			play: function() {
+				this.arr[this.ind].play();
+				this.ind = (this.ind + 1) % 10;
+			}
+		}
 	}
 	
 	return _retObj;
@@ -1012,321 +1136,269 @@ function _13SoundGen() {
 
 
 var SBData = {
-	'music': {
+	'swing': {
       songData: [
         { // Instrument 0
           i: [
-          3, // OSC1_WAVEFORM
-          192, // OSC1_VOL
-          116, // OSC1_SEMI
-          0, // OSC1_XENV
-          3, // OSC2_WAVEFORM
-          192, // OSC2_VOL
-          128, // OSC2_SEMI
-          0, // OSC2_DETUNE
-          0, // OSC2_XENV
-          0, // NOISE_VOL
-          7, // ENV_ATTACK
-          12, // ENV_SUSTAIN
-          22, // ENV_RELEASE
-          0, // LFO_WAVEFORM
-          0, // LFO_AMT
-          0, // LFO_FREQ
-          0, // LFO_FX_FREQ
-          2, // FX_FILTER
-          255, // FX_FREQ
-          0, // FX_RESONANCE
-          0, // FX_DIST
-          32, // FX_DRIVE
-          61, // FX_PAN_AMT
-          3, // FX_PAN_FREQ
-          29, // FX_DELAY_AMT
-          4 // FX_DELAY_TIME
-          ],
-          // Patterns
-          p: [1,2,1,2,,,,,1,2,1,2],
-          // Columns
-          c: [
-            {n: [147,150,154,147,150,154,147,150,154,147,150,154,142,145,147,154,142,145,149,142,145,149,142,145,149,142,145,149,137,140,142,149,135,,,,147,,,,135,,,,147,,,,130,,,,142,,,,130,,,,142],
-             f: []},
-            {n: [145,149,152,145,149,152,145,149,152,145,149,152,140,142,145,152,140,144,147,140,144,147,140,144,147,140,144,147,135,140,144,147,133,,,,145,,,,133,,,,145,,,,128,,,,140,,,,128,,,,140],
-             f: []}
-          ]
-        },
-        { // Instrument 1
-          i: [
-          2, // OSC1_WAVEFORM
-          128, // OSC1_VOL
-          116, // OSC1_SEMI
-          0, // OSC1_XENV
-          2, // OSC2_WAVEFORM
-          127, // OSC2_VOL
-          116, // OSC2_SEMI
-          15, // OSC2_DETUNE
-          0, // OSC2_XENV
-          0, // NOISE_VOL
-          83, // ENV_ATTACK
-          35, // ENV_SUSTAIN
-          129, // ENV_RELEASE
-          3, // LFO_WAVEFORM
-          130, // LFO_AMT
-          4, // LFO_FREQ
-          1, // LFO_FX_FREQ
-          2, // FX_FILTER
-          40, // FX_FREQ
-          167, // FX_RESONANCE
-          2, // FX_DIST
-          32, // FX_DRIVE
-          89, // FX_PAN_AMT
-          5, // FX_PAN_FREQ
-          91, // FX_DELAY_AMT
-          7 // FX_DELAY_TIME
-          ],
-          // Patterns
-          p: [,,1,2,1,2,1,2,,,1,2,1,2,3],
-          // Columns
-          c: [
-            {n: [135,,,,,,,,,,,,,,,,130,,,,,,,,,,,,,,,,123,,,,,,,,,,,,,,,,,118],
-             f: []},
-            {n: [133,,,,,,,,,,,,,,,,128,,,,,,,,,,,,,,,,121,,,,,,,,,,,,,,,,,116],
-             f: []},
-            {n: [135,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,123],
-             f: []}
-          ]
-        },
-        { // Instrument 2
-          i: [
-          2, // OSC1_WAVEFORM
-          96, // OSC1_VOL
-          116, // OSC1_SEMI
-          0, // OSC1_XENV
-          2, // OSC2_WAVEFORM
-          96, // OSC2_VOL
-          116, // OSC2_SEMI
-          13, // OSC2_DETUNE
-          0, // OSC2_XENV
-          0, // NOISE_VOL
-          97, // ENV_ATTACK
-          50, // ENV_SUSTAIN
-          124, // ENV_RELEASE
-          1, // LFO_WAVEFORM
-          138, // LFO_AMT
-          7, // LFO_FREQ
-          1, // LFO_FX_FREQ
-          3, // FX_FILTER
-          37, // FX_FREQ
-          84, // FX_RESONANCE
-          2, // FX_DIST
-          32, // FX_DRIVE
-          135, // FX_PAN_AMT
-          4, // FX_PAN_FREQ
-          92, // FX_DELAY_AMT
-          3 // FX_DELAY_TIME
-          ],
-          // Patterns
-          p: [,,1,2,1,2,1,2,,,1,2,1,2,3],
-          // Columns
-          c: [
-            {n: [154,,,,,,,,,,,,,,,,154,,,,,,,,,,,,,,,,159,,,,,,,,,,,,,,,,157,,,,,,,,,,,,,,,,162,,,,,,,,,,,,,,,,161],
-             f: []},
-            {n: [152,,,,,,,,,,,,,,,,152,,,,,,,,,,,,,,,,157,,,,,,,,,,,,,,,,156,,,,,,,,,,,,,,,,161,,,,,,,,,,,,,,,,159],
-             f: []},
-            {n: [154,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,159,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,162],
-             f: []}
-          ]
-        },
-        { // Instrument 3
-          i: [
-          3, // OSC1_WAVEFORM
-          250, // OSC1_VOL
-          140, // OSC1_SEMI
-          0, // OSC1_XENV
-          3, // OSC2_WAVEFORM
-          55, // OSC2_VOL
-          128, // OSC2_SEMI
-          3, // OSC2_DETUNE
-          0, // OSC2_XENV
-          17, // NOISE_VOL
-          3, // ENV_ATTACK
-          16, // ENV_SUSTAIN
-          41, // ENV_RELEASE
-          0, // LFO_WAVEFORM
-          83, // LFO_AMT
-          4, // LFO_FREQ
-          1, // LFO_FX_FREQ
-          2, // FX_FILTER
-          242, // FX_FREQ
-          164, // FX_RESONANCE
-          1, // FX_DIST
-          69, // FX_DRIVE
-          77, // FX_PAN_AMT
-          6, // FX_PAN_FREQ
-          25, // FX_DELAY_AMT
-          6 // FX_DELAY_TIME
-          ],
-          // Patterns
-          p: [,,,,1,2,1,2,,,1,2,1,2],
-          // Columns
-          c: [
-            {n: [123,,,,130,,,126,,126,125,,123,,126,,118,,,,125,,,121,,121,120,,118,,121],
-             f: []},
-            {n: [121,,,,128,,,125,,125,123,,121,,125,,116,,,,123,,,120,,120,118,,116,,120],
-             f: []}
-          ]
-        },
-        { // Instrument 4
-          i: [
-          0, // OSC1_WAVEFORM
-          255, // OSC1_VOL
-          116, // OSC1_SEMI
-          1, // OSC1_XENV
-          0, // OSC2_WAVEFORM
-          255, // OSC2_VOL
-          116, // OSC2_SEMI
-          0, // OSC2_DETUNE
-          1, // OSC2_XENV
-          0, // NOISE_VOL
-          4, // ENV_ATTACK
-          6, // ENV_SUSTAIN
-          35, // ENV_RELEASE
-          0, // LFO_WAVEFORM
-          0, // LFO_AMT
-          0, // LFO_FREQ
-          0, // LFO_FX_FREQ
-          2, // FX_FILTER
-          14, // FX_FREQ
-          1, // FX_RESONANCE
-          1, // FX_DIST
-          32, // FX_DRIVE
-          0, // FX_PAN_AMT
-          0, // FX_PAN_FREQ
-          0, // FX_DELAY_AMT
-          0 // FX_DELAY_TIME
-          ],
-          // Patterns
-          p: [,,,,1,1,1,1,,2,1,1,1,1],
-          // Columns
-          c: [
-            {n: [147,,,,147,,,147,,,147,,147,,,,147,,,,147,,,147,,,147,,147,,,147],
-             f: []},
-            {n: [,,,,,,,,,,,,,,,,,,,,,,,,147,,,,147,,147,147],
-             f: []}
-          ]
-        },
-        { // Instrument 5
-          i: [
           0, // OSC1_WAVEFORM
           0, // OSC1_VOL
-          128, // OSC1_SEMI
+          92, // OSC1_SEMI
           0, // OSC1_XENV
           0, // OSC2_WAVEFORM
           0, // OSC2_VOL
-          128, // OSC2_SEMI
+          92, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
-          60, // NOISE_VOL
-          4, // ENV_ATTACK
-          10, // ENV_SUSTAIN
-          34, // ENV_RELEASE
-          0, // LFO_WAVEFORM
-          187, // LFO_AMT
-          5, // LFO_FREQ
-          0, // LFO_FX_FREQ
-          1, // FX_FILTER
-          239, // FX_FREQ
-          135, // FX_RESONANCE
-          0, // FX_DIST
-          32, // FX_DRIVE
-          108, // FX_PAN_AMT
-          5, // FX_PAN_FREQ
-          16, // FX_DELAY_AMT
-          4 // FX_DELAY_TIME
-          ],
-          // Patterns
-          p: [,,,,1,1,1,1,1,1,1,1,1,1],
-          // Columns
-          c: [
-            {n: [,147,147,,,147,147,,,147,147,,,147,147,147,,147,147,,,147,147,,,147,147,,,147,147,147],
-             f: []}
-          ]
-        },
-        { // Instrument 6
-          i: [
-          2, // OSC1_WAVEFORM
-          128, // OSC1_VOL
-          116, // OSC1_SEMI
-          0, // OSC1_XENV
-          2, // OSC2_WAVEFORM
-          128, // OSC2_VOL
-          128, // OSC2_SEMI
-          15, // OSC2_DETUNE
-          0, // OSC2_XENV
-          0, // NOISE_VOL
-          7, // ENV_ATTACK
-          14, // ENV_SUSTAIN
-          39, // ENV_RELEASE
-          0, // LFO_WAVEFORM
-          97, // LFO_AMT
-          4, // LFO_FREQ
-          1, // LFO_FX_FREQ
-          3, // FX_FILTER
-          49, // FX_FREQ
-          154, // FX_RESONANCE
-          0, // FX_DIST
-          109, // FX_DRIVE
-          107, // FX_PAN_AMT
-          4, // FX_PAN_FREQ
-          79, // FX_DELAY_AMT
-          4 // FX_DELAY_TIME
-          ],
-          // Patterns
-          p: [,,,,,,1,2,1,2,,,1,2],
-          // Columns
-          c: [
-            {n: [147,150,154,147,150,154,147,150,154,147,150,154,142,145,147,154,142,145,149,142,145,149,142,145,149,142,145,149,137,140,142,149,135,,,,147,,,,135,,,,147,,,,130,,,,142,,,,130,,,,142],
-             f: []},
-            {n: [145,149,152,145,149,152,145,149,152,145,149,152,140,142,145,152,140,144,147,140,144,147,140,144,147,140,144,147,135,140,144,147,133,,,,145,,,,133,,,,145,,,,128,,,,140,,,,128,,,,140],
-             f: []}
-          ]
-        },
-        { // Instrument 7
-          i: [
-          0, // OSC1_WAVEFORM
-          192, // OSC1_VOL
-          116, // OSC1_SEMI
-          0, // OSC1_XENV
-          0, // OSC2_WAVEFORM
-          192, // OSC2_VOL
-          116, // OSC2_SEMI
-          0, // OSC2_DETUNE
-          0, // OSC2_XENV
-          0, // NOISE_VOL
-          7, // ENV_ATTACK
-          22, // ENV_SUSTAIN
-          71, // ENV_RELEASE
+          255, // NOISE_VOL
+          12, // ENV_ATTACK
+          0, // ENV_SUSTAIN
+          52, // ENV_RELEASE
+          0, // ARP_CHORD
+          0, // ARP_SPEED
           0, // LFO_WAVEFORM
           0, // LFO_AMT
           0, // LFO_FREQ
-          0, // LFO_FX_FREQ
+          1, // LFO_FX_FREQ
           2, // FX_FILTER
-          255, // FX_FREQ
-          0, // FX_RESONANCE
+          27, // FX_FREQ
+          166, // FX_RESONANCE
           0, // FX_DIST
-          32, // FX_DRIVE
+          116, // FX_DRIVE
           0, // FX_PAN_AMT
           0, // FX_PAN_FREQ
           0, // FX_DELAY_AMT
           0 // FX_DELAY_TIME
           ],
           // Patterns
-          p: [],
+          p: [1],
           // Columns
           c: [
+            {n: [147],
+             f: []}
           ]
         }
       ],
-      rowLen: 6014,   // In sample lengths
-      patternLen: 32,  // Rows per pattern
-      endPattern: 16  // End pattern
+      rowLen: 5513,   // In sample lengths
+      patternLen: 2,  // Rows per pattern
+      endPattern: 3  // End pattern
+    },
+	'hit': {
+	  songData: [
+        { // Instrument 0
+          i: [
+          2, // OSC1_WAVEFORM
+          255, // OSC1_VOL
+          92, // OSC1_SEMI
+          0, // OSC1_XENV
+          3, // OSC2_WAVEFORM
+          0, // OSC2_VOL
+          92, // OSC2_SEMI
+          0, // OSC2_DETUNE
+          0, // OSC2_XENV
+          255, // NOISE_VOL
+          0, // ENV_ATTACK
+          39, // ENV_SUSTAIN
+          20, // ENV_RELEASE
+          0, // ARP_CHORD
+          0, // ARP_SPEED
+          2, // LFO_WAVEFORM
+          0, // LFO_AMT
+          0, // LFO_FREQ
+          1, // LFO_FX_FREQ
+          2, // FX_FILTER
+          17, // FX_FREQ
+          0, // FX_RESONANCE
+          0, // FX_DIST
+          255, // FX_DRIVE
+          0, // FX_PAN_AMT
+          0, // FX_PAN_FREQ
+          0, // FX_DELAY_AMT
+          0 // FX_DELAY_TIME
+          ],
+          // Patterns
+          p: [1],
+          // Columns
+          c: [
+            {n: [99],
+             f: []}
+          ]
+        }
+      ],
+      rowLen: 5513,   // In sample lengths
+      patternLen: 2,  // Rows per pattern
+      endPattern: 3  // End pattern
+    },
+	'block': {
+	  songData: [
+        { // Instrument 0
+          i: [
+          3, // OSC1_WAVEFORM
+          255, // OSC1_VOL
+          161, // OSC1_SEMI
+          0, // OSC1_XENV
+          3, // OSC2_WAVEFORM
+          0, // OSC2_VOL
+          92, // OSC2_SEMI
+          0, // OSC2_DETUNE
+          0, // OSC2_XENV
+          31, // NOISE_VOL
+          0, // ENV_ATTACK
+          15, // ENV_SUSTAIN
+          33, // ENV_RELEASE
+          104, // ARP_CHORD
+          4, // ARP_SPEED
+          1, // LFO_WAVEFORM
+          0, // LFO_AMT
+          0, // LFO_FREQ
+          1, // LFO_FX_FREQ
+          1, // FX_FILTER
+          0, // FX_FREQ
+          0, // FX_RESONANCE
+          0, // FX_DIST
+          255, // FX_DRIVE
+          0, // FX_PAN_AMT
+          0, // FX_PAN_FREQ
+          0, // FX_DELAY_AMT
+          0 // FX_DELAY_TIME
+          ],
+          // Patterns
+          p: [1],
+          // Columns
+          c: [
+            {n: [206],
+             f: []}
+          ]
+        }
+      ],
+      rowLen: 5513,   // In sample lengths
+      patternLen: 2,  // Rows per pattern
+      endPattern: 3  // End pattern
+    },
+	'shoot': {
+	  songData: [
+        { // Instrument 0
+          i: [
+          1, // OSC1_WAVEFORM
+          0, // OSC1_VOL
+          92, // OSC1_SEMI
+          0, // OSC1_XENV
+          3, // OSC2_WAVEFORM
+          0, // OSC2_VOL
+          92, // OSC2_SEMI
+          0, // OSC2_DETUNE
+          0, // OSC2_XENV
+          255, // NOISE_VOL
+          0, // ENV_ATTACK
+          0, // ENV_SUSTAIN
+          59, // ENV_RELEASE
+          0, // ARP_CHORD
+          0, // ARP_SPEED
+          3, // LFO_WAVEFORM
+          87, // LFO_AMT
+          11, // LFO_FREQ
+          1, // LFO_FX_FREQ
+          2, // FX_FILTER
+          96, // FX_FREQ
+          0, // FX_RESONANCE
+          0, // FX_DIST
+          255, // FX_DRIVE
+          0, // FX_PAN_AMT
+          0, // FX_PAN_FREQ
+          0, // FX_DELAY_AMT
+          0 // FX_DELAY_TIME
+          ],
+          // Patterns
+          p: [1],
+          // Columns
+          c: [
+            {n: [206],
+             f: []}
+          ]
+        }
+      ],
+      rowLen: 5513,   // In sample lengths
+      patternLen: 2,  // Rows per pattern
+      endPattern: 3  // End pattern
+    },
+	'rev': {
+	  songData: [
+        { // Instrument 0
+          i: [
+          1, // OSC1_WAVEFORM
+          255, // OSC1_VOL
+          92, // OSC1_SEMI
+          0, // OSC1_XENV
+          0, // OSC2_WAVEFORM
+          134, // OSC2_VOL
+          92, // OSC2_SEMI
+          255, // OSC2_DETUNE
+          0, // OSC2_XENV
+          255, // NOISE_VOL
+          0, // ENV_ATTACK
+          33, // ENV_SUSTAIN
+          59, // ENV_RELEASE
+          0, // ARP_CHORD
+          0, // ARP_SPEED
+          3, // LFO_WAVEFORM
+          0, // LFO_AMT
+          0, // LFO_FREQ
+          1, // LFO_FX_FREQ
+          2, // FX_FILTER
+          96, // FX_FREQ
+          0, // FX_RESONANCE
+          0, // FX_DIST
+          255, // FX_DRIVE
+          0, // FX_PAN_AMT
+          0, // FX_PAN_FREQ
+          55, // FX_DELAY_AMT
+          6 // FX_DELAY_TIME
+          ],
+          // Patterns
+          p: [1],
+          // Columns
+          c: [
+            {n: [135],
+             f: []}
+          ]
+        }
+      ],
+      rowLen: 5513,   // In sample lengths
+      patternLen: 2,  // Rows per pattern
+      endPattern: 3  // End pattern
     }
 }
+
+// JSFXR test
+/*function _13SoundGen() {	
+	var _retObj = {};
+	
+	var _data = {
+		'swing': [3,0.16,0.01,,0.3,0.21,,0.48,-0.1999,,,-1,,,-1,,,0.02,1,,,,-1,0.5],
+		'hit': [3,,0.075,,0.1097,0.51,,-0.6729,,,,,,,,,,,1,,,,,0.5],
+		'block': [0,,0.01,,0.22,0.6884,,-0.02,,,,-1,,,-1,,-1,,1,-1,,,-1,0.5],
+		'shoot': [1,,0.0163,,0.62,0.4,,-0.4,-0.3399,,,,,0.4596,-0.3585,0.7,-1,-1,0.36,-0.58,,,-1,0.5],
+		'rev': [1,,0.1296,,0.4899,0.359,,0.3799,1,,,,,,-1,0.78,-1,-1,1,-1,,,-1,0.5]
+	}
+	
+	for(var i in _data)
+	{
+		var _audioarr = [];
+		
+		_13Rep(10, function () {
+			var _audio = new Audio();
+			_audio.src = jsfxr(_data[i]);
+			_audioarr.push(_audio);
+		})
+		
+		_retObj[i] = {
+			arr: _audioarr,
+			ind: 0,
+			play: function() {
+				this.arr[this.ind].play();
+				this.ind = (this.ind + 1) % 10;
+			}
+		}
+	}	
+
+	return _retObj;
+}*/

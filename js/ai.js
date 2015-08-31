@@ -12,6 +12,11 @@ function _13AI(mob, world, timePassed)
 		mob.action = mob._naction;
 		var _act = mob._naction = _13ObjClone(mob.action, true);
 		
+		var _mpos = {
+			x: _pl.pos.x + _pl.vel.x / 2,
+			y: _pl.pos.y + _pl.vel.y / 2
+		}
+		
 		_act.watch = {
 			x : _pl.pos.x - mob.pos.x,
 			y: _pl.pos.y - mob.pos.y
@@ -20,7 +25,7 @@ function _13AI(mob, world, timePassed)
 		if(mob._lastAI < 0)
 		{
 			if(!mob.dead) {
-				var _pldist = Math.abs(_pl.pos.x - mob.pos.x);
+				var _pldist = Math.abs(_mpos.x - mob.pos.x);
 					
 				if(_pldist < 500) {
 					mob.awake = true;
@@ -31,10 +36,11 @@ function _13AI(mob, world, timePassed)
 					// RANGED AI
 
 					if(mob.awake && !mob.dead && !_pl.dead) {
-						if(mob.didatk > 500 / mob.revmult)
+						
+						if(mob.didatk > 500 / mob.revmult || _pldist > 600)
 						{
-							if(_act.move == null) _act.move = { 
-								x: _pl.pos.x + (_pl.facing ? -1 : 1) * (400 + _13RandBetween(0, 100)), 
+							if(_act.move == null || _pldist > 600) _act.move = { 
+								x: _mpos.x + (_pl.facing ? -1 : 1) * (400 + _13RandBetween(0, 100)), 
 								y: _pl.lastgy + _13RandBetween(-300, -250)
 							}
 							_act.attack = false;
@@ -61,7 +67,7 @@ function _13AI(mob, world, timePassed)
 					});
 
 					if(mob.awake && !mob.dead && !_pl.dead) {
-						var _pldir = (_pl.pos.x < mob.pos.x) ? (-1) : (1);
+						var _pldir = (_mpos.x < mob.pos.x) ? (-1) : (1);
 				
 						if(_pldist > 200) _act.move = _pldir;
 						else if(_pldist < 150) _act.move = -_pldir;
@@ -69,7 +75,7 @@ function _13AI(mob, world, timePassed)
 						if(_pldist < 350) {
 							if(mob.canshield && _pl.facing != mob.facing) {
 								if((_pl.isattack && mob.isshield) ||
-									(_pl.isattack && Math.random() > 0.8) || 
+									(_pl.isattack && Math.random() > 0.9) || 
 									(mob.isshield && Math.random() > 0.5) ||
 									Math.random() > 0.9) _act.shield = true;
 							}
@@ -84,7 +90,7 @@ function _13AI(mob, world, timePassed)
 					}
 				}
 				
-				mob._lastAI = 200 / mob.revmult;
+				mob._lastAI = 150 / mob.revmult;
 			}
 		}
 	}

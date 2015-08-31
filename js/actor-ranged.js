@@ -30,7 +30,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		
 		var _aura = _world.addParticles('aura_bullet_' + bName, 20);	
 		_13ObjExtend(_aura, _auraProps);
-		_aura.lifespan = 400;
+		_aura.lifespan = 300;
 		_aura.freq = 60;
 		_aura.min.vel.y = -50;
 		_aura.max.vel.y = 50;
@@ -50,9 +50,9 @@ function _13ActorRanged(_world, bName, bW, bH) {
 			watch: { x: 0, y: 0 },
 			attack: false
 		},
-		health: new _13LimVal(10 + 60 * _retObj.level),
+		health: new _13LimVal(10 + 80 * _retObj.level),
 		damval: 25,
-		didatk: 2500,
+		didatk: 0,
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
 			var _pusha = Math.atan2(this.pos.y - tbod.pos.y, this.pos.x - tbod.pos.x);

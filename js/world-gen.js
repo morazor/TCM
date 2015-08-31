@@ -12,10 +12,10 @@ function _13WorldGen(_world) {
 		var _cy = 370;
 		var _cx = 250 * _dir;
 		
-		_13Rep(5, function(i) {
-			var _cw = (i % 3 == 0 ? 600 : 200) + 50 * Math.round(Math.random() * 5);
+		_13Rep(3, function(i) {
+			var _cw = (i % 2 == 0 ? 600 : 200) + 50 * Math.round(Math.random() * 5);
 			
-			_walls.push({x: _cx +_cw / 2 * _dir, y: _cy, w: _cw, h: 500, t: Math.random() > 0.4, g: Math.random() > 0.3 });
+			_walls.push({x: _cx +_cw / 2 * _dir, y: _cy, w: _cw, h: 500, t: Math.random() < _cw / 600, g: Math.random() < _cw / 600 });
 			
 			_cx += _dir * (_cw - 50);
 			_cy += _13RandPick([-1, 1, 2]) * 50;
@@ -170,7 +170,7 @@ function _13WorldGen(_world) {
 					{
 						_finalBoss = _13ObjExtend(_world.addActorMelee('rev_player'), {
 							pos: { x: 0, y: -200 },
-							health: new _13LimVal(450),
+							health: new _13LimVal(600),
 							revmult: 1.3
 						});
 						

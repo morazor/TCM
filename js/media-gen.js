@@ -945,11 +945,11 @@ function _13TextureGen() {
 		_ctx.fill();
 		
 		if(j > 1) {
-			var _spn = _13RandPick([1, 2, 2, 2]);
-			_ctx.rotate(0.4 * (_spn - 1));
+			var _spn = (Math.random() < j * 0.18 ? 2 : 1)
+			_ctx.rotate(0.5 * (_spn - 1));
 			for(var i = 0; i < _spn; i++)
 			{
-				_ctx.rotate(-0.8 * i + _13RandBetween(-0.2, 0.2)); 
+				_ctx.rotate(_13RandBetween(-0.3, 0.3) - i); 
 				_treebr(_ctx, j - 1);
 			}
 		}
@@ -1272,7 +1272,7 @@ var SBData = {
           119, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
-          70, // NOISE_VOL
+          150, // NOISE_VOL
           20, // ENV_ATTACK
           0, // ENV_SUSTAIN
           64, // ENV_RELEASE
@@ -1309,40 +1309,40 @@ var SBData = {
 	  songData: [
         { // Instrument 0
           i: [
-		  3, // OSC1_WAVEFORM
+		  0, // OSC1_WAVEFORM
           255, // OSC1_VOL
           128, // OSC1_SEMI
           0, // OSC1_XENV
           1, // OSC2_WAVEFORM
-          255, // OSC2_VOL
-          119, // OSC2_SEMI
+          0, // OSC2_VOL
+          92, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
-          138, // NOISE_VOL
-          43, // ENV_ATTACK
+          255, // NOISE_VOL
+          0, // ENV_ATTACK
           0, // ENV_SUSTAIN
-          119, // ENV_RELEASE
+          48, // ENV_RELEASE
           0, // ARP_CHORD
           0, // ARP_SPEED
-          0, // LFO_WAVEFORM
-          124, // LFO_AMT
-          9, // LFO_FREQ
+          1, // LFO_WAVEFORM
+          255, // LFO_AMT
+          13, // LFO_FREQ
           1, // LFO_FX_FREQ
           2, // FX_FILTER
-          82, // FX_FREQ
-          33, // FX_RESONANCE
-          28, // FX_DIST
+          22, // FX_FREQ
+          0, // FX_RESONANCE
+          0, // FX_DIST
           255, // FX_DRIVE
           0, // FX_PAN_AMT
           0, // FX_PAN_FREQ
-          0, // FX_DELAY_AMT
-          0 // FX_DELAY_TIME
+          131, // FX_DELAY_AMT
+          2 // FX_DELAY_TIME
           ],
           // Patterns
           p: [1],
           // Columns
           c: [
-            {n: [110],
+            {n: [99],
              f: []}
           ]
         }

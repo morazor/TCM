@@ -107,8 +107,13 @@ function _13Sprite(bTexture) {
 					_ctx.fillRect(0, 0, this.texture.width, this.texture.height);
 					_ctx.restore();
 					
-					_fxctx.clearRect(0, 0, this.texture.width, this.texture.height);
-					_fxctx.drawImage(this.texture, _13RandBetween(-5, 5), _13RandBetween(-5, 5));
+					_fxctx.globalAlpha = 0.5;
+					
+					_fxctx.save();
+					_fxctx.globalCompositeOperation = 'destination-in';
+					_fxctx.fillRect(0, 0, this.texture.width, this.texture.height);
+					_fxctx.restore();
+					_fxctx.drawImage(this.texture, _13RandBetween(-3, 3), _13RandBetween(-3, 3));
 					tContext.drawImage(_fxCanv, posX, posY);
 				}
 				
@@ -224,8 +229,8 @@ function _13Body(_world, bName, bW, bH) {
 		grav: 1,
 		collide: true,
 		overlap: false,
-		onCollide: function (tbod) {},
-		onOverlap: function (tbod) {},
+		onCollide: function () {},
+		onOverlap: function () {},
 		dead: false,
 		lifespan: null,
 		die: function(bullet) {
@@ -244,9 +249,9 @@ function _13Body(_world, bName, bW, bH) {
 			l: false,
 			r: false
 		},
-		beforeUpdate: function(timePassed) {},
-		afterUpdate: function(timePassed) {},
-		beforeCollide: function(tbod) { return true; },
+		beforeUpdate: function() {},
+		afterUpdate: function() {},
+		beforeCollide: function() { return true; },
 		scale: 1,
 		alpha: 1,
 		autorot: false,

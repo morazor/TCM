@@ -69,9 +69,9 @@ var CPlayer = function() {
             attack = instr.i[10] * instr.i[10] * 4,
             sustain = instr.i[11] * instr.i[11] * 4,
             release = instr.i[12] * instr.i[12] * 4,
-            releaseInv = 1 / release,
-            arp = instr.i[13],
-            arpInterval = rowLen * Math.pow(2, 2 - instr.i[14]);
+            releaseInv = 1 / release;
+            //arp = instr.i[13],
+            //arpInterval = rowLen * Math.pow(2, 2 - instr.i[14]);
 
         var noteBuf = new Int32Array(attack + sustain + release);
 
@@ -79,18 +79,20 @@ var CPlayer = function() {
         var c1 = 0, c2 = 0;
 
         // Local variables.
-        var j, j2, e, t, rsample, o1t, o2t;
+        var j, /*j2,*/ e, t, rsample, o1t, o2t;
 
         // Generate one note (attack + sustain + release)
-        for (j = 0, j2 = 0; j < attack + sustain + release; j++, j2++) {
-            if (j2 >= 0) {
+        for (j = 0/*, j2 = 0*/; j < attack + sustain + release; j++/*, j2++*/) {
+            if (j /*j2*/ >= 0) {
+				// i don't need arpeggio
+				
                 // Switch arpeggio note.
-                arp = (arp >> 8) | ((arp & 255) << 4);
-                j2 -= arpInterval;
+                //arp = (arp >> 8) | ((arp & 255) << 4);
+                //j2 -= arpInterval;
 
                 // Calculate note frequencies for the oscillators
-                o1t = getnotefreq(n + (arp & 15) + instr.i[2] - 128);
-                o2t = getnotefreq(n + (arp & 15) + instr.i[6] - 128) * (1 + 0.0008 * instr.i[7]);
+                o1t = getnotefreq(n /*+ (arp & 15)*/ + instr.i[2] - 128);
+                o2t = getnotefreq(n /*+ (arp & 15)*/ + instr.i[6] - 128) * (1 + 0.0008 * instr.i[7]);
             }
 
             // Envelope
@@ -301,7 +303,7 @@ var CPlayer = function() {
 					_13Rep(2, function(_i) {
 
 						// Store in stereo channel buffer (needed for the delay effect)
-						chnBuf[k + _i] = sample | 0;
+						//chnBuf[k + _i] = sample | 0;
 
 						// ...and add to stereo mix buffer
 						mMixBuf[k + _i] += sample | 0;

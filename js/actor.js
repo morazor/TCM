@@ -161,6 +161,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 					if(_atkang > 0 && _atkang < _pang) { // BLOCKED
 						_stopped = true;
 						
+						tbod.shnrg.add(-1);
 						tbod.pushback(_atkbod, 0.3 * this.revmult);
 						
 						if(this.type == 'melee') this.pushback(tbod, 0.7 * tbod.revmult);
@@ -203,8 +204,8 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		beforeCollide: function (tbod) {
 			return tbod.faction != this.faction;
 		},
-		onDamage: function(bullet) {},
-		onDie: function(bullet) {}
+		onDamage: function() {},
+		onDie: function() {}
 	});
 	
 	return _retObj;

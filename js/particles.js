@@ -89,7 +89,6 @@ function _13Particles(_world, bName, maxNum) {
 					_13Each(_em.list, function (_cP) {
 						if(_cP.dead)
 						{
-							_em.beforeEmit(_cP);
 							_13ObjExtend(_cP, {
 								dead: false,
 								lifespan: _em.lifespan,
@@ -125,9 +124,6 @@ function _13Particles(_world, bName, maxNum) {
 					});
 				});
 			}
-		},
-		beforeEmit: function(_cP)
-		{
 		}
 	}
 }

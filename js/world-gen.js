@@ -18,7 +18,7 @@ function _13WorldGen(_world) {
 			_walls.push({x: _cx +_cw / 2 * _dir, y: _cy, w: _cw, h: 500, t: Math.random() < _cw / 600, g: Math.random() < _cw / 600 });
 			
 			_cx += _dir * (_cw - 50);
-			_cy += _13RandPick([-1, 1, 2]) * 50;
+			_cy += _13RandPick([-1, 1, 1.5]) * 50;
 		});
 		
 		_walls.push({x: _cx + 500 *_dir, y: _cy, w: 1000, h: 500});
@@ -149,7 +149,7 @@ function _13WorldGen(_world) {
 
 						_mobLvl = Math.max(0, 1 - _mobLvl);
 					
-						var _bName = (Math.random() > 0.5 ? 'enemy_skel_' : 'enemy_wotw_');
+						var _bName = _13RandPick(['enemy_skel_', 'enemy_wotw_']);
 						_13ObjExtend(_world.addEnemy(_bName + _mobLvl), {
 							pos: _13ObjClone(_13RandPick(_spawnp)),
 							awake: true,

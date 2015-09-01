@@ -61,9 +61,10 @@ function _13Game() {
 		}
 	});
 	
-	_allCanvas[1].addEventListener('click', function(eventObj) {
+	_allCanvas[1].addEventListener('click', function() {
 		if(_world.status == 0) {
 			_world.status = 1;
+			_13MediaSounds.rev.play();
 		}
 	});
 	
@@ -87,8 +88,7 @@ function _13Game() {
 	/*** MAIN CYCLE ***/
 	
 	var _updTime = 30;
-	var _liveTime = 0;
-	
+
 	_13HUD(_ctx, _player, _world);
 	
 	setInterval(function () {
@@ -178,7 +178,7 @@ function _13HUD(_ctx, _player, _world) {
 			'The Cursed',
 			[ 'Mir', 'Ror' ],
 			[ 'A valiant knight', 'A vicious villain' ],
-			[ 'The mirror has been shattered', 'To break free from the curse' ],
+			[ 'To break free from the curse', 'The mirror has been shattered' ],
 			[ 'Fight with valour', 'Slay the nemesis' ]
 		]
 		
@@ -248,7 +248,7 @@ function _13HUD(_ctx, _player, _world) {
 				_13Each(_text[i], function (_ct, j) {
 					if(j > 0) {
 						_ctx.scale(-1, 1);
-						_ctx.fillStyle = 'red';
+						if(_world.status != 3) _ctx.fillStyle = 'red';
 					}
 					
 					_ctx.fillText(_text[i][j], -20, 0);

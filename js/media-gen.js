@@ -6,20 +6,19 @@ function _13MediaGen() {
 	var _lights = {
 		player: { c: '#ffff77', r: 350 },
 		enemy_wotw_0: { c: '#64a0ff', r: 250 },
-		enemy_wotw_1: { c: '#e164ff', r: 250 }
+		enemy_wotw_1: { c: '#e164ff', r: 250 },
+		rev_player: { c: '#ff0000', r: 350 }
 	}
 	
 	for(var _i in _lights)
 	{
 		_lights['bullet_' + _i] = {
 			c: _lights[_i].c,
-			r: _lights[_i].r * 0.5
+			r: _lights[_i].r * 0.6
 		}
 	}
 	
-	_lights.rev_player = { c: '#ff0000', r: 350 };
-	_lights.rev_bullet_player = { c: '#ff0000', r: 350 };
-	_lights.bullet_rev_player = _lights.rev_bullet_player;
+	_lights.rev_bullet_player = _lights.bullet_rev_player;
 	_lights.sparks = { c: 'yellow', r: 30 }
 	
 	_13MediaTextures = _13TextureGen();
@@ -523,7 +522,7 @@ function _13TextureGen() {
 					_crot *= _ac;
 					_crotk *= _ac;
 					
-					var _cbob = Math.abs(_crot) * _pbs * 0.05;
+					var _cbob = Math.abs(_crot) * _pbs * 0.04;
 					
 					_frSkel.rot += Math.abs(_crot) * 0.2;
 					

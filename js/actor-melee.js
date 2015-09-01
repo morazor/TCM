@@ -21,8 +21,6 @@ function _13ActorMelee(_world, bName, bW, bH) {
 	var _preAtkTime;
 	var _atkSpeed;
 
-	var _revMult = 1;
-	
 	if(bName == 'player')
 	{
 		_13ObjExtend(_retObj, {
@@ -39,7 +37,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 	}
 
 	return _13ObjExtend(_retObj, {
-		onDie: function(bullet) {
+		onDie: function() {
 			_13Each(this.bullets, function(_cbul) {
 				_cbul.die();
 			});
@@ -50,7 +48,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			_13Skel.AllBones(this.texture.skel, function (tb) {		
 				if(tb.texture != null && tb.alpha != 0)
 				{
-					var _cBone = _13ObjExtend(_world.addBody(tb.texture), {
+					_13ObjExtend(_world.addBody(tb.texture), {
 						name: 'bone',
 						dead: false,
 						w: tb.size * 0.5,
@@ -89,6 +87,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		isattack: false,
 		isshield: false,
 		canshield: _retObj.level != 0,
+		shnrg: new _13LimVal(3),
 		_sndatk: {},
 		beforeUpdate: function(timePassed) {
 			// REV CHECK
@@ -239,7 +238,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				this.isshield = false;
 			}
 		},
-		afterRefresh: function(timePassed) {
+		afterRefresh: function() {
 			var _this = this;
 			
 			if(this.didatk > 0 && !this.stopatk && 

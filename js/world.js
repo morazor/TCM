@@ -194,6 +194,16 @@ function _13World() {
 											var _r1Vel = _r1.vel[i];
 											_r1.vel[i] = _r1.bounce * _r2.vel[i];
 											_r2.vel[i] = _r2.bounce * _r1Vel;
+											
+											if(_relVel[i] > 0) {
+												_r1.pos[i] -= _overlap[i] / 2;
+												_r2.pos[i] += _overlap[i] / 2;
+											}
+											else {
+												_r1.pos[i] += _overlap[i] / 2;
+												_r2.pos[i] -= _overlap[i] / 2;
+											}
+											
 										}
 									}
 								}
@@ -353,6 +363,19 @@ function _13World() {
 						tCtx.restore();
 					}
 					
+					if(_cBody.canshield)
+					{
+						tCtx.save();
+					
+						tCtx.translate(0, -_cBody.h / 2 - 25);
+						tCtx.fillStyle = 'white';
+						tCtx.font = '28px monospace';
+						tCtx.textAlign = 'center';
+						tCtx.fillText(Math.round(_cBody.shnrg.c) + '/' + _cBody.shnrg.max, 0, 0);
+						
+						tCtx.restore();
+					}
+					
 					if(_cBody.isshield)
 					{
 						var _watchang = Math.atan2(_cBody.action.watch.y, _cBody.action.watch.x);
@@ -430,7 +453,7 @@ function _13World() {
 		
 			return _retObj;
 		},
-		addEnemy: function(bName, bW, bH) {
+		addEnemy: function(bName) {
 			if(bName.match(/wotw/) != null) return this.addActorRanged(bName);
 			else return this.addActorMelee(bName);
 		},

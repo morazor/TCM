@@ -38,7 +38,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		_aura.link = _cbul;
 	})
 	
-	var _atkTime = 2000;
+	var _atkTime = 2200;
 	
 	return _13ObjExtend(_retObj, {
 		w: 60,
@@ -56,13 +56,12 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
 			var _pusha = _13Ang(this.pos, tbod.pos);
-			this.vel.x = Math.cos(_pusha) * 300;
-			this.vel.y = Math.sin(_pusha) * 300;
+			this.vel.x = Math.cos(_pusha) * 300 * _pushc;
+			this.vel.y = Math.sin(_pusha) * 300 * _pushc;
 		},
-		onDie: function(bullet) {
+		onDie: function() {
 		},
-		beforeUpdate: function(timePassed) {
-			var _act = this.action;
+		beforeUpdate: function() {
 		},
 		afterUpdate: function(timePassed) {
 			var _act = this.action;

@@ -72,10 +72,11 @@ function _13AI(mob, player, timePassed)
 						
 						if(_pldist < 350) {
 							if(mob.canshield && player.facing != mob.facing) {
+								var _basech = 1.03 - (mob.revmult + mob.shnrg.c) * 0.1;
 								if((player.isattack && mob.isshield) ||
-									(player.isattack && Math.random() > 0.9) || 
-									(mob.isshield && Math.random() > 0.5) ||
-									Math.random() > 0.9) _act.shield = true;
+									(player.isattack && Math.random() > _basech) || 
+									(mob.isshield && Math.random() > 0.4) ||
+									Math.random() > _basech) _act.shield = true;
 							}
 							
 							if(!_act.shield && Math.random() > 0.7) _act.attack = true;

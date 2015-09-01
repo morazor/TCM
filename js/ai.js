@@ -1,8 +1,6 @@
-function _13AI(mob, world, timePassed)
+function _13AI(mob, player, timePassed)
 {
-	var _pl = world.player;
-	
-	if(mob != _pl)
+	if(mob != player)
 	{
 		if(mob._lastAI == null) mob._lastAI = 0;
 		
@@ -13,13 +11,13 @@ function _13AI(mob, world, timePassed)
 		var _act = mob._naction = _13ObjClone(mob.action, true);
 		
 		var _mpos = {
-			x: _pl.pos.x + _pl.vel.x / 2,
-			y: _pl.pos.y + _pl.vel.y / 2
+			x: player.pos.x + player.vel.x / 2,
+			y: player.pos.y + player.vel.y / 2
 		}
 		
 		_act.watch = {
-			x : _pl.pos.x - mob.pos.x,
-			y: _pl.pos.y - mob.pos.y
+			x : player.pos.x - mob.pos.x,
+			y: player.pos.y - mob.pos.y
 		}
 		
 		if(mob._lastAI < 0)
@@ -35,13 +33,13 @@ function _13AI(mob, world, timePassed)
 				{
 					// RANGED AI
 
-					if(mob.awake && !mob.dead && !_pl.dead) {
-						
-						if(mob.didatk > 500 / mob.revmult || _pldist > 600)
+					if(mob.awake && !mob.dead && !player.dead) {
+						var _toofar = _pldist > 700;
+						if(mob.didatk > 500 / mob.revmult || _toofar)
 						{
-							if(_act.move == null || _pldist > 600) _act.move = { 
-								x: _mpos.x + (_pl.facing ? -1 : 1) * (400 + _13RandBetween(0, 100)), 
-								y: _pl.lastgy + _13RandBetween(-300, -250)
+							if(_act.move == null || _toofar) _act.move = { 
+								x: _mpos.x + (player.facing ? -1 : 1) * (375 + _13RandBetween(0, 100)), 
+								y: player.lastgy + _13RandBetween(-275, -230)
 							}
 							_act.attack = false;
 						}
@@ -66,16 +64,16 @@ function _13AI(mob, world, timePassed)
 						jump: false
 					});
 
-					if(mob.awake && !mob.dead && !_pl.dead) {
+					if(mob.awake && !mob.dead && !player.dead) {
 						var _pldir = (_mpos.x < mob.pos.x) ? (-1) : (1);
 				
 						if(_pldist > 200) _act.move = _pldir;
 						else if(_pldist < 150) _act.move = -_pldir;
 						
 						if(_pldist < 350) {
-							if(mob.canshield && _pl.facing != mob.facing) {
-								if((_pl.isattack && mob.isshield) ||
-									(_pl.isattack && Math.random() > 0.9) || 
+							if(mob.canshield && player.facing != mob.facing) {
+								if((player.isattack && mob.isshield) ||
+									(player.isattack && Math.random() > 0.9) || 
 									(mob.isshield && Math.random() > 0.5) ||
 									Math.random() > 0.9) _act.shield = true;
 							}

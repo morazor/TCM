@@ -22,7 +22,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 	_aura.link = _retObj;
 	
 	var _bulLife = 2500;
-	var _bulVel = 500;
+	var _bulVel = 600;
 	
 	_13Each(_retObj.bullets, function(_cbul) {
 		_cbul.w = 20;
@@ -55,7 +55,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		didatk: 0,
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
-			var _pusha = Math.atan2(this.pos.y - tbod.pos.y, this.pos.x - tbod.pos.x);
+			var _pusha = _13Ang(this.pos, tbod.pos);
 			this.vel.x = Math.cos(_pusha) * 300;
 			this.vel.y = Math.sin(_pusha) * 300;
 		},
@@ -73,15 +73,20 @@ function _13ActorRanged(_world, bName, bW, bH) {
 			
 			this.didatk -= timePassed;
 			
-			if(_act.move != null) // MOVING
+			 // MOVING
+			var _maxSpeed = 1000 * this.revmult;
+			
+			for(var i in this.acc)
 			{
-				for(var i in this.acc)
-				{
-					this.acc[i] = timePassed * this.revmult * 0.2 * ((_act.move[i] - this.pos[i]) - this.vel[i]);
+				if(_act.move != null && Math.abs(this.vel[i]) < _maxSpeed) 
+					this.acc[i] = timePassed * this.revmult * 0.15 * (_act.move[i] - this.pos[i] - this.vel[i] / 2);
+				else {
+					this.acc[i] = 0;
+					this.vel[i] *= 0.99;
 				}
 			}
-			
-			this.alpha = 1 - Math.min(0.5 * this.level + 0.49, _13Dist(this.vel, { x: 0, y: 0}) / 600);
+
+			this.alpha = 1 - Math.min(0.4 * this.level + 0.59, _13Dist(this.vel, { x: 0, y: 0}) / _maxSpeed);
 			
 			if(this.didatk <= 0 && _act.attack)
 			{

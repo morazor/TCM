@@ -1,3 +1,6 @@
+// WARNING: I HEREBY DECLARE THAT I HAVE CHOPPED OFF SOME EFFECTS AND MADE IT MONO
+// DON'T USE THIS VERSION OR EVIL THINGS MAY HAPPEN
+
 /* -*- mode: javascript; tab-width: 4; indent-tabs-mode: nil; -*-
 *
 * Copyright (c) 2011-2013 Marcus Geelnard
@@ -23,7 +26,7 @@
 *
 */
 
-"use strict";
+//"use strict";
 
 var CPlayer = function() {
 
@@ -171,7 +174,7 @@ var CPlayer = function() {
     this.generate = function () {
         // Local variables
         var i, j, b, p, row, col, n, cp,
-            k, t, lfor, e, x, rsample, rowStartSample, f, da;
+            k, lfor, e, x, sample, rowStartSample, f, da;
 
         // Put performance critical items in local variables
         var chnBuf = new Int32Array(mNumWords),
@@ -181,16 +184,16 @@ var CPlayer = function() {
 
         // Clear effect state
         var low = 0, band = 0, high;
-        var lsample, filterActive = false;
+        var filterActive = false;
 
         // Clear note cache.
         var noteCache = [];
 
          // Patterns
-         for (p = 0; p <= mLastRow; ++p) {
-            cp = instr.p[p];
-
-            // Pattern rows
+		 _13Each(instr.p, function(cp, p) {
+			 if(p > mLastRow) return true;
+			 
+			 // Pattern rows
             for (row = 0; row < patternLen; ++row) {
                 // Execute effect command.
                 var cmdNo = cp ? instr.c[cp - 1].f[row] : 0;
@@ -211,12 +214,12 @@ var CPlayer = function() {
                     fxFilter = instr.i[19],
                     fxFreq = instr.i[20] * 43.23529 * 3.141592 / 44100,
                     q = 1 - instr.i[21] / 255,
-                    dist = instr.i[22] * 1e-5,
-                    drive = instr.i[23] / 32,
-                    panAmt = instr.i[24] / 512,
+                    //dist = instr.i[22] * 1e-5,
+                    drive = instr.i[23] / 32;
+                    /*panAmt = instr.i[24] / 512,
                     panFreq = 6.283184 * Math.pow(2, instr.i[25] - 9) / rowLen,
                     dlyAmt = instr.i[26] / 255,
-                    dly = instr.i[27] * rowLen;
+                    dly = instr.i[27] * rowLen;*/
 
                 // Calculate start sample number for this row in the pattern
                 rowStartSample = (p * patternLen + row) * rowLen;
@@ -241,10 +244,10 @@ var CPlayer = function() {
                 for (j = 0; j < rowLen; j++) {
                     // Dry mono-sample
                     k = (rowStartSample + j) * 2;
-                    rsample = chnBuf[k];
+                    sample = chnBuf[k];
 
                     // We only do effects if we have some sound input
-                    if (rsample || filterActive) {
+                    if (sample || filterActive) {
                         // State variable filter
                         f = fxFreq;
                         if (fxLFO) {
@@ -252,50 +255,60 @@ var CPlayer = function() {
                         }
                         f = 1.5 * Math.sin(f);
                         low += f * band;
-                        high = q * (rsample - band) - low;
+                        high = q * (sample - band) - low;
                         band += f * high;
-                        rsample = fxFilter == 3 ? band : fxFilter == 1 ? high : low;
+                        sample = fxFilter == 3 ? band : fxFilter == 1 ? high : low;
 
                         // Distortion
-                        if (dist) {
-                            rsample *= dist;
-                            rsample = rsample < 1 ? rsample > -1 ? osc_sin(rsample*.25) : -1 : 1;
-                            rsample /= dist;
-                        }
+						
+						/*if (dist) {
+                            sample *= dist;
+                            sample = sample < 1 ? sample > -1 ? osc_sin(sample*.25) : -1 : 1;
+                            sample /= dist;
+                        }*/
+						
+						// no distortion needed
+
 
                         // Drive
-                        rsample *= drive;
+                        sample *= drive;
 
                         // Is the filter active (i.e. still audiable)?
-                        filterActive = rsample * rsample > 1e-5;
+                        filterActive = sample * sample > 1e-5;
 
                         // Panning
-                        t = Math.sin(panFreq * k) * panAmt + 0.5;
+						
+						/*t = Math.sin(panFreq * k) * panAmt + 0.5;
                         lsample = rsample * (1 - t);
-                        rsample *= t;
-                    } else {
-                        lsample = 0;
+                        rsample *= t;*/
+						
+						// no panning needed, just half it
+						
+						sample *= 0.5;
                     }
 
                     // Delay is always done, since it does not need sound input
-                    if (k >= dly) {
+                    /*if (k >= dly) {
                         // Left channel = left + right[-p] * t
-                        lsample += chnBuf[k-dly+1] * dlyAmt;
+                        //lsample += chnBuf[k-dly+1] * dlyAmt;
 
                         // Right channel = right + left[-p] * t
-                        rsample += chnBuf[k-dly] * dlyAmt;
-                    }
+                        sample += chnBuf[k-dly] * dlyAmt;
+                    }*/
+					
+					// delay not needed
+					
+					_13Rep(2, function(_i) {
 
-                    // Store in stereo channel buffer (needed for the delay effect)
-                    chnBuf[k] = lsample | 0;
-                    chnBuf[k+1] = rsample | 0;
+						// Store in stereo channel buffer (needed for the delay effect)
+						chnBuf[k + _i] = sample | 0;
 
-                    // ...and add to stereo mix buffer
-                    mMixBuf[k] += lsample | 0;
-                    mMixBuf[k+1] += rsample | 0;
+						// ...and add to stereo mix buffer
+						mMixBuf[k + _i] += sample | 0;
+                    });
                 }
             }
-        }
+		 });
 
         // Next iteration. Return progress (1.0 == done!).
         mCurrentCol++;

@@ -189,7 +189,7 @@ function _13Body(_world, bName, bW, bH) {
 			_grd.addColorStop(0, lightC[i].c);
 			_grd.addColorStop(1, 'rgba(0,0,0,0)');
 			
-			_lCtx.globalAlpha = 0.5;
+			_lCtx.globalAlpha = 0.3;
 			_lCtx.beginPath();
 			_lCtx.fillStyle = _grd;
 			_lCtx.arc(0, 0, _cs / 2, 0, Math.PI * 2);
@@ -246,7 +246,6 @@ function _13Body(_world, bName, bW, bH) {
 		},
 		beforeUpdate: function(timePassed) {},
 		afterUpdate: function(timePassed) {},
-		onRender: function() {},
 		beforeCollide: function(tbod) { return true; },
 		scale: 1,
 		alpha: 1,

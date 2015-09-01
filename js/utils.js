@@ -61,6 +61,9 @@ function _13RectInters(r1, r2) {
 function _13Dist(p1, p2) {
 	return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 }
+function _13Ang(p1, p2) {
+	return Math.atan2(p1.y - p2.y, p1.x - p2.x);
+}
 
 function _13RandBetween(minV, maxV) {
 	return minV + Math.random() * (maxV - minV);

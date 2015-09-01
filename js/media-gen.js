@@ -17,10 +17,10 @@ function _13MediaGen() {
 		}
 	}
 	
-	_lights.rev_player = { c: '#cc0000', r: 350 };
-	_lights.rev_bullet_player = { c: '#cc0000', r: 350 };
+	_lights.rev_player = { c: '#ff0000', r: 350 };
+	_lights.rev_bullet_player = { c: '#ff0000', r: 350 };
 	_lights.bullet_rev_player = _lights.rev_bullet_player;
-	_lights.sparks = { c: '#ffdd99', r: 30 }
+	_lights.sparks = { c: 'yellow', r: 30 }
 	
 	_13MediaTextures = _13TextureGen();
 	_13MediaLights = _lights;
@@ -54,6 +54,10 @@ function _13TextureGen() {
 	
 	_ctx.translate(_bls / 2, _bls / 2);
 	_ctx.scale(0.7, 1);
+	
+	_13Path(_ctx, { c: 'rgba(127,127,127,0.25)', p: [
+		[ 'arc', 0, 0, _bls / 2 - 15, 0, Math.PI * 2 ]
+	]});
 	
 	_13Path(_ctx, { c: '#777777', p: [
 		[ _bls / 2, 0],
@@ -679,7 +683,7 @@ function _13TextureGen() {
 			switch(_cp.c) {
 				case _platec:
 				{
-					_cp.c = '#222233';
+					_cp.c = 'black';
 				}
 				break;
 				case _goldc:
@@ -865,19 +869,19 @@ function _13TextureGen() {
 		]});
 	});
 	
-	var _hillsc = ['#04091a', '#050b21'];
+	var _hillsc = ['#050b21', '#04091a'];
 
 	for(var j = 0; j < 2; j++)
 	{
 		var i = j / 2;
 
 		_13Path(_canvas, { c: _hillsc[j], p: [
-			[ -0.3 + i, 0.6 ],
+			[ 0.3 - i, 0.6 ],
 			[
 				'bez',
-				0.1 + i + 0.2 * Math.random(), 0.1 + 0.2 * Math.random(),
-				0.1 + i + 0.2 * Math.random(), 0.1 + 0.2 * Math.random(),
-				0.8 + i, 0.6
+				0.8 - i, 0.1 + 0.3 * i,
+				0.8 - i, 0.1 + 0.3 * i,
+				1.3 - i, 0.6
 			]
 		]}, _fw);
 	}
@@ -1088,7 +1092,7 @@ var SBData = {
           92, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
-          180, // NOISE_VOL
+          140, // NOISE_VOL
           28, // ENV_ATTACK
           0, // ENV_SUSTAIN
           39, // ENV_RELEASE
@@ -1102,11 +1106,11 @@ var SBData = {
           24, // FX_FREQ
           157, // FX_RESONANCE
           0, // FX_DIST
-          255, // FX_DRIVE
-          0, // FX_PAN_AMT
-          0, // FX_PAN_FREQ
-          0, // FX_DELAY_AMT
-          0 // FX_DELAY_TIME
+          255 // FX_DRIVE
+          //0, // FX_PAN_AMT
+          //0, // FX_PAN_FREQ
+          //0, // FX_DELAY_AMT
+          //0 // FX_DELAY_TIME
           ],
           // Patterns
           p: [1],
@@ -1126,7 +1130,7 @@ var SBData = {
         { // Instrument 0
           i: [
           0, // OSC1_WAVEFORM
-          0, // OSC1_VOL
+          50, // OSC1_VOL
           92, // OSC1_SEMI
           0, // OSC1_XENV
           0, // OSC2_WAVEFORM
@@ -1146,13 +1150,13 @@ var SBData = {
           0, // LFO_FX_FREQ
           2, // FX_FILTER
           18, // FX_FREQ
-          28, // FX_RESONANCE
+          100, // FX_RESONANCE
           0, // FX_DIST
-          255, // FX_DRIVE
-          0, // FX_PAN_AMT
-          0, // FX_PAN_FREQ
-          0, // FX_DELAY_AMT
-          0 // FX_DELAY_TIME
+          255 // FX_DRIVE
+          //0, // FX_PAN_AMT
+          //0, // FX_PAN_FREQ
+          //0, // FX_DELAY_AMT
+          //0 // FX_DELAY_TIME
           ],
           // Patterns
           p: [1],
@@ -1171,34 +1175,34 @@ var SBData = {
 	  songData: [
         { // Instrument 0
           i: [
-		  2, // OSC1_WAVEFORM
-          5, // OSC1_VOL
+		  3, // OSC1_WAVEFORM
+          30, // OSC1_VOL
           128, // OSC1_SEMI
           0, // OSC1_XENV
           3, // OSC2_WAVEFORM
-          0, // OSC2_VOL
-          92, // OSC2_SEMI
+          30, // OSC2_VOL
+          89, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
-          20, // NOISE_VOL
+          120, // NOISE_VOL
           0, // ENV_ATTACK
-          9, // ENV_SUSTAIN
+          5, // ENV_SUSTAIN
           47, // ENV_RELEASE
-          19, // ARP_CHORD
-          5, // ARP_SPEED
+          0, // ARP_CHORD
+          0, // ARP_SPEED
           0, // LFO_WAVEFORM
           0, // LFO_AMT
           0, // LFO_FREQ
           0, // LFO_FX_FREQ
-          1, // FX_FILTER
-          8, // FX_FREQ
+          0, // FX_FILTER
+          25, // FX_FREQ
           0, // FX_RESONANCE
           0, // FX_DIST
-          255, // FX_DRIVE
-          0, // FX_PAN_AMT
-          0, // FX_PAN_FREQ
-          0, // FX_DELAY_AMT
-          0 // FX_DELAY_TIME
+          255 // FX_DRIVE
+          //0, // FX_PAN_AMT
+          //0, // FX_PAN_FREQ
+          //0, // FX_DELAY_AMT
+          //0 // FX_DELAY_TIME
           ],
           // Patterns
           p: [1],
@@ -1240,11 +1244,11 @@ var SBData = {
           24, // FX_FREQ
           0, // FX_RESONANCE
           0, // FX_DIST
-          194, // FX_DRIVE
-          0, // FX_PAN_AMT
-          0, // FX_PAN_FREQ
-          0, // FX_DELAY_AMT
-          0 // FX_DELAY_TIME
+          194 // FX_DRIVE
+          //0, // FX_PAN_AMT
+          //0, // FX_PAN_FREQ
+          //0, // FX_DELAY_AMT
+          //0 // FX_DELAY_TIME
           ],
           // Patterns
           p: [1],
@@ -1286,11 +1290,11 @@ var SBData = {
           39, // FX_FREQ
           0, // FX_RESONANCE
           0, // FX_DIST
-          39, // FX_DRIVE
-          0, // FX_PAN_AMT
-          0, // FX_PAN_FREQ
-          0, // FX_DELAY_AMT
-          0 // FX_DELAY_TIME
+          39 // FX_DRIVE
+          //0, // FX_PAN_AMT
+          //0, // FX_PAN_FREQ
+          //0, // FX_DELAY_AMT
+          //0 // FX_DELAY_TIME
           ],
           // Patterns
           p: [1],
@@ -1310,39 +1314,39 @@ var SBData = {
         { // Instrument 0
           i: [
 		  0, // OSC1_WAVEFORM
-          255, // OSC1_VOL
-          128, // OSC1_SEMI
+          150, // OSC1_VOL
+          97, // OSC1_SEMI
           0, // OSC1_XENV
-          1, // OSC2_WAVEFORM
-          0, // OSC2_VOL
-          92, // OSC2_SEMI
+          0, // OSC2_WAVEFORM
+          150, // OSC2_VOL
+          118, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
-          255, // NOISE_VOL
+          0, // NOISE_VOL
           0, // ENV_ATTACK
           0, // ENV_SUSTAIN
-          48, // ENV_RELEASE
+          90, // ENV_RELEASE
           0, // ARP_CHORD
           0, // ARP_SPEED
           1, // LFO_WAVEFORM
-          255, // LFO_AMT
-          13, // LFO_FREQ
-          1, // LFO_FX_FREQ
+          0, // LFO_AMT
+          0, // LFO_FREQ
+          0, // LFO_FX_FREQ
           2, // FX_FILTER
-          22, // FX_FREQ
+          50, // FX_FREQ
           0, // FX_RESONANCE
           0, // FX_DIST
-          255, // FX_DRIVE
-          0, // FX_PAN_AMT
-          0, // FX_PAN_FREQ
-          131, // FX_DELAY_AMT
-          2 // FX_DELAY_TIME
+          255 // FX_DRIVE
+          //0, // FX_PAN_AMT
+          //0, // FX_PAN_FREQ
+          //0, // FX_DELAY_AMT
+          //0 // FX_DELAY_TIME
           ],
           // Patterns
           p: [1],
           // Columns
           c: [
-            {n: [99],
+            {n: [120],
              f: []}
           ]
         }
@@ -1353,37 +1357,3 @@ var SBData = {
     }
 }
 
-// JSFXR test
-/*function _13SoundGen() {	
-	var _retObj = {};
-	
-	var _data = {
-		'swing': [3,0.16,0.01,,0.3,0.21,,0.48,-0.1999,,,-1,,,-1,,,0.02,1,,,,-1,0.5],
-		'hit': [3,,0.075,,0.1097,0.51,,-0.6729,,,,,,,,,,,1,,,,,0.5],
-		'block': [0,,0.01,,0.22,0.6884,,-0.02,,,,-1,,,-1,,-1,,1,-1,,,-1,0.5],
-		'shoot': [1,,0.0163,,0.62,0.4,,-0.4,-0.3399,,,,,0.4596,-0.3585,0.7,-1,-1,0.36,-0.58,,,-1,0.5],
-		'rev': [1,,0.1296,,0.4899,0.359,,0.3799,1,,,,,,-1,0.78,-1,-1,1,-1,,,-1,0.5]
-	}
-	
-	for(var i in _data)
-	{
-		var _audioarr = [];
-		
-		_13Rep(10, function () {
-			var _audio = new Audio();
-			_audio.src = jsfxr(_data[i]);
-			_audioarr.push(_audio);
-		})
-		
-		_retObj[i] = {
-			arr: _audioarr,
-			ind: 0,
-			play: function() {
-				this.arr[this.ind].play();
-				this.ind = (this.ind + 1) % 10;
-			}
-		}
-	}	
-
-	return _retObj;
-}*/

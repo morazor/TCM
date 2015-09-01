@@ -133,7 +133,7 @@ function _13HUD(_ctx, _player, _world) {
 	{
 		_ctx.save();
 		
-		_ctx.translate(860, 0);
+		_ctx.translate(760, 0);
 		
 		var _topd = 54;
 		
@@ -143,20 +143,23 @@ function _13HUD(_ctx, _player, _world) {
 			_topd = 81;
 
 			_ctx.save();
-			_ctx.fillRect(-2, 0, 204, 54);
+			_ctx.fillRect(-2, 0, 404, 34);
+			
+			_13Rep(20, function(i) {
+				if(Math.floor(_world.adv * 20) > i) _ctx.fillStyle = 'white';
+				else _ctx.fillStyle = '#444444';
+				
+				_ctx.fillRect(20 * i, 2, 16, 30);
+			});
 
-			_ctx.globalAlpha = 0.7;
-			_ctx.drawImage(_13MediaTextures.bone_pile_0, 90, 280, 200, 50, 0, 2, 200, 50);
-			_ctx.fillStyle = 'red';
-			_ctx.fillRect(0, 2, 200 * _world.adv, 50);
 			_ctx.restore();
 		}
 		
-		_ctx.translate(0, 1080 - _topd);
+		_ctx.translate(100, 1080 - _topd);
 
 		_ctx.fillRect(-2, 0, 204, 81);	
 
-		_ctx.fillStyle = '#990000';
+		_ctx.fillStyle = 'red';
 		_ctx.fillRect(0, 2, 200 * _player.health.perc, 50);	
 
 		if(_player.revpow != null)
@@ -173,8 +176,10 @@ function _13HUD(_ctx, _player, _world) {
 			'Developed for JS13K by morazor',
 			'[click to start]',
 			'The Cursed',
-			'Mir',
-			'Ror'
+			[ 'Mir', 'Ror' ],
+			[ 'A valiant knight', 'A vicious villain' ],
+			[ 'The mirror has been shattered', 'To break free from the curse' ],
+			[ 'Fight with valour', 'Slay the nemesis' ]
 		]
 		
 		if(_world.status == 2) // game over
@@ -183,8 +188,7 @@ function _13HUD(_ctx, _player, _world) {
 				'',
 				'[reload to play again]',
 				'You have died, fighting for the right to be',
-				'Your',
-				'Self'
+				[ 'Your', 'Self' ]
 			]
 		}
 		else if(_world.status == 3) // finished
@@ -193,8 +197,7 @@ function _13HUD(_ctx, _player, _world) {
 				'',
 				'[reload to play again]',
 				'You are finally free to live your life',
-				'Your',
-				'Way'
+				[ 'Your', 'Way']
 			]
 		}
 	
@@ -213,33 +216,50 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.font = '24px monospace';
 		_ctx.fillText(_text[0], 0, -20);
 		
-		_ctx.translate(0, -340);
+		_ctx.translate(0, -240);
 		
 		_ctx.fillText(_text[1], 0, -20);
-		
-		_ctx.translate(0, -200);
-		
-		_ctx.font = '64px serif';
-		var _topm = -30;
-		
-		if(_world.status != 0)
-		{
-			_ctx.font = '28px monospace';
-			_topm = -40;
-		}
 
-		_ctx.fillText(_text[2], 0, _topm);
+		_ctx.textBaseline = 'middle';
 		
-		_ctx.fillRect(-1, -12, 2, 96);
+		if(_world.status == 0) _ctx.font = '80px serif';
+		else _ctx.font = '40px serif';
 		
-		_ctx.font = '96px serif';
-		_ctx.fillStyle = 'white';
-		_ctx.textAlign = 'right';
-		_ctx.fillText(_text[3], -20, 60);
+		_ctx.translate(0, -450);
+
+		_ctx.fillText(_text[2], 0, -100);
 		
-		_ctx.scale(-1, 1);
-		if(_world.status != 3) _ctx.fillStyle = 'red';
-		_ctx.fillText(_text[4], -20, 60);
+		_13Each(_text, function(_ctext, i) {
+			if(i > 2) {
+				_ctx.save();
+				
+				var _ch = (i > 3 ? 36 : 136)
+				
+				_ctx.fillRect(-1, -_ch / 2, 2, _ch);
+				
+				_ctx.font = _ch + 'px serif';
+
+				_ctx.fillStyle = 'white';
+				_ctx.textAlign = 'right';
+				
+				_ctx.strokeStyle = 'black';
+				_ctx.lineWidth = 0.5;
+				
+				_13Each(_text[i], function (_ct, j) {
+					if(j > 0) {
+						_ctx.scale(-1, 1);
+						_ctx.fillStyle = 'red';
+					}
+					
+					_ctx.fillText(_text[i][j], -20, 0);
+					if(i > 3) _ctx.strokeText(_text[i][j], -20, 0);
+				});
+				
+				_ctx.restore();
+				_ctx.translate(0, (i > 3 ? _ch : _ch * 1.5));
+			}
+		});
+		
 		_ctx.restore();
 	}
 }

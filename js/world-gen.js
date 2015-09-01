@@ -62,60 +62,7 @@ function _13WorldGen(_world) {
 	_13ObjExtend(_world.addBody('mirror_inner'), {
 		pos: { x: 0, y: -150 },
 		fixed: true,
-		collide: false,
-		overlap: true,
-		onOverlap: function(tbod) {
-			if(tbod.name == 'player') this._ovlpl = true;
-		},
-		beforeUpdate: function() {
-			this._ovlpl = false;
-		},
-		onRender: function() {
-			var _mrrs = this.texture.width;
-			
-			if(this._basetxt == null) {
-				
-				this._basetxt = this.texture
-				
-				this.texture = _13Canv(_mrrs, _mrrs);
-			}
-			
-			var _mctx = this.texture.getContext('2d');
-			_mctx.clearRect(0, 0, _mrrs, _mrrs);
-			_mctx.save();
-			
-			_mctx.drawImage(this._basetxt, 0, 0);
-			
-			_mctx.globalCompositeOperation = 'source-atop';
-			
-			if(this._ovlpl && _player.revpow != null) {
-				_mctx.save();
-				
-				_mctx.translate(_mrrs / 2, _mrrs / 2);
-				_mctx.scale(1.4, 1.4);
-				var _ri = (_player.revved ? 0 : 1);
-				var _cl = _player.baserev.light[_ri];
-				
-				_mctx.drawImage(_cl, 
-					_player.pos.x - this.pos.x - _cl.width / 2, 
-					_player.pos.y - this.pos.y - _cl.height / 2);
-					
-				var _cskt = _player.baserev.texture[_ri];
-				_cskt.refresh(0);
-				
-				_mctx.translate(_player.pos.x - this.pos.x, _player.pos.y - this.pos.y);
-				if(!_player.facing) _mctx.scale(-1, 1);
-				
-				_cskt.render(_mctx,  - _cskt.width / 2,  - _cskt.height / 2);
-				
-				_mctx.restore();
-			}
-			
-			_mctx.fillStyle = 'rgba(127,127,127,0.25)'
-			_mctx.fillRect(0, 0, _mrrs, _mrrs);
-			
-			_mctx.restore();
-		}
+		collide: false
 	});
 	
 	_13ObjExtend(_world.addBody('mirror'), {
@@ -175,7 +122,8 @@ function _13WorldGen(_world) {
 						});
 						
 						if(_player.revved) _player.rev();
-						else _13MediaSounds.rev.play();
+						
+						_13MediaSounds.rev.play();
 						
 						_player.health.add(_player.health.max);
 						_player.revpow = null;
@@ -197,21 +145,19 @@ function _13WorldGen(_world) {
 					{
 						var _mobLvl = _waveStep % 10;
 						
-						// 0: miniboss, 1: post boss pause, 2+: popcorn spawn
+						// 0: miniboss, 1+: popcorn spawn
 
-						if(_mobLvl != 1) {
-							_mobLvl = Math.max(0, 1 - _mobLvl);
-						
-							var _bName = (Math.random() > 0.5 ? 'enemy_skel_' : 'enemy_wotw_');
-							_13ObjExtend(_world.addEnemy(_bName + _mobLvl), {
-								pos: _13ObjClone(_13RandPick(_spawnp)),
-								awake: true,
-								revmult: (_mobLvl == 0 ? 0.8 : 1.1)
-							});
-						}
+						_mobLvl = Math.max(0, 1 - _mobLvl);
+					
+						var _bName = (Math.random() > 0.5 ? 'enemy_skel_' : 'enemy_wotw_');
+						_13ObjExtend(_world.addEnemy(_bName + _mobLvl), {
+							pos: _13ObjClone(_13RandPick(_spawnp)),
+							awake: true,
+							revmult: (_mobLvl == 0 ? 0.8 : 1.1)
+						});
 						
 						_waveTime = 0;
-						_nextStep = 5000 - 3000 * _adv;
+						_nextStep = (5000 - 3000 * _adv) * (_mobLvl * 2 + 1);
 					}				
 				}
 			}

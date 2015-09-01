@@ -152,9 +152,9 @@ function _13ActorMelee(_world, bName, bW, bH) {
 
 			this.facing = _act.watch.x > 0;
 
-			_act.watch.x = Math.abs(_act.watch.x); // need abs on this because of facing handling
+			var _wxabs = Math.abs(_act.watch.x); // need abs on this because of facing handling
 			
-			var _hbrot = Math.atan2(_act.watch.y, _act.watch.x) * 0.2; // watch dir
+			var _hbrot = Math.atan2(_act.watch.y, _wxabs) * 0.2; // watch dir
 
 			if(!this.block.d)
 			{

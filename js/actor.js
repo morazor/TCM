@@ -110,7 +110,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
 			this.vel.x = (this.pos.x > tbod.pos.x) ? (300) : (-300) * _pushc;
-			this.vel.y = -150 * _pushc;
+			this.vel.y = -120 * _pushc;
 		},
 		onHit: function(tbod, bullet)
 		{
@@ -123,33 +123,62 @@ function _13Actor(_world, bName, bW, bH, bType) {
 			{
 				bullet.die();
 				
-				if(this.type == 'melee')
-				{
-					if(tbod.isshield && tbod.facing != this.facing) { // MELEE ATTACK
-						_stopped = true;
-						this.pushback(tbod, 0.5 * tbod.revmult);
-						tbod.pushback(this, 0.5 * this.revmult);
-					}
-					else {
-						tbod.pushback(this, this.revmult);
-						tbod.damage(bullet);
+				var _atkbod = bullet;
+				if(this.type == 'melee') _atkbod = this;
+
+				if(tbod.isshield) {
+					var _watchang = Math.atan2(tbod.action.watch.y, tbod.action.watch.x);
+					
+					// the parry angle is different from _watchang
+					// basically, i don't want the player to parry to the ground
+					// watch up is - PI / 2, so let's make it zero
+					
+					_watchang = (_watchang + Math.PI * 4.5) % (Math.PI * 2); // now angle is 0 to PI * 2
 						
+					if(_watchang > Math.PI) _watchang = _watchang - Math.PI * 2; // now it's - PI to PI
+					
+					// now let's reduce the difference
+					
+					_watchang *= 0.8;
+					var _bonusAngle = Math.abs(_watchang * 0.6); // bigger horizontal shield
+					
+					// and back
+					
+					_watchang -= Math.PI / 2;
+					
+					var _pang = 1.4 + _bonusAngle;
+					
+					var _atkang = _13Ang(_atkbod.pos, tbod.pos);
+
+					// let's not mess up with angles. hit is parried if is in watch +- _pang / 2
+					// so _watchang - _pang / 2 is my zero and _atkang must be > 0 and < _pang
+					
+					_watchang -= _pang / 2;
+
+					_atkang = (_atkang - _watchang + Math.PI * 4) % (Math.PI * 2);
+
+					
+					if(_atkang > 0 && _atkang < _pang) { // BLOCKED
+						_stopped = true;
+						
+						tbod.pushback(_atkbod, 0.3 * this.revmult);
+						
+						if(this.type == 'melee') this.pushback(tbod, 0.7 * tbod.revmult);
+					}
+				}
+				
+				if(!_stopped) {
+					tbod.pushback(_atkbod, this.revmult);
+					tbod.damage(bullet);
+				
+					if(this.type == 'melee')
+					{
 						if(!bullet.owner._sndatk.hit) {
 							bullet.owner._sndatk.hit = true;
 							_13MediaSounds.hit.play();
 						}
 					}
-				}
-				else{
-					if(tbod.isshield && tbod.facing == (bullet.pos.x > tbod.pos.x)) { // RANGED ATTACK
-						_stopped = true;
-						tbod.pushback(bullet, 0.5 * this.revmult);
-					}
-					else {
-						tbod.pushback(bullet, this.revmult);
-						tbod.damage(bullet);
-						_13MediaSounds.hit.play();
-					}
+					else _13MediaSounds.hit.play();
 				}
 			}
 			
@@ -168,9 +197,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 						_13MediaSounds.block.play();
 					}
 				}
-				else {
-					_13MediaSounds.miss.play();
-				}
+				else _13MediaSounds.miss.play();
 			}
 		},
 		beforeCollide: function (tbod) {

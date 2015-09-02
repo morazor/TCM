@@ -149,6 +149,9 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		afterUpdate: function(timePassed) {
 			var _act = this.action;
 
+			// always change facing instatly regardless of attacks because ai sometimes gets stuck
+			/*if(!this.isattack) */
+			
 			this.facing = _act.watch.x > 0;
 
 			var _wxabs = Math.abs(_act.watch.x); // need abs on this because of facing handling

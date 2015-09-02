@@ -18,6 +18,12 @@ function _13World() {
 		status: 0,
 		bodies: [],
 		actors: [],
+		sttime: 0,
+		setst: function(stnum) {
+			this.status = stnum;
+			this.sttime = 0;
+			_13MediaSounds[(stnum == 1 ? 'rev': 'over')].play();
+		},
 	
 	/*	SEQUENCE EXPLAINED:
 		
@@ -32,7 +38,7 @@ function _13World() {
 	
 		update: function (timePassed) {
 			_lastUpdate += timePassed;
-			
+
 			/* PARTICLES */
 			for(var i = 0; i < _particles.length; i++)
 			{

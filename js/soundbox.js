@@ -145,7 +145,8 @@ var CPlayer = function() {
     ];
 
     // Private variables set up by init()
-    var mSong, mLastRow, mCurrentCol, mNumWords, mMixBuf;
+	// i use a single column
+    var mSong, mLastRow, /*mCurrentCol,*/ mNumWords, mMixBuf;
 
 
     //--------------------------------------------------------------------------
@@ -158,7 +159,7 @@ var CPlayer = function() {
 
         // Init iteration state variables
         mLastRow = song.endPattern - 2;
-        mCurrentCol = 0;
+        //mCurrentCol = 0;
 
         // Prepare song info
         mNumWords =  song.rowLen * song.patternLen * (mLastRow + 1) * 2;
@@ -180,7 +181,8 @@ var CPlayer = function() {
 
         // Put performance critical items in local variables
         var chnBuf = new Int32Array(mNumWords),
-            instr = mSong.songData[mCurrentCol],
+            //instr = mSong.songData[mCurrentCol],
+			instr = mSong.songData[0],
             rowLen = mSong.rowLen,
             patternLen = mSong.patternLen;
 
@@ -313,8 +315,10 @@ var CPlayer = function() {
 		 });
 
         // Next iteration. Return progress (1.0 == done!).
-        mCurrentCol++;
-        return mCurrentCol / 8;
+        /*mCurrentCol++;
+        return mCurrentCol / 8;*/
+		
+		return 1;
     };
 
     // Create a WAVE formatted Uint8Array from the generated audio data

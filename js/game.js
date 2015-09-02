@@ -9,6 +9,9 @@ function _13Game() {
 		document.body.appendChild(_canvas);
 	});
 	
+	var _bgCanv = _allCanvas[0];
+	var _mainCanv = _allCanvas[1];
+	
 	/*** SCALE HANDLING ***/
 	
 	var _scaleRatio = 1;
@@ -41,8 +44,8 @@ function _13Game() {
 	});
 	
 	document.body.addEventListener('mousemove', function(eventObj){
-		_mousePos.x = (eventObj.clientX - _allCanvas[1].offsetLeft) / _scaleRatio;
-		_mousePos.y = (eventObj.clientY - _allCanvas[1].offsetTop) / _scaleRatio;
+		_mousePos.x = (eventObj.clientX - _mainCanv.offsetLeft) / _scaleRatio;
+		_mousePos.y = (eventObj.clientY - _mainCanv.offsetTop) / _scaleRatio;
 	});
 	
 	document.body.addEventListener('mousedown', function(eventObj){
@@ -61,10 +64,9 @@ function _13Game() {
 		}
 	});
 	
-	_allCanvas[1].addEventListener('click', function() {
+	_mainCanv.addEventListener('click', function() {
 		if(_world.status == 0) {
-			_world.status = 1;
-			_13MediaSounds.rev.play();
+			_world.setst(1);
 		}
 	});
 	
@@ -74,10 +76,10 @@ function _13Game() {
 	
 	_13MediaGen();
 	
-	var _ctx = _allCanvas[0].getContext('2d');
+	var _ctx = _bgCanv.getContext('2d');
 	_ctx.drawImage(_13MediaTextures.landscape, 0, 0);
-	
-	var _ctx = _allCanvas[1].getContext('2d');
+
+	var _ctx = _mainCanv.getContext('2d');
 	
 	
 
@@ -113,24 +115,35 @@ function _13Game() {
 			}
 			
 			_player.action = _act;
+			
+			var _wasalive = !_player.dead;
 		
-
-			_world.update(_updTime);
+			var _worlspeed = (_world.status == 1 ? 1 : 0.2);
+			
+			_world.update(_updTime * _worlspeed);
 			
 			var _camPos = { x: _player.pos.x + _camOffset.x, y:  _player.pos.y + _camOffset.y - _player.h * 0.5 }; // adding player height to center on player
 			
 			_world.render(_ctx, _camPos);
 			
-			if(_player.dead) _world.status = 2;
-			
-			_13HUD(_ctx, _player, _world);
+			if(_player.dead && _wasalive) _world.setst(2);
 		}
+		
+		_world.sttime += _updTime;
+		
+		_13HUD(_ctx, _player, _world);
 	}, _updTime);
 }
 
 function _13HUD(_ctx, _player, _world) {
+	var _overDelay = 5000;
+	var _flipTime = 10000;
+	
 	if(_world.status == 1)
 	{
+		_ctx.fillStyle = 'rgba(0,0,0,' + Math.max(0, 1 - _world.sttime / 500) + ')';
+		_ctx.fillRect(0, 0, 1920, 1080);
+	
 		_ctx.save();
 		
 		_ctx.fillStyle = 'black';
@@ -186,8 +199,17 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.save();
 		_ctx.beginPath();
 		
-		_ctx.fillStyle = 'rgba(0,0,0,' + (_world.status == 0 ? 1 : 0.5) + ')';
-		_ctx.fillRect(0, 0, 1920, 1080);
+		if(_world.status != 0) {
+			_ctx.globalAlpha = Math.max(0, (_world.sttime - _overDelay) / 500);
+			
+			_ctx.fillStyle = 'rgba(0,0,0,0.5)';
+			_ctx.fillRect(0, 0, 1920, 1080);
+		}
+		else {
+			_ctx.fillStyle = 'black';
+			_ctx.fillRect(0, 0, 1920, 1080);
+			_ctx.globalAlpha = _world.sttime / 500;
+		}
 
 		_ctx.fillStyle = '#bbbbbb';
 		
@@ -210,6 +232,16 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.translate(0, -450);
 
 		_ctx.fillText(_text[2], 0, -100);
+
+		if(_world.status != 3)
+		{
+			var _flipPerc = ((_world.status == 0 ? 0 : _overDelay) + _world.sttime % _flipTime) / _flipTime;
+
+			if(_13RandBetween(-0.2, 0.2) > Math.cos(_flipPerc * Math.PI * 2 - 1.3))
+			{
+				_ctx.scale(-1, 1);
+			}
+		}
 		
 		_13Each(_text, function(_ctext, i) {
 			if(i > 2) {

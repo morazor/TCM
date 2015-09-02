@@ -118,7 +118,7 @@ function _13TextureGen() {
 	
 	_ctx.translate(0, _bls / 2);
 
-	_13Path(_ctx, { c: '#ee0000', b: 1, p: [
+	_13Path(_ctx, { c: '#ee0000', p: [
 		[ 0, 0 ],
 		[ 'arc', _bls * 0.7, 0, _bls * 0.3 - 1, -1.4, 1.4 ]
 	]});
@@ -1047,11 +1047,6 @@ function _13SoundGen() {
 		var _player = new CPlayer();
 		var _song = SBData[i]
 		
-		for(var j = _song.songData.length; j < 8; j++)
-		{
-			_song.songData.push(_song.songData[0]);
-		}
-		
 		_player.init(_song);
 		while(_player.generate() < 1) {};
 		
@@ -1183,7 +1178,7 @@ var SBData = {
           89, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
-          120, // NOISE_VOL
+          80, // NOISE_VOL
           0, // ENV_ATTACK
           5, // ENV_SUSTAIN
           47, // ENV_RELEASE
@@ -1313,11 +1308,11 @@ var SBData = {
         { // Instrument 0
           i: [
 		  0, // OSC1_WAVEFORM
-          150, // OSC1_VOL
+          255, // OSC1_VOL
           97, // OSC1_SEMI
           0, // OSC1_XENV
           0, // OSC2_WAVEFORM
-          150, // OSC2_VOL
+          255, // OSC2_VOL
           118, // OSC2_SEMI
           0, // OSC2_DETUNE
           0, // OSC2_XENV
@@ -1353,6 +1348,52 @@ var SBData = {
       rowLen: 5513,   // In sample lengths
       patternLen: 6,  // Rows per pattern
       endPattern: 5  // End pattern
-    }
+    },
+	'over': {
+	  songData: [
+        { // Instrument 0
+          i: [
+		  0, // OSC1_WAVEFORM
+          0, // OSC1_VOL
+          92, // OSC1_SEMI
+          0, // OSC1_XENV
+          0, // OSC2_WAVEFORM
+          0, // OSC2_VOL
+          92, // OSC2_SEMI
+          0, // OSC2_DETUNE
+          0, // OSC2_XENV
+          255, // NOISE_VOL
+          0, // ENV_ATTACK
+          0, // ENV_SUSTAIN
+          196, // ENV_RELEASE
+          0, // ARP_CHORD
+          0, // ARP_SPEED
+          1, // LFO_WAVEFORM
+          81, // LFO_AMT
+          7, // LFO_FREQ
+          1, // LFO_FX_FREQ
+          3, // FX_FILTER
+          7, // FX_FREQ
+          190, // FX_RESONANCE
+          0, // FX_DIST
+          255 // FX_DRIVE
+          //0, // FX_PAN_AMT
+          //0, // FX_PAN_FREQ
+          //0, // FX_DELAY_AMT
+          //0 // FX_DELAY_TIME
+          ],
+          // Patterns
+          p: [1],
+          // Columns
+          c: [
+            {n: [120],
+             f: []}
+          ]
+        }
+      ],
+      rowLen: 5513,   // In sample lengths
+      patternLen: 32,  // Rows per pattern
+      endPattern: 31  // End pattern
+    }  
 }
 

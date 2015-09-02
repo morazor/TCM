@@ -131,7 +131,7 @@ function _13WorldGen(_world) {
 						_player.texture.trail = 'rgba(255,255,120, 0.8)';
 					}
 				}
-				else if(_finalBoss.dead) _world.status = 3;
+				else if(_finalBoss.dead) _world.setst(3);
 			}
 			else {
 				if(_waveTime > _nextStep) {

@@ -202,7 +202,9 @@ function _13Actor(_world, bName, bW, bH, bType) {
 			}
 		},
 		beforeCollide: function (tbod) {
-			return tbod.faction != this.faction;
+			// removed collision with the player
+			// so there's a way to escape insta-killing sandwiches
+			return tbod.type != this.type;
 		},
 		onDamage: function() {},
 		onDie: function() {}

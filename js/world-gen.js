@@ -99,7 +99,7 @@ function _13WorldGen(_world) {
 			_waveTime += timePassed;
 			
 			var _adv = (_waveStep - 1) / _endWave;
-
+			
 			if(_finalRound)
 			{
 				if(_finalBoss == null)
@@ -128,7 +128,7 @@ function _13WorldGen(_world) {
 						_player.health.add(_player.health.max);
 						_player.revpow = null;
 						_player.revmult = 1.3;
-						_player.texture.trail = '#ffff77';
+						_player.texture.trail = 'rgba(255,255,120, 0.8)';
 					}
 				}
 				else if(_finalBoss.dead) _world.status = 3;

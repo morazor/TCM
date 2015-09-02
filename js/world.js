@@ -178,34 +178,36 @@ function _13World() {
 											if(_r1.pos.x < _r2.pos.x) _r1.block.r = true;
 											else _r1.block.l = true;
 										}
-										else */
+										else 
 									
-										if(_r1.fixed) { 
-											_r2.vel[i] = -_r2.bounce * _r2.vel[i];
+										if(_r1.fixed) { */
 										
-											if(_relVel[i] > 0) _r2.pos[i] += _overlap[i];
-											else _r2.pos[i] -= _overlap[i];
-											
-											if(_r2.pos[i] < _r1.pos[i]) _r2.block[_sides[i][1]] = true; // left or up
-											else _r2.block[_sides[i][0]] = true; // right or down
-										}
+										// after the removal of collision between player and skeletons _r1 is always fixed
+										
+										_r2.vel[i] = -_r2.bounce * _r2.vel[i];
+									
+										if(_relVel[i] > 0) _r2.pos[i] += _overlap[i];
+										else _r2.pos[i] -= _overlap[i];
+										
+										if(_r2.pos[i] < _r1.pos[i]) _r2.block[_sides[i][1]] = true; // left or up
+										else _r2.block[_sides[i][0]] = true; // right or down
+										
+										/*}
 										else
 										{
 											var _r1Vel = _r1.vel[i];
 											_r1.vel[i] = _r1.bounce * _r2.vel[i];
 											_r2.vel[i] = _r2.bounce * _r1Vel;
 											
-											// believe it or not, it's better without
-											/*if(_relVel[i] > 0) {
+											if(_relVel[i] > 0) {
 												_r1.pos[i] -= _overlap[i] / 2;
 												_r2.pos[i] += _overlap[i] / 2;
 											}
 											else {
 												_r1.pos[i] += _overlap[i] / 2;
 												_r2.pos[i] -= _overlap[i] / 2;
-											}*/
-											
-										}
+											}
+										} */
 									}
 								}
 

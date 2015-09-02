@@ -195,14 +195,15 @@ function _13World() {
 											_r1.vel[i] = _r1.bounce * _r2.vel[i];
 											_r2.vel[i] = _r2.bounce * _r1Vel;
 											
-											if(_relVel[i] > 0) {
+											// believe it or not, it's better without
+											/*if(_relVel[i] > 0) {
 												_r1.pos[i] -= _overlap[i] / 2;
 												_r2.pos[i] += _overlap[i] / 2;
 											}
 											else {
 												_r1.pos[i] += _overlap[i] / 2;
 												_r2.pos[i] -= _overlap[i] / 2;
-											}
+											}*/
 											
 										}
 									}

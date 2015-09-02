@@ -133,29 +133,11 @@ function _13HUD(_ctx, _player, _world) {
 	{
 		_ctx.save();
 		
-		_ctx.translate(760, 0);
-		
-		var _topd = 54;
-		
 		_ctx.fillStyle = 'black';
 		
-		if(_player.revpow != null) {
-			_topd = 81;
-
-			_ctx.save();
-			_ctx.fillRect(-2, 0, 404, 34);
-			
-			_13Rep(20, function(i) {
-				if(Math.floor(_world.adv * 20) > i) _ctx.fillStyle = 'white';
-				else _ctx.fillStyle = '#444444';
-				
-				_ctx.fillRect(20 * i, 2, 16, 30);
-			});
-
-			_ctx.restore();
-		}
+		var _topd = (_player.revpow != null? 81 : 54);
 		
-		_ctx.translate(100, 1080 - _topd);
+		_ctx.translate(860, 1080 - _topd);
 
 		_ctx.fillRect(-2, 0, 204, 81);	
 
@@ -260,6 +242,22 @@ function _13HUD(_ctx, _player, _world) {
 			}
 		});
 		
+		_ctx.restore();
+	}
+	
+	if(_world.status != 0 && _player.revpow != null)
+	{
+		_ctx.save();
+		
+		_ctx.translate(760, 0);
+
+		_13Rep(20, function(i) {
+			if(Math.floor(_world.adv * 20) > i) _ctx.fillStyle = 'white';
+			else _ctx.fillStyle = '#444444';
+			
+			_ctx.fillRect(20 * i, 2, 16, 30);
+		});
+
 		_ctx.restore();
 	}
 }

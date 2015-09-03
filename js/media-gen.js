@@ -4,22 +4,22 @@ var _13MediaSounds = {};
 
 function _13MediaGen() {
 	var _lights = {
-		player: { c: '#f5f5ff', r: 350 },
-		enemy_wotw_0: { c: '#3264ff', r: 250 },
-		enemy_wotw_1: { c: '#9632ff', r: 250 },
-		rev_player: { c: '#ff0000', r: 350 }
+		player: { c: '#f5f5ff', r: 175 },
+		enemy_wotw_0: { c: '#3264ff', r: 125 },
+		enemy_wotw_1: { c: '#9632ff', r: 125 },
+		rev_player: { c: '#ff0000', r: 175 }
 	}
 	
 	for(var _i in _lights)
 	{
 		_lights['bullet_' + _i] = {
 			c: _lights[_i].c,
-			r: _lights[_i].r * 0.6
+			r: _lights[_i].r * 0.5
 		}
 	}
 	
 	_lights.rev_bullet_player = _lights.bullet_rev_player;
-	_lights.sparks = { c: 'yellow', r: 30 }
+	_lights.sparks = { c: '#ffff00', r: 15 }
 	
 	_13MediaTextures = _13TextureGen();
 	_13MediaLights = _lights;
@@ -36,7 +36,7 @@ function _13TextureGen() {
 	var _chainc = _13Canv(_pw, _pw);
 
 	_13Path(_chainc, { c: '#444444', p: [ [ 'rect', 0, 0, _pw, _pw ] ]});
-	_13Path(_chainc, { c: '#aaaadd', l: 1, p: [ [ 'arc', _pw / 2, _pw / 2, _pw / 2 - 1 / 2, 0, Math.PI * 2 ] ]});
+	_13Path(_chainc, { c: '#aaaadd', l: 1, p: [ [ 'arc', _pw / 2, _pw / 2, _pw / 2 - 1 / 2 ] ]});
 
 	var _platec = '#f5f5ff';
 	var _goldc = '#ffdd77';
@@ -55,13 +55,13 @@ function _13TextureGen() {
 	_ctx.scale(0.7, 1);
 	
 	_13Path(_ctx, { c: 'rgba(127,127,127,0.25)', p: [
-		[ 'arc', 0, 0, _bls / 2 - 15, 0, Math.PI * 2 ]
+		[ 'arc', 0, 0, _bls / 2 - 15 ]
 	]});
 	
 	_13Path(_ctx, { c: '#777777', p: [
 		[ _bls / 2, 0],
-		[ 'arc', 0, 0, _bls / 2 - 1, 0, Math.PI * 2 ],
-		[ 'arc', 0, 0, _bls / 2 - 15, 0, Math.PI * 2, true ]
+		[ 'arc', 0, 0, _bls / 2 - 1 ],
+		[ 'arc', 0, 0, _bls / 2 - 15, null, null, true ]
 	]});
 	
 	_ctx.strokeStyle = 'rgba(255,255,255,0.5)';
@@ -103,7 +103,7 @@ function _13TextureGen() {
 
 	_13Path(_ctx, { c: '#333333', p: [
 		[ _bls / 2, 0 ],
-		[ 'arc', 0, 0, _bls / 2 - 15, 0, Math.PI * 2 ]
+		[ 'arc', 0, 0, _bls / 2 - 15 ]
 	]});
 	
 	_retObj.mirror_inner = _canvas;
@@ -148,41 +148,19 @@ function _13TextureGen() {
 	var _canvas = _13Canv(4, 4);
 	
 	_13Path(_canvas, { c: 'yellow', b: 1, p: [
-		[ 'arc', 2, 2, 2, 0, Math.PI * 2 ]
+		[ 'arc', 2, 2, 2 ]
 	]});
 	
 	_retObj.sparks = _canvas;
 	
 	// AURAS
-	var _bls = 80;
+	var _bls = 40;
 	
-	var _aurac = [ [ 'rgba(0,50,255,1)', 'rgba(0,0,255,0)' ], [ 'rgba(100,0,255,1)', 'rgba(50,0,255,0)' ] ];
+	var _aurac = [ ['#0032ff','#0000ff'], ['#6400ff','#3200ff'] ];
 	_13Each(_aurac, function(_cau, i) {
-		var _canvas = _13Canv(_bls, _bls);
-		
-		var _ctx = _canvas.getContext('2d');
-		_ctx.translate(_bls / 2, _bls / 2)
+		_retObj['aura_enemy_wotw_' + i] = _13Gradient(_bls, _cau[0], _cau[1], 155, 1, _bls / 2);
 
-		var _grd = _ctx.createRadialGradient(0, 0, _bls * 0.2, 0, 0, _bls / 2);
-
-		_grd.addColorStop(0, _cau[0]);
-		_grd.addColorStop(1, _cau[1]);
-
-		_ctx.fillStyle = _grd;
-		
-		_ctx.arc(0, 0, _bls / 2, 0, Math.PI * 2);
-		_ctx.fill();
-
-		_retObj['aura_enemy_wotw_' + i] = _canvas;
-		
-		var _bcanvas = _canvas;
-		
-		var _canvas = _13Canv(_bls / 2, _bls / 2);
-		
-		var _ctx = _canvas.getContext('2d');
-		_ctx.scale(0.5, 0.5);
-		
-		_ctx.drawImage(_bcanvas, 0, 0);
+		var _canvas = _13Gradient(_bls / 2, _cau[0], _cau[1], 125, 1, _bls / 4);
 		
 		_retObj['aura_bullet_enemy_wotw_' + i] = _canvas;
 		_retObj['blood_enemy_wotw_' + i] = _canvas;
@@ -786,12 +764,12 @@ function _13TextureGen() {
 						else{
 							tb.path[0].p = [
 								[ 0.6, 0.5 ],
-								[ 'arc', 0, 0.5, 0.6, 0, Math.PI * 2 ]
+								[ 'arc', 0, 0.5, 0.6 ]
 							]
 							
 							tb.path[1].p = [
 								[ 0.5, 0.5 ],
-								[ 'arc', 0, 0.5, 0.5, 0, Math.PI * 2 ]
+								[ 'arc', 0, 0.5, 0.5 ]
 							]
 						}
 					}
@@ -864,7 +842,7 @@ function _13TextureGen() {
 
 	_13Rep(50, function() {
 		_13Path(_canvas, { c: 'white', p: [
-			[ 'arc', Math.random() * _fw, Math.random() * _fh, Math.random() * _fh * 0.003, 0, Math.PI * 2 ]
+			[ 'arc', Math.random() * _fw, Math.random() * _fh, Math.random() * _fh * 0.003 ]
 		]});
 	});
 	

@@ -118,7 +118,7 @@ function _13Path(_ctx, _cPath, size)
 		
 		switch(_cform)
 		{
-			case 'arc': _ctx.arc(_prm[0], _prm[1], _prm[2], _prm[3], _prm[4], _prm[5]); break;
+			case 'arc': _ctx.arc(_prm[0], _prm[1], _prm[2], _prm[3] || 0, _prm[4] || Math.PI * 2, _prm[5]); break;
 			case 'rect': _ctx.rect(_prm[0], _prm[1], _prm[2], _prm[3]); break;
 			case 'bez': _ctx.bezierCurveTo(_prm[0], _prm[1], _prm[2], _prm[3], _prm[4], _prm[5]); break;
 			default: 
@@ -144,4 +144,43 @@ function _13Path(_ctx, _cPath, size)
 	}
 	
 	_ctx.restore();
+}
+
+function _13Gradient(rad, cola, colb, basea, ppow, offset) {
+	if(colb == null) colb = cola;
+	
+	var _rad2 = rad * 2;
+	var _canvas = _13Canv(_rad2, _rad2);
+			
+	var _baseColA = [];
+	var _baseColB = [];
+			
+	for(var j = 0; j < 6; j += 2)
+	{
+		_baseColA.push(parseInt(cola.substr(1 + j, 2), 16));
+		_baseColB.push(parseInt(colb.substr(1 + j, 2), 16));
+	}
+	
+	var _ctx = _canvas.getContext('2d');
+	var _imgData = _ctx.createImageData(_rad2, _rad2);
+
+	_13Rep(_rad2, function (j) {
+		_13Rep(_rad2, function (k) {
+			var _bi = (j + k * _rad2) * 4;
+			
+			var _cDist = Math.max(0, _13Dist({ x: j, y: k }, { x: rad, y: rad}) - offset);
+			
+			var _cDistPerc = Math.pow(1 - Math.min(1, _cDist / (rad - offset)), ppow);
+			
+			_13Rep(3, function (l) {
+				_imgData.data[_bi + l] = _baseColA[l] * _cDistPerc + _baseColB[l] * (1 - _cDistPerc);
+			});
+			
+			_imgData.data[_bi + 3] = basea * _cDistPerc;
+		});
+	});
+	
+	_ctx.putImageData(_imgData, 0, 0);
+	
+	return _canvas;
 }

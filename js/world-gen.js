@@ -99,7 +99,7 @@ function _13WorldGen(_world) {
 	
 	var _waveTime = 0;
 	var _waveStep = 0; 
-	var _nextStep = 0;
+	var _nextStep = 4000;
 	
 	var _endWave = 69;
 	var _finalRound = false;
@@ -146,7 +146,11 @@ function _13WorldGen(_world) {
 						_player.texture.trail = '#aabbff';
 					}
 				}
-				else if(_finalBoss.dead) _world.setst(3);
+				else {
+					_world._wadv = 1;
+					_world._wlive = _finalBoss.health.perc;
+					if(_finalBoss.dead) _world.setst(3);
+				}
 			}
 			else {
 				if(_waveTime > _nextStep) {

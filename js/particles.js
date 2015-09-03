@@ -50,8 +50,8 @@ function _13Particles(_world, bName, maxNum) {
 				this.pos.x = this.link.pos.x;
 				this.pos.y = this.link.pos.y;
 				
-				this.vel.x = this.link.vel.x * 0.5;
-				this.vel.y = this.link.vel.y * 0.5;
+				this.vel.x = this.link.vel.x * 0.65;
+				this.vel.y = this.link.vel.y * 0.65;
 				
 				this.alpha = this.link.alpha;
 				

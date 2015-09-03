@@ -182,27 +182,7 @@ function _13Body(_world, bName, bW, bH) {
 	_13Rep(2, function(i) {
 		if(lightC[i] != null)
 		{
-			var _cs = lightC[i].r;
-			_lCanv = _13Canv(_cs, _cs);
-			
-			var _lCtx = _lCanv.getContext('2d');
-			
-			_lCtx.translate(_cs / 2, _cs / 2);
-			
-			var _grd = _lCtx.createRadialGradient(0, 0, 0, 0, 0, _cs / 2);
-
-			_grd.addColorStop(0, lightC[i].c);
-			_grd.addColorStop(1, 'rgba(0,0,0,0)');
-			
-			_lCtx.globalAlpha = 0.3;
-			_lCtx.beginPath();
-			_lCtx.fillStyle = _grd;
-			_lCtx.arc(0, 0, _cs / 2, 0, Math.PI * 2);
-			_lCtx.closePath();
-			
-			_lCtx.fill();
-			
-			lightC[i] = _lCanv;
+			lightC[i] = _13Gradient(lightC[i].r, lightC[i].c, null, 80, 2, 0);
 		}
 	});
 	

@@ -145,7 +145,7 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.restore();
 	}
 	
-	if(_world.status != 0 && _player.revpow != null)
+	if(_world.status != 0)
 	{
 		// progress bar
 		_ctx.save();
@@ -154,15 +154,17 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.rotate(-Math.PI / 2);
 		
 		_13Path(_ctx, { c: 'black', b: 0, p: [
-			[ 'arc', 0, 0, 70, 0, Math.PI * 2 ]
+			[ 'arc', 0, 0, 70 ]
 		]});
 		
-		if(_world._wadv != null) {
+		if(_world._wadv > 0) {
 			_13Path(_ctx, { c: 'red', b: 0, p: [
 				[ 0, 0 ],
 				[ 'arc', 0, 0, 70, 0, Math.PI * 2 * _world._wadv ]
 			]});
-			
+		}
+		
+		if(_world._wadv - _world._wlive > 0) {
 			_13Path(_ctx, { c: 'white', b: 0, p: [
 				[ 0, 0 ],
 				[ 'arc', 0, 0, 70, 0, Math.PI * 2 * (_world._wadv - _world._wlive) ]

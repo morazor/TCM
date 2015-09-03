@@ -93,7 +93,7 @@ function _13Sprite(bTexture) {
 					}
 				}
 			
-				if(this.lastFrame != null) _13Skel.Average(_frSkel, this.lastFrame, 0.7);
+				if(this.lastFrame != null && timePassed > 0) _13Skel.Average(_frSkel, this.lastFrame, 1 - Math.pow(0.3, timePassed / 30));
 				this.lastFrame = _frSkel;
 			},
 			render: function(tContext, posX, posY) {
@@ -252,6 +252,7 @@ function _13Body(_world, bName, bW, bH) {
 		beforeUpdate: function() {},
 		afterUpdate: function() {},
 		beforeCollide: function() { return true; },
+		afterRefresh: function() {},
 		scale: 1,
 		alpha: 1,
 		autorot: false,

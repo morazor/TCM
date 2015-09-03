@@ -4,9 +4,9 @@ var _13MediaSounds = {};
 
 function _13MediaGen() {
 	var _lights = {
-		player: { c: '#ffff77', r: 350 },
-		enemy_wotw_0: { c: '#64a0ff', r: 250 },
-		enemy_wotw_1: { c: '#e164ff', r: 250 },
+		player: { c: '#f5f5ff', r: 350 },
+		enemy_wotw_0: { c: '#3264ff', r: 250 },
+		enemy_wotw_1: { c: '#9632ff', r: 250 },
 		rev_player: { c: '#ff0000', r: 350 }
 	}
 	
@@ -903,9 +903,9 @@ function _13TextureGen() {
 		
 		var _blist = [];
 		
-		for(var j = 0; j < 2; j++)
+		for(var j = 0; j < 5; j++)
 		{
-			_13Skel.AllBones(_retObj['enemy_skel_' + j].skel, function(tb) {
+			_13Skel.AllBones(_retObj['enemy_skel_' + Math.max(0, 1 - j)].skel, function(tb) {
 				if(tb.texture != null && tb.alpha != 0)
 				{
 					_blist.push(tb.texture);
@@ -915,13 +915,13 @@ function _13TextureGen() {
 		
 		_ctx.translate(_bls * 0.6, _bls * 0.07);
 		
-		for(var j = 0; j < 14; j++)
+		for(var j = 0; j < 23; j++)
 		{
-			for(var k = -j * 1.5; k < j * 1.5; k++)
+			for(var k = -j; k < j; k++)
 			{
 				var _cbt = _13RandPick(_blist);
 				_ctx.save();
-				_ctx.translate(k * 10, j * 25);
+				_ctx.translate(k * 10, j * 15);
 				_ctx.rotate(Math.PI * 2 * Math.random());
 				_ctx.drawImage(_cbt, - _cbt.width / 2, - _cbt.height / 2);
 				_ctx.restore();
@@ -961,11 +961,11 @@ function _13TextureGen() {
 	}
 	
 	for(var i = 0; i < 7; i++) {
-		var _canvas = _13Canv(_bls, _bls);
+		var _canvas = _13Canv(_bls * 1.2, _bls);
 		
 		var _ctx = _canvas.getContext('2d');
 		
-		_ctx.translate(_bls / 2, _bls);
+		_ctx.translate(_bls * 0.6, _bls);
 		_ctx.fillStyle = '#443322';
 		_treebr(_ctx, 5);
 		

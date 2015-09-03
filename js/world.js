@@ -285,7 +285,7 @@ function _13World() {
 				var _ri = (_player.revved ? 0 : 1);
 
 				var _crev = _player.baserev.texture[_ri];
-				_crev.refresh(0);
+				_crev.refresh(0); // this skips easing between frames but it's not very noticeable
 
 				if(!_player.facing) tCtx.scale(-1, 1);
 				

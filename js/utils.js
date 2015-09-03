@@ -83,7 +83,7 @@ function _13Canv(w, h) {
 function _13Path(_ctx, _cPath, size)
 {
 	if(size == null) size = 1;
-	if(_ctx.canvas == null) _ctx = _ctx.getContext('2d');
+	if(_ctx.getContext != null) _ctx = _ctx.getContext('2d');
 	
 	_ctx.save();
 	_ctx.beginPath();
@@ -137,7 +137,8 @@ function _13Path(_ctx, _cPath, size)
 	
 	if(_cPath.b != null)
 	{
-		_ctx.strokeStyle = 'rgba(127,127,127,0.5)';
+		var _bcol = _cPath.b * 127;
+		_ctx.strokeStyle = 'rgba(' + _bcol + ',' + _bcol + ',' + _bcol + ',0.5)';
 		_ctx.lineWidth = 1;
 		_ctx.stroke();
 	}

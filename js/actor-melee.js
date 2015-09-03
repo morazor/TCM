@@ -7,7 +7,9 @@ function _13ActorMelee(_world, bName, bW, bH) {
 	var _bulLife = 60;
 	
 	_13Each(_retObj.bullets, function(_cbul) {
-		_cbul.afterUpdate = function () {
+		_cbul.afterUpdate = function (timePassed) {
+			_bulLife = timePassed * 2;
+			this.lifespan = Math.min(this.lifespan, _bulLife);
 			this.scale = this.lifespan / _bulLife;
 		}
 	});
@@ -103,7 +105,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				}
 				else
 				{
-					this.revpow.add(timePassed / 400);
+					this.revpow.add(timePassed / 300);
 					if(this.revpow.perc == 1) {
 						this.rev();
 						_13MediaSounds.rev.play();

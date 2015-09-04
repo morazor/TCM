@@ -25,16 +25,16 @@ function _13World() {
 			_13MediaSounds[(stnum == 1 ? 'rev': 'over')].play();
 		},
 	
-	/*	SEQUENCE EXPLAINED:
-		
-		beforeUpdate: input handling
-		update: movement & collisions
-		afterUpdate: animations setting
-		refresh: skeletons refresh
-		afterRefresh: stuff needing refreshed skeletons
-		render: texture is rendered */
+		/*	SEQUENCE EXPLAINED:
+			
+			beforeUpdate: input handling
+			update: movement & collisions
+			afterUpdate: animations setting
+			refresh: skeletons refresh
+			afterRefresh: stuff needing refreshed skeletons
+			render: texture is rendered */
 
-	/*** UPDATE ***/
+		/*** UPDATE ***/
 	
 		update: function (timePassed) {
 			_lastUpdate += timePassed;
@@ -170,21 +170,7 @@ function _13World() {
 								_13Rep(2, function(i) {
 									if(_bounce[i])
 									{
-										
-										// _r2 is never fixed: all fixed stuff is added first
-										/*if(_r2.fixed) { 
-											_r1.vel.x = -_r1.bounce * _r1.vel.x;
-										
-											if(_relVelX < 0) _r1.pos.x += _overlapX;
-											else _r1.pos.x -= _overlapX;
-											
-											if(_r1.pos.x < _r2.pos.x) _r1.block.r = true;
-											else _r1.block.l = true;
-										}
-										else 
-									
-										if(_r1.fixed) { */
-										
+										// _r2 is never fixed: all fixed stuff is added first										
 										// after the removal of collision between player and skeletons _r1 is always fixed
 										
 										_r2.vel[i] = -_r2.bounce * _r2.vel[i];
@@ -194,23 +180,6 @@ function _13World() {
 										
 										if(_r2.pos[i] < _r1.pos[i]) _r2.block[_sides[i][1]] = true; // left or up
 										else _r2.block[_sides[i][0]] = true; // right or down
-										
-										/*}
-										else
-										{
-											var _r1Vel = _r1.vel[i];
-											_r1.vel[i] = _r1.bounce * _r2.vel[i];
-											_r2.vel[i] = _r2.bounce * _r1Vel;
-											
-											if(_relVel[i] > 0) {
-												_r1.pos[i] -= _overlap[i] / 2;
-												_r2.pos[i] += _overlap[i] / 2;
-											}
-											else {
-												_r1.pos[i] += _overlap[i] / 2;
-												_r2.pos[i] -= _overlap[i] / 2;
-											}
-										} */
 									}
 								});
 
@@ -347,7 +316,7 @@ function _13World() {
 				if(!_cBody.dead && (_cBody.overlap || _cBody.collide))
 				{
 					tCtx.save();
-					tCtx.translate(_cBody.pos.x, _cBody.pos.y);
+					tCtx.translate(_cBody.pos[0], _cBody.pos[1]);
 							
 					tCtx.beginPath();
 					tCtx.strokeStyle = 'rgba(255,200,0,0.3)';
@@ -384,7 +353,7 @@ function _13World() {
 					
 					if(_cBody.isshield)
 					{
-						var _watchang = Math.atan2(_cBody.action.watch.y, _cBody.action.watch.x);
+						var _watchang = Math.atan2(_cBody.action.watch[1], _cBody.action.watch[0]);
 					
 						// the parry angle is different from _watchang
 						// basically, i don't want the player to parry to the ground

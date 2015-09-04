@@ -135,9 +135,9 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			var _vx = this.vel[0];
 			
 			var _cPVel = ((!this.isshield && ((_vx > 0 && this.facing) || (_vx < 0 && !this.facing))) ? (1) : (0.5)) * _plSpeed;
-			
+				
 			var _brakeTo = _cPVel; // TOO FAST
-			if((_act.move == 0 || _act.move * _vx < 0) && this.block.d) _brakeTo = 0; // STOPPING
+			if(this.block.d && (_act.move == 0 || _act.move * _vx < 0)) _brakeTo = 0; // STOPPING
 
 			// MOVING
 			_vx += _act.move * timePassed;

@@ -123,7 +123,7 @@ function _13Game() {
 			var _worlspeed = (_world.status == 1 ? 1 : 0.2);
 			
 			_world.update(_updTime * _worlspeed);
-			
+
 			var _camPos = [ _player.pos[0] + _camOffset[0], _player.pos[1] + _camOffset[1] - _player.h * 0.5 ]; // adding player height to center on player
 			
 			_world.render(_ctx, _camPos);

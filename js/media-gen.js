@@ -321,7 +321,7 @@ function _13TextureGen() {
 	_farm.link[0] = { // arm
 		x: 0,
 		y:  0,
-		rot: Math.PI - 0.3,
+		rot: 3.35,
 		size: _pbs * 0.18,
 		name: 'arm',
 		path: [
@@ -345,7 +345,7 @@ function _13TextureGen() {
 		link: [ {
 				x: 0,
 				y: 0,
-				rot: -0.25,
+				rot: -0.4,
 				size: _pbs * 0.18,
 				name: 'arm_lk',
 				path: [
@@ -379,7 +379,7 @@ function _13TextureGen() {
 					size: _pbs * 0.45,
 					name: 'weapon',
 					under: true,
-					path: [ // weapon path y must be 1 at max for hit calculations
+					path: [ // weapon path y must be 0 to 1 for hit calculations
 						{ c: _platec, b: 1, p: [ // blade
 							[ 0.05, 0 ],
 							[ -0.05, 0 ],
@@ -412,7 +412,7 @@ function _13TextureGen() {
 
 	// other arm
 	var _barm = _13SkelClone(_farm)
-	_barm.link[0].rot = Math.PI - 0.15;
+	_barm.link[0].rot = 3;
 	_barm.under = true;
 	_barm.link[0].z = 4;
 	_barm.link[0].link[0].z = 4;
@@ -480,7 +480,7 @@ function _13TextureGen() {
 						_frSkel.bones.leg[j].rot += _crot;
 						_frSkel.bones.leg_lk[j].rot  += _ckn;
 						
-						var _armr = ((j == 0) ? (2) : (4));
+						var _armr = ((j == 0) ? (-2) : (2));
 						
 						_frSkel.bones.arm[j].rot -= _armr * _crot * 2;
 						_frSkel.bones.arm_lk[j].rot -= _armr * _ckn * 2;
@@ -541,10 +541,10 @@ function _13TextureGen() {
 						_frSkel.bones.leg[j].rot += _lrot;
 						_frSkel.bones.leg_lk[j].rot += _ckn;
 						
-						var _armr = ((j == 0) ? (1) : (1.5));
+						var _armr = ((j == 0) ? (1.2) : (1));
 						
-						_frSkel.bones.arm[j].rot -= _armr * _crot * 4;
-						_frSkel.bones.arm_lk[j].rot -= _armr * _ckn;
+						_frSkel.bones.arm[j].rot -= _armr * _crot * 8;
+						_frSkel.bones.arm_lk[j].rot -= _armr * _ckn * 0.5;
 					}
 					
 					if(_ap > 0.5)
@@ -826,48 +826,6 @@ function _13TextureGen() {
 	_13SkelInit(_cSkel);
 	
 	_retObj.player = _skelObj;
-	
-	/******************* 
-	 * LANDSCAPE START *
-	 *******************/
-	 
-	var _fw = 1920; // anim width
-	var _fh = 1080; // anim height
-	 
-	var _canvas = _13Canv(_fw, _fh);
-	
-	_13Path(_canvas, { c: '#020408', p: [
-		[ 'rect', 0, 0, _fw, _fh ]
-	]});
-
-	_13Rep(50, function() {
-		_13Path(_canvas, { c: 'white', p: [
-			[ 'arc', Math.random() * _fw, Math.random() * _fh, Math.random() * _fh * 0.003 ]
-		]});
-	});
-	
-	var _hillsc = ['#050b21', '#04091a'];
-
-	for(var j = 0; j < 2; j++)
-	{
-		var i = j / 2;
-
-		_13Path(_canvas, { c: _hillsc[j], p: [
-			[ 0.3 - i, 0.6 ],
-			[
-				'bez',
-				0.8 - i, 0.1 + 0.3 * i,
-				0.8 - i, 0.1 + 0.3 * i,
-				1.3 - i, 0.6
-			]
-		]}, _fw);
-	}
-	
-	_retObj.landscape = _canvas;
-	
-	/*****************
-	 * LANDSCAPE END *
-	 *****************/
 	 
 	// BONE PILES
 	 
@@ -945,7 +903,7 @@ function _13TextureGen() {
 		
 		_ctx.translate(_bls * 0.6, _bls);
 		_ctx.fillStyle = '#443322';
-		_treebr(_ctx, 5);
+		_treebr(_ctx, 4 + (i % 2));
 		
 		_retObj['tree_' + i] = _canvas;
 	}
@@ -1013,6 +971,48 @@ function _13TextureGen() {
 
 		_retObj['grave_' + i] = _canvas;
 	}
+	
+	/******************* 
+	 * LANDSCAPE START *
+	 *******************/
+	 
+	var _fw = 1920; // anim width
+	var _fh = 1080; // anim height
+	 
+	var _canvas = _13Canv(_fw, _fh);
+	
+	_13Path(_canvas, { c: '#020408', p: [
+		[ 'rect', 0, 0, _fw, _fh ]
+	]});
+
+	_13Rep(50, function() {
+		_13Path(_canvas, { c: 'white', p: [
+			[ 'arc', Math.random() * _fw, Math.random() * _fh, Math.random() * _fh * 0.003 ]
+		]});
+	});
+	
+	var _hillsc = ['#050b21', '#04091a'];
+
+	for(var j = 0; j < 2; j++)
+	{
+		var i = j / 2;
+
+		_13Path(_canvas, { c: _hillsc[j], p: [
+			[ 0.3 - i, 0.6 ],
+			[
+				'bez',
+				0.8 - i, 0.1 + 0.3 * i,
+				0.8 - i, 0.1 + 0.3 * i,
+				1.3 - i, 0.6
+			]
+		]}, _fw);
+	}
+	
+	_retObj.landscape = _canvas;
+	
+	/*****************
+	 * LANDSCAPE END *
+	 *****************/
 	
 	return _retObj;
 }

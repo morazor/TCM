@@ -434,7 +434,7 @@ function _13World() {
 		/*** CLASSES ***/
 		
 		addBody: function (bName, bW, bH) {
-			var _retObj = new _13Body(this, bName, bW, bH);
+			var _retObj = _13Body(this, bName, bW, bH);
 			
 			this.bodies.push(_retObj);
 			
@@ -447,14 +447,14 @@ function _13World() {
 			return _retObj;
 		},
 		addActorRanged: function(bName, bW, bH) {
-			var _retObj = new _13ActorRanged(this, bName, bW, bH);
+			var _retObj = _13ActorRanged(this, bName, bW, bH);
 			
 			this.actors.push(_retObj);
 		
 			return _retObj;
 		},
 		addActorMelee: function(bName, bW, bH) {
-			var _retObj = new _13ActorMelee(this, bName, bW, bH);
+			var _retObj = _13ActorMelee(this, bName, bW, bH);
 			
 			if(bName == 'player') _player = _retObj;
 			
@@ -468,7 +468,7 @@ function _13World() {
 		},
 		addParticles: function(bName, maxNum)
 		{	
-			var _retObj = new _13Particles(this, bName, maxNum)
+			var _retObj = _13Particles(this, bName, maxNum)
 			_particles.push(_retObj);
 
 			return _retObj;

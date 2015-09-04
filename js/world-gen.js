@@ -132,7 +132,7 @@ function _13WorldGen(_world) {
 					{
 						_finalBoss = _13ObjExtend(_world.addActorMelee('rev_player'), {
 							pos: { x: 0, y: -200 },
-							health: new _13LimVal(600),
+							health: _13LimVal(600),
 							revmult: 1.3
 						});
 						

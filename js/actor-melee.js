@@ -1,5 +1,5 @@
 function _13ActorMelee(_world, bName, bW, bH) {
-	var _retObj = new _13Actor(_world, bName, bW, bH, 'melee');
+	var _retObj = _13Actor(_world, bName, bW, bH, 'melee');
 
 	_retObj.w *= 0.17;
 	_retObj.h *= 0.45;
@@ -28,8 +28,8 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		_13ObjExtend(_retObj, {
 			atkspeed: 1.2,
 			damval: 5,
-			health: new _13LimVal(250),
-			revpow: new _13LimVal(100, 0),
+			health: _13LimVal(250),
+			revpow: _13LimVal(100, 0),
 			onRev: function() {
 				_13Each(this.bullets, function(_cbul) {
 					_cbul.rev();
@@ -89,7 +89,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		isattack: false,
 		isshield: false,
 		canshield: _retObj.level != 0,
-		shnrg: new _13LimVal(3),
+		shnrg: _13LimVal(3),
 		_sndatk: {},
 		beforeUpdate: function(timePassed) {
 			// REV CHECK

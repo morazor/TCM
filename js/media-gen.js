@@ -158,9 +158,9 @@ function _13TextureGen() {
 	
 	var _aurac = [ ['#0032ff','#0000ff'], ['#6400ff','#3200ff'] ];
 	_13Each(_aurac, function(_cau, i) {
-		_retObj['aura_enemy_wotw_' + i] = _13Gradient(_bls, _cau[0], _cau[1], 155, 1, _bls / 2);
+		_retObj['aura_enemy_wotw_' + i] = _13Gradient(_bls, _cau[0], _cau[1], 175, 1, _bls / 2);
 
-		var _canvas = _13Gradient(_bls / 2, _cau[0], _cau[1], 125, 1, _bls / 4);
+		var _canvas = _13Gradient(_bls / 2, _cau[0], _cau[1], 175, 1, _bls / 4);
 		
 		_retObj['aura_bullet_enemy_wotw_' + i] = _canvas;
 		_retObj['blood_enemy_wotw_' + i] = _canvas;

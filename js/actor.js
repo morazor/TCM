@@ -2,15 +2,16 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	var _retObj = _world.addBody(bName, bW, bH);
 	
 	var _spnam = (bType == 'melee' ? 'sparks' : 'sparks_' + bName);
+	var _pgrav = (bType == 'melee' ? 1 : 0);
 	
 	var _sparks = _world.addParticles(_spnam, 10);
 	_13ObjExtend(_sparks, {
 		rotvel: 10,
-		grav: 1,
+		grav: _pgrav,
 		lifespan: 350,
 		freq: 0,
 		collide: 'wall',
-		fx: { scale: true, alpha: false }
+		fx: { scale: 1, alpha: 1 }
 	});
 	
 	_sparks.min.vel = { x: -350, y: -350 };
@@ -19,9 +20,9 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	var _blood = _13ObjExtend(_world.addParticles('blood_' + bName, 5), {
 		lifespan: 350,
 		freq: 0,
-		grav: 1,
+		grav: _pgrav,
 		scale: 0.5,
-		fx: { scale: true }
+		fx: { scale: 1 }
 	});
 	
 	_blood.min.scale = 0.5;
@@ -41,7 +42,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	_blood.max.vel = { x: 200, y: 200 };
 	
 	if(bType == 'ranged') {
-		_blood.fx.alpha = false;
+		_blood.fx.alpha = 1;
 	}
 	
 	_retObj.bullets = [];
@@ -74,7 +75,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		awake: false,
 		stopatk: false,
 		didatk: 0,
-		health: new _13LimVal(100 + 100 * _lev), // should go in melee-actor
+		health: _13LimVal(100 + 100 * _lev), // should go in melee-actor
 		damval: 2,
 		atkspeed: 1,
 		speed: 400,

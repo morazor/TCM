@@ -83,7 +83,7 @@ function _13Game() {
 	
 	
 
-	var _world = new _13World();
+	var _world = _13World();
 	
 	var _player = _13WorldGen(_world);
 	

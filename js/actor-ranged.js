@@ -5,7 +5,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		lifespan: 600,
 		freq: 60,
 		on: true,
-		fx: { scale: true, alpha: false }
+		fx: { scale: 1, alpha: 1 }
 	}
 	
 	var _aura = _world.addParticles('aura_' + bName, 10);	
@@ -18,7 +18,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 	
 	// particles created before body because i need them under the body
 	
-	var _retObj = new _13Actor(_world, bName, bW, bH, 'ranged');
+	var _retObj = _13Actor(_world, bName, bW, bH, 'ranged');
 	_aura.link = _retObj;
 	
 	var _bulLife = 2500;
@@ -50,7 +50,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 			watch: { x: 0, y: 0 },
 			attack: false
 		},
-		health: new _13LimVal(10 + 80 * _retObj.level),
+		health: _13LimVal(10 + 80 * _retObj.level),
 		damval: 25,
 		didatk: 0,
 		pushback: function (tbod, _pushc) {

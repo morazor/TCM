@@ -45,13 +45,13 @@ function _13Particles(_world, bName, maxNum) {
 		fx: {},
 		update: function(timePassed)
 		{
-			if(this.link != null)
+			if(this.link)
 			{
-				this.pos.x = this.link.pos.x;
-				this.pos.y = this.link.pos.y;
-				
-				this.vel.x = this.link.vel.x * 0.65;
-				this.vel.y = this.link.vel.y * 0.65;
+				for(var i in this.pos)
+				{
+					this.pos[i] = this.link.pos[i];
+					this.vel[i] = this.link.vel[i] * 0.65;
+				}
 				
 				this.alpha = this.link.alpha;
 				
@@ -101,7 +101,7 @@ function _13Particles(_world, bName, maxNum) {
 									for(var i in _em.fx)
 									{
 										var _bp = this.lifespan / _em.lifespan; // 1 to 0
-										this[i] = this.start[i] * Math.pow((_em.fx) ? (_bp) : (1 -_bp), 0.5); // 0 to 1 if is false
+										this[i] = this.start[i] * Math.pow(_bp, 0.5);
 									}
 								}
 							});

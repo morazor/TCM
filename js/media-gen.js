@@ -314,7 +314,7 @@ function _13TextureGen() {
 	}
 
 	// FAKE BODY avoids layers handling
-	var _farm = _13Skel.Clone(_cSkel.link[0]);
+	var _farm = _13SkelClone(_cSkel.link[0]);
 	_farm.under = false;
 	_farm.path = null;
 	_farm.link = [];
@@ -402,7 +402,7 @@ function _13TextureGen() {
 	_cSkel.link.push(_farm);
 
 	// other leg
-	var _bleg = _13Skel.Clone(_cSkel.link[1])
+	var _bleg = _13SkelClone(_cSkel.link[1])
 	_bleg.rot = -_bleg.rot;
 	_bleg.under = true;
 	_bleg.z = 4;
@@ -411,7 +411,7 @@ function _13TextureGen() {
 	_cSkel.link.splice(0, 0, _bleg);
 
 	// other arm
-	var _barm = _13Skel.Clone(_farm)
+	var _barm = _13SkelClone(_farm)
 	_barm.link[0].rot = Math.PI - 0.15;
 	_barm.under = true;
 	_barm.link[0].z = 4;
@@ -445,7 +445,7 @@ function _13TextureGen() {
 		]
 	};
 
-	var _cshield2 = _13Skel.Clone(_cshield);
+	var _cshield2 = _13SkelClone(_cshield);
 	_cshield2.name = 'shieldside';
 	_cshield2.alpha = 0;
 	_cshield2.path = [{ c: _platec, b: 1, p: [ // sideways
@@ -581,8 +581,8 @@ function _13TextureGen() {
 				layer: 1,
 				chain: { split: [ 0.5, 0.5 ], trans: [ // everybody loves parallel arrays <3
 					function (_frSkel, _ap, _ac) { // first part of attack is charging
-						var _endpos = this[1](_13Skel.Clone(_frSkel), 0, _ac);
-						_frSkel = _13Skel.Average(_frSkel, _endpos, 1 - _ap);
+						var _endpos = this[1](_13SkelClone(_frSkel), 0, _ac);
+						_frSkel = _13SkelAverage(_frSkel, _endpos, 1 - _ap);
 				
 						return _frSkel;
 					}, function (_frSkel, _ap, _ac) {
@@ -652,9 +652,9 @@ function _13TextureGen() {
 	 
 	// PLAYER REVERSE
 	
-	var _skelRev = _13Skel.Clone(_cSkel);
+	var _skelRev = _13SkelClone(_cSkel);
 
-	_13Skel.AllBones(_skelRev, function (tb) {
+	_13SkelAllBones(_skelRev, function (tb) {
 	 	
 	 	_13Each(tb.path, function(_cp) {
 			switch(_cp.c) {
@@ -682,16 +682,16 @@ function _13TextureGen() {
 		trail: '#770000'
 	};
 	 
-	_13Skel.Init(_skelRev);
+	_13SkelInit(_skelRev);
 	
 	_retObj.rev_player = _skelObjRev;
 	 
 	 // SKELETONS
 	 for(var k = 0; k < 2; k++)
 	 {
-		var _skelSkel = _13Skel.Clone(_cSkel);
+		var _skelSkel = _13SkelClone(_cSkel);
 
-		_13Skel.AllBones(_skelSkel, function (tb) {
+		_13SkelAllBones(_skelSkel, function (tb) {
 			if(tb.path != null) 
 			{
 				switch(tb.name)
@@ -817,13 +817,13 @@ function _13TextureGen() {
 			h: _fh
 		};
 		
-		_13Skel.Init(_skelSkel);
+		_13SkelInit(_skelSkel);
 		
 		_retObj['enemy_skel_' + k] = _skelObjSkel;
 	}
 	
 	// player initialized at the end (the other clone the skeleton)
-	_13Skel.Init(_cSkel);
+	_13SkelInit(_cSkel);
 	
 	_retObj.player = _skelObj;
 	
@@ -883,7 +883,7 @@ function _13TextureGen() {
 		
 		for(var j = 0; j < 5; j++)
 		{
-			_13Skel.AllBones(_retObj['enemy_skel_' + Math.max(0, 1 - j)].skel, function(tb) {
+			_13SkelAllBones(_retObj['enemy_skel_' + Math.max(0, 1 - j)].skel, function(tb) {
 				if(tb.texture != null && tb.alpha != 0)
 				{
 					_blist.push(tb.texture);

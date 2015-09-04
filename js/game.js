@@ -32,7 +32,7 @@ function _13Game() {
 	/*** INPUT HANDLING ***/
 
 	var _keyPressed = [];
-	var _mousePos = { x: 0, y: 0};
+	var _mousePos = [0, 0];
 	var _mousePressed = { l: false, r: false };
 	
 	document.body.addEventListener('keydown', function(eventObj){
@@ -44,8 +44,10 @@ function _13Game() {
 	});
 	
 	document.body.addEventListener('mousemove', function(eventObj){
-		_mousePos.x = (eventObj.clientX - _mainCanv.offsetLeft) / _scaleRatio;
-		_mousePos.y = (eventObj.clientY - _mainCanv.offsetTop) / _scaleRatio;
+		_mousePos = [
+			(eventObj.clientX - _mainCanv.offsetLeft) / _scaleRatio,
+			(eventObj.clientY - _mainCanv.offsetTop) / _scaleRatio
+		]
 	});
 	
 	document.body.addEventListener('mousedown', function(eventObj){
@@ -70,7 +72,7 @@ function _13Game() {
 		}
 	});
 	
-	var _camOffset = { x: 0, y: -150 };
+	var _camOffset = [0, -150];
 	
 	/*** WORLD INIT ***/
 	
@@ -101,10 +103,10 @@ function _13Game() {
 				jump: _keyPressed[38] || _keyPressed[87],
 				attack: _mousePressed.l,
 				shield: _mousePressed.r,
-				watch: {
-					x : _mousePos.x / 1920 - 0.5,
-					y: (_mousePos.y + _camOffset.y) / 1080 - 0.5
-				}
+				watch: [
+					_mousePos[0] / 1920 - 0.5,
+					(_mousePos[1] + _camOffset[1]) / 1080 - 0.5
+				]
 			}
 			
 			if(_keyPressed[37] || _keyPressed[65]) {
@@ -122,7 +124,7 @@ function _13Game() {
 			
 			_world.update(_updTime * _worlspeed);
 			
-			var _camPos = { x: _player.pos.x + _camOffset.x, y:  _player.pos.y + _camOffset.y - _player.h * 0.5 }; // adding player height to center on player
+			var _camPos = [ _player.pos[0] + _camOffset[0], _player.pos[1] + _camOffset[1] - _player.h * 0.5 ]; // adding player height to center on player
 			
 			_world.render(_ctx, _camPos);
 			

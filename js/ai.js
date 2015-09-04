@@ -10,20 +10,17 @@ function _13AI(mob, player, timePassed)
 		mob.action = mob._naction;
 		var _act = mob._naction = _13ObjClone(mob.action, true);
 		
-		var _mpos = {
-			x: player.pos.x + player.vel.x / 2,
-			y: player.pos.y + player.vel.y / 2
-		}
-		
-		_act.watch = {
-			x : player.pos.x - mob.pos.x,
-			y: player.pos.y - mob.pos.y
-		}
+		var _mpos = [];
+
+		_13Rep(2, function(i) {
+			_mpos[i] = player.pos[i] + player.vel[i] / 2;
+			_act.watch[i] = player.pos[i] - mob.pos[i];
+		});
 		
 		if(mob._lastAI < 0)
 		{
 			if(!mob.dead) {
-				var _pldist = Math.abs(_mpos.x - mob.pos.x);
+				var _pldist = Math.abs(_mpos[0] - mob.pos[0]);
 					
 				if(_pldist < 500) {
 					mob.awake = true;
@@ -37,10 +34,10 @@ function _13AI(mob, player, timePassed)
 						var _toofar = _pldist > 700;
 						if(mob.didatk > 500 / mob.revmult || _toofar)
 						{
-							if(_act.move == null || _toofar) _act.move = { 
-								x: _mpos.x + (player.facing ? -1 : 1) * (375 + _13RandBetween(0, 100)), 
-								y: player.lastgy + _13RandBetween(-275, -230)
-							}
+							if(_act.move == null || _toofar) _act.move = [ 
+								_mpos[0] + (player.facing ? -1 : 1) * (375 + _13RandBetween(0, 100)), 
+								player.lastgy + _13RandBetween(-275, -230)
+							]
 							_act.attack = false;
 						}
 						else 
@@ -65,7 +62,7 @@ function _13AI(mob, player, timePassed)
 					});
 
 					if(mob.awake && !mob.dead && !player.dead) {
-						var _pldir = (_mpos.x < mob.pos.x) ? (-1) : (1);
+						var _pldir = (_mpos[0] < mob.pos[0]) ? (-1) : (1);
 				
 						if(_pldist > 200) _act.move = _pldir;
 						else if(_pldist < 150) _act.move = -_pldir;

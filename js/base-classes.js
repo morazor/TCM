@@ -5,7 +5,7 @@ function _13Sprite(bTexture) {
 			texture: _13Canv(bTexture.w, bTexture.h),
 			width: bTexture.w,
 			height: bTexture.h,
-			skel: _13Skel.Clone(bTexture.skel),
+			skel: _13SkelClone(bTexture.skel),
 			anim: _13ObjClone(bTexture.anim, true),
 			trail: bTexture.trail
 		}
@@ -40,7 +40,7 @@ function _13Sprite(bTexture) {
 				this.anim[animName].on = false;
 			},
 			refresh: function(timePassed) {
-				var _frSkel = _13Skel.Clone(this.skel);
+				var _frSkel = _13SkelClone(this.skel);
 
 				for(var i in this.anim)
 				{
@@ -93,7 +93,7 @@ function _13Sprite(bTexture) {
 					}
 				}
 			
-				if(this.lastFrame != null && timePassed > 0) _13Skel.Average(_frSkel, this.lastFrame, 1 - Math.pow(0.3, timePassed / 30));
+				if(this.lastFrame != null && timePassed > 0) _13SkelAverage(_frSkel, this.lastFrame, 1 - Math.pow(0.3, timePassed / 30));
 				this.lastFrame = _frSkel;
 			},
 			render: function(tContext, posX, posY) {
@@ -119,7 +119,7 @@ function _13Sprite(bTexture) {
 				
 				_ctx.clearRect(0, 0, this.texture.width, this.texture.height);
 				
-				_13Skel.Draw(_ctx, this.lastFrame);
+				_13SkelDraw(_ctx, this.lastFrame);
 				
 				if(this.skip > 0) this.skip--;
 				else tContext.drawImage(this.texture, posX, posY);
@@ -197,9 +197,9 @@ function _13Body(_world, bName, bW, bH) {
 		light: lightC[0],
 		w: bW,
 		h: bH,
-		pos: { x: 0, y: 0},
-		vel: { x: 0, y: 0},
-		acc: { x: 0, y: 0},
+		pos: [0, 0],
+		vel: [0, 0],
+		acc: [0, 0],
 		rot: 0,
 		rotvel: 0,
 		fixed: false,

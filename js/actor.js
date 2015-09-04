@@ -14,8 +14,8 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		fx: { scale: 1, alpha: 1 }
 	});
 	
-	_sparks.min.vel = { x: -350, y: -350 };
-	_sparks.max.vel = { x: 350, y: 350 };
+	_sparks.min.vel = [-350, -350]
+	_sparks.max.vel = [350, 350]
 
 	var _blood = _13ObjExtend(_world.addParticles('blood_' + bName, 5), {
 		lifespan: 350,
@@ -38,8 +38,8 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		_blood.max.rotvel = 10;
 	}
 	
-	_blood.min.vel = { x: -200, y: -200 };
-	_blood.max.vel = { x: 200, y: 200 };
+	_blood.min.vel = [-200, -200]
+	_blood.max.vel = [200, 200]
 	
 	if(bType == 'ranged') {
 		_blood.fx.alpha = 1;
@@ -85,6 +85,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 			if(!this.dead)
 			{
 				var _cdam = bullet.owner.damval * bullet.owner.revmult * bullet.dammod;
+				var _this = this;
 				
 				if(this.revved) {
 					var _maxh = Math.min(this.revpow.c, _cdam); // maximum convertible damage is current rewpow
@@ -94,11 +95,11 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				}
 				else this.health.add(-_cdam);
 				
-				_blood.pos.x = (bullet.pos.x + this.pos.x * 2) / 3;
-				_blood.pos.y = (bullet.pos.y + this.pos.y * 2) / 3;
-				
-				_blood.vel.x = this.vel.x * 1.5;
-				_blood.vel.y = this.vel.y * 1.5;
+				_13Rep(2, function(i) {
+					_blood.pos[i] = (bullet.pos[i] + _this.pos[i] * 2) / 3;
+
+					_blood.vel[i] = _this.vel[i] * 1.5;
+				});
 				
 				_blood.on = 3;
 				
@@ -110,8 +111,8 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		},
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
-			this.vel.x = (this.pos.x > tbod.pos.x) ? (300) : (-300) * _pushc;
-			this.vel.y = -120 * _pushc;
+			this.vel[0] = (this.pos[0] > tbod.pos[0]) ? (300) : (-300) * _pushc;
+			this.vel[1] = -120 * _pushc;
 		},
 		onHit: function(tbod, bullet)
 		{
@@ -128,7 +129,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				if(this.type == 'melee') _atkbod = this;
 
 				if(tbod.isshield) {
-					var _watchang = Math.atan2(tbod.action.watch.y, tbod.action.watch.x);
+					var _watchang = Math.atan2(tbod.action.watch[1], tbod.action.watch[0]);
 					
 					// the parry angle is different from _watchang
 					// basically, i don't want the player to parry to the ground
@@ -191,7 +192,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				
 				this.stopatk = true;
 				
-				_sparks.pos = { x: bullet.pos.x, y: bullet.pos.y };
+				_sparks.pos = _13ObjClone(bullet.pos);
 				
 				if(this.type == 'melee') {
 					if(!bullet.owner._sndatk.block) {

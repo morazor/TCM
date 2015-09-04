@@ -9,27 +9,27 @@ function _13Particles(_world, bName, maxNum) {
 	}
 	
 	return {
-		pos: { x: 0, y: 0},
-		vel: { x: 0, y: 0},
-		acc: { x: 0, y: 0},
+		pos: [0, 0],
+		vel: [0, 0],
+		acc: [0, 0],
 		rot: 0,
 		rotvel: 0,
 		scale: 1, 
 		alpha: 1,
 		list: _pList,
 		min: {
-			pos: { x: 0, y: 0},
-			vel: { x: 0, y: 0},
-			acc: { x: 0, y: 0},
+			pos: [0, 0],
+			vel: [0, 0],
+			acc: [0, 0],
 			rot: 0,
 			rotvel: 0,
 			scale: 0, // all props get summed with min-max, so i need 0 here
 			alpha: 0
 		},
 		max: {
-			pos: { x: 0, y: 0},
-			vel: { x: 0, y: 0},
-			acc: { x: 0, y: 0},
+			pos: [0, 0],
+			vel: [0, 0],
+			acc: [0, 0],
 			rot: 0,
 			rotvel: 0,
 			scale: 0,
@@ -108,10 +108,11 @@ function _13Particles(_world, bName, maxNum) {
 							
 							for(var i in _em.min)
 							{
-								if(_cP[i].x != null)
+								if(_cP[i].length != null)
 								{
-									_cP[i].x = _em[i].x + _13RandBetween(_em.min[i].x, _em.max[i].x);
-									_cP[i].y = _em[i].y + _13RandBetween(_em.min[i].y, _em.max[i].y);
+									_13Rep(2, function(j) {
+										_cP[i][j] = _em[i][j] + _13RandBetween(_em.min[i][j], _em.max[i][j]);
+									});
 								}
 								else {
 									_cP[i] = _em[i] + _13RandBetween(_em.min[i], _em.max[i]);

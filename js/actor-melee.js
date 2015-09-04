@@ -44,10 +44,10 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				_cbul.die();
 			});
 
-			var _vx = this.vel.x * 0.5;
+			var _vx = this.vel[0] * 0.5;
 			var _mob = this;
 			
-			_13Skel.AllBones(this.texture.skel, function (tb) {		
+			_13SkelAllBones(this.texture.skel, function (tb) {		
 				if(tb.texture != null && tb.alpha != 0)
 				{
 					_13ObjExtend(_world.addBody(tb.texture), {
@@ -64,14 +64,14 @@ function _13ActorMelee(_world, bName, bW, bH) {
 							
 							if(this.lifespan <= 2500) this.alpha = this.lifespan / 2500;
 						},
-						vel: { 
-							x: _13RandBetween(_vx - 50, _vx + 50), 
-							y: _13RandBetween(-100, 0)
-						},
-						pos: {
-							x: _mob.pos.x + _13RandBetween(-0.5, 0.5) * _mob.w,
-							y: _mob.pos.y + _13RandBetween(-0.5, 0.5) * _mob.h
-						},
+						vel: [
+							_13RandBetween(_vx - 50, _vx + 50), 
+							_13RandBetween(-100, 0)
+						],
+						pos: [
+							_mob.pos[0] + _13RandBetween(-0.5, 0.5) * _mob.w,
+							_mob.pos[1] + _13RandBetween(-0.5, 0.5) * _mob.h
+						],
 						rot: _13RandBetween(0, 2.8),
 						rotvel: _13RandBetween(-10, 10)
 					});
@@ -81,7 +81,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		action: {
 			move: 0,
 			jump: false,
-			watch: { x: 0, y: 0 },
+			watch: [0, 0],
 			attack: false,
 			block: false
 		},
@@ -119,34 +119,38 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		
 			var _act = this.action;
 			
-			if(this.block.d) this.lastgy = this.pos.y;
+			if(this.block.d) this.lastgy = this.pos[1];
 
 			if(_act.jump) {
 				if(!_didJump)
 				{
 					if(this.block.d) { // JUMP
 						_didJump = true;
-						this.vel.y = -_plJump;
+						this.vel[1] = -_plJump;
 					}
 				}
 			}
 			else if(this.block.d) _didJump = false;
 			
-			var _cPVel = ((!this.isshield && ((this.vel.x > 0 && this.facing) || (this.vel.x < 0 && !this.facing))) ? (1) : (0.5)) * _plSpeed;
+			var _vx = this.vel[0];
+			
+			var _cPVel = ((!this.isshield && ((_vx > 0 && this.facing) || (_vx < 0 && !this.facing))) ? (1) : (0.5)) * _plSpeed;
 			
 			var _brakeTo = _cPVel; // TOO FAST
-			if((_act.move == 0 || _act.move * this.vel.x < 0) && this.block.d) _brakeTo = 0; // STOPPING
+			if((_act.move == 0 || _act.move * _vx < 0) && this.block.d) _brakeTo = 0; // STOPPING
 
 			// MOVING
-			this.vel.x += _act.move * timePassed;
-			
-			var _absx = Math.abs(this.vel.x);
+			_vx += _act.move * timePassed;
+
+			var _absx = Math.abs(_vx);
 			
 			if(_absx > _brakeTo)
 			{
 				var _brakeM = Math.max(_brakeTo, _absx - timePassed * 2);
-				this.vel.x = (this.vel.x < 0 ? -_brakeM : _brakeM);
+				_vx = (_vx < 0 ? -_brakeM : _brakeM);
 			}
+			
+			this.vel[0] = _vx;
 		},
 		afterUpdate: function(timePassed) {
 			var _act = this.action;
@@ -154,11 +158,11 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			// always change facing instatly regardless of attacks because ai sometimes gets stuck
 			/*if(!this.isattack) */
 			
-			this.facing = _act.watch.x > 0;
+			this.facing = _act.watch[0] > 0;
 
-			var _wxabs = Math.abs(_act.watch.x); // need abs on this because of facing handling
+			var _wxabs = Math.abs(_act.watch[0]); // need abs on this because of facing handling
 			
-			var _hbrot = Math.atan2(_act.watch.y, _wxabs) * 0.2; // watch dir
+			var _hbrot = Math.atan2(_act.watch[1], _wxabs) * 0.2; // watch dir
 
 			if(!this.block.d)
 			{
@@ -166,10 +170,12 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			}
 			else
 			{
-				if(this.vel.x == 0) this.texture.play('stand', this.revmult);
+				var _vx = this.vel[0]
+				
+				if(_vx == 0) this.texture.play('stand', this.revmult);
 				else {
-					var _animSpeed = (((this.facing && this.vel.x > 0) || (!this.facing && this.vel.x < 0)) ? (1) : (-1));
-					this.texture.play('run', _animSpeed * this.revmult, Math.max(0.2, Math.abs(this.vel.x) / _plSpeed));
+					var _animSpeed = (((this.facing && _vx > 0) || (!this.facing && _vx < 0)) ? (1) : (-1));
+					this.texture.play('run', _animSpeed * this.revmult, Math.max(0.2, Math.abs(_vx) / _plSpeed));
 				}
 			}
 			
@@ -183,7 +189,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				
 					_headbone.rot = Math.PI + _hbrot;
 					
-					if(_act.watch.y > 0)
+					if(_act.watch[1] > 0)
 					{
 						_headbone.x = -_hbrot * 15;
 					}
@@ -258,18 +264,18 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				
 				var _cSkel = this.texture.lastFrame;
 				var _rotSum = _cSkel.rot;
-				var _pds = { x:0, y: 0}; // starting sword point
-				var _pde = { x:0, y: 0}; // ending sword point
+				var _pds = [0, 0]; // starting sword point
+				var _pde = [0, 0]; // ending sword point
 				
 				var _dn = ((this.facing) ? (-1) : (1));
 				_13Rep(4, function() {
-					_pds = { x: _pde.x, y: _pde.y };					
+					_pds = _13ObjClone(_pde);					
 					
 					_cSkel = _cSkel.link[0];
 					_rotSum += _cSkel.rot;
 					
-					_pde.x += _dn * (_cSkel.x + Math.sin(_rotSum) * _cSkel.size);
-					_pde.y += _cSkel.y + Math.cos(_rotSum) * _cSkel.size;
+					_pde[0] += _dn * (_cSkel.x + Math.sin(_rotSum) * _cSkel.size);
+					_pde[1] += _cSkel.y + Math.cos(_rotSum) * _cSkel.size;
 				})
 						
 				_13Each(this.bullets, function(_cbul) {
@@ -277,7 +283,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 					{
 						_cbul.undie(_bulLife);
 						
-						for(var i in _pds)  {
+						_13Rep(2, function(i) {
 							var _pdd = (_pde[i] - _pds[i]) * (0.1 + 0.3 * _bulnum); // _bulnum is 3 to 1
 							_cbul.pos[i] = _this.pos[i] + _pds[i] + _pdd;
 							
@@ -290,7 +296,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 							***/
 							
 							_cbul.dammod = _atkSpeed;
-						}
+						});
 
 						if(--_bulnum <= 0) return true;
 					}
@@ -298,8 +304,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			}
 			
 			_13Each(this.bullets, function(_cbul) {
-				_cbul.vel.x = _this.vel.x
-				_cbul.vel.y = _this.vel.y
+				_cbul.vel = _13ObjClone(_this.vel);
 			});
 		}
 	});

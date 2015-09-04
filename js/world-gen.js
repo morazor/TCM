@@ -22,7 +22,7 @@ function _13WorldGen(_world) {
 		});
 		
 		_walls.push({x: _cx + 500 *_dir, y: _cy, w: 1000, h: 500});
-		_spawnp.push({ x: _cx + 500 *_dir, y: _cy -390 });
+		_spawnp.push([ _cx + 500 *_dir, _cy -390 ]);
 	});
 
 	_13Rep(3, function(i) {
@@ -34,7 +34,7 @@ function _13WorldGen(_world) {
 	
 	_13Each(_walls, function(_bw) {
 		_13ObjExtend(_world.addBody('wall', _bw.w, _bw.h), {
-			pos: { x: _bw.x, y: _bw.y },
+			pos: [_bw.x, _bw.y],
 			fixed: true
 		});
 		
@@ -60,7 +60,10 @@ function _13WorldGen(_world) {
 					}
 					
 					_13ObjExtend(_world.addBody(_cName + '_' + _im[i]), {
-						pos: { x: _bw.x + _rnd * _bw.w / 3.1, y: _bw.y - _bw.h / 2 - _cOffY },
+						pos: [
+							_bw.x + _rnd * _bw.w / 3.1, 
+							_bw.y - _bw.h / 2 - _cOffY
+						],
 						fixed: true,
 						collide: false
 					});
@@ -72,13 +75,13 @@ function _13WorldGen(_world) {
 	})
 	
 	_13ObjExtend(_world.addBody('mirror_inner'), {
-		pos: { x: 0, y: -150 },
+		pos: [0, -150],
 		fixed: true,
 		collide: false
 	});
 	
 	_13ObjExtend(_world.addBody('mirror'), {
-		pos: { x: 0, y: -150 },
+		pos: [0, -150],
 		fixed: true,
 		collide: false
 	});
@@ -131,7 +134,7 @@ function _13WorldGen(_world) {
 					if(_liveEnemies == 0)
 					{
 						_finalBoss = _13ObjExtend(_world.addActorMelee('rev_player'), {
-							pos: { x: 0, y: -200 },
+							pos: [0, -200],
 							health: _13LimVal(600),
 							revmult: 1.3
 						});
@@ -184,7 +187,7 @@ function _13WorldGen(_world) {
 	}
 	
 	_player = _13ObjExtend(_world.addActorMelee('player'), {
-		pos: { x: 0,y: -200 }
+		pos: [0, -200]
 	});
 	
 	return _player;

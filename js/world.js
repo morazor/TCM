@@ -1,10 +1,10 @@
 function _13World() {	
 
 	function _calcPoints(cBody) {
-		cBody.left = cBody.pos.x - cBody.w / 2;
-		cBody.right = cBody.pos.x + cBody.w / 2;
-		cBody.top = cBody.pos.y - cBody.h / 2;
-		cBody.bottom = cBody.pos.y + cBody.h / 2;
+		cBody.left = cBody.pos[0] - cBody.w / 2;
+		cBody.right = cBody.pos[0] + cBody.w / 2;
+		cBody.top = cBody.pos[1] - cBody.h / 2;
+		cBody.bottom = cBody.pos[1] + cBody.h / 2;
 	}
 
 	var _lastUpdate = 0;
@@ -74,23 +74,21 @@ function _13World() {
 				{
 					var _cgrav = _cBody.grav * timePassed; // gravity
 					
-					_cBody.vel.x += _cBody.acc.x * timePassed / 1000;
-					_cBody.vel.y += _cBody.acc.y * timePassed / 1000 + _cgrav;
+					_cBody.vel[0] += _cBody.acc[0] * timePassed / 1000;
+					_cBody.vel[1] += _cBody.acc[1] * timePassed / 1000 + _cgrav;
 					
-					var _velang = Math.atan2(_cBody.vel.y, _cBody.vel.x);
-					var _frict = { 
-						x: _cBody.frict * Math.cos(_velang) * timePassed * 0.1, 
-						y: _cBody.frict * Math.sin(_velang) * timePassed * 0.1
-					}
+					var _velang = Math.atan2(_cBody.vel[1], _cBody.vel[0]);
+					var _frict = [
+						_cBody.frict * Math.cos(_velang) * timePassed * 0.1, 
+						_cBody.frict * Math.sin(_velang) * timePassed * 0.1
+					]
 					
-					for(var i in _frict)
-					{
+					_13Rep(2, function (i) {
 						if(Math.abs(_frict[i]) > Math.abs(_cBody.vel[i])) _cBody.vel[i] = 0;
 						else _cBody.vel[i] -= _frict[i];
-					}
-
-					_cBody.pos.x += _cBody.vel.x * timePassed / 1000;
-					_cBody.pos.y += _cBody.vel.y * timePassed / 1000;
+						
+						_cBody.pos[i] += _cBody.vel[i] * timePassed / 1000;
+					});
 					
 					if(_cBody.autorot)
 					{
@@ -125,12 +123,12 @@ function _13World() {
 					((_r1.overlap || _r1.collide == true || _r1.collide == _r2.name) && (_r2.overlap || _r2.collide == true || _r2.collide == _r1.name)) &&
 					(_r1.beforeCollide(_r2) && _r2.beforeCollide(_r1))) {
 					
-						var _overlap = {
-							x: Math.max(0, Math.min(_r1.right,_r2.right) - Math.max(_r1.left,_r2.left)),
-							y: Math.max(0, Math.min(_r1.bottom,_r2.bottom) - Math.max(_r1.top,_r2.top))
-						}
+						var _overlap = [
+							Math.max(0, Math.min(_r1.right,_r2.right) - Math.max(_r1.left,_r2.left)),
+							Math.max(0, Math.min(_r1.bottom,_r2.bottom) - Math.max(_r1.top,_r2.top))
+						]
 				
-						if(_overlap.x * _overlap.y > 0)
+						if(_overlap[0] * _overlap[1] > 0)
 						{
 							if(_r1.overlap || _r2.overlap)
 							{
@@ -152,25 +150,24 @@ function _13World() {
 										(_relVel[i] > 0 && _r1.pos[i] < _r2.pos[i]));
 								}
 							
-								if(_bounce.x && _bounce.y) // is this check right?
+								if(_bounce[0] && _bounce[1]) // is this check right?
 								{
-									if(_overlap.x < _overlap.y)
+									if(_overlap[0] < _overlap[1])
 									{
-										_bounce.y = false;
+										_bounce[1] = false;
 									}
 									else
 									{
-										_bounce.x = false;
+										_bounce[0] = false;
 									}
 								}
 								
-								var _sides = {
-									x: [ 'l', 'r' ],
-									y: [ 'u', 'd' ]
-								}
+								var _sides = [
+									[ 'l', 'r' ],
+									[ 'u', 'd' ]
+								]
 								
-								for(var i in _bounce)
-								{
+								_13Rep(2, function(i) {
 									if(_bounce[i])
 									{
 										
@@ -215,7 +212,7 @@ function _13World() {
 											}
 										} */
 									}
-								}
+								});
 
 								_r1.onCollide(_r2);	
 								_r2.onCollide(_r1);									
@@ -248,7 +245,7 @@ function _13World() {
 		render: function (tCtx, cameraPos) {
 			tCtx.save();
 			
-			var _cc = [Math.round(-cameraPos.x + tCtx.canvas.width / 2), Math.round(-cameraPos.y + tCtx.canvas.height / 2)];
+			var _cc = [Math.round(-cameraPos[0] + tCtx.canvas.width / 2), Math.round(-cameraPos[1] + tCtx.canvas.height / 2)];
 		
 			tCtx.clearRect(0, 0, tCtx.canvas.width, tCtx.canvas.height);
 			tCtx.translate(_cc[0], _cc[1]);
@@ -271,7 +268,7 @@ function _13World() {
 			var _mrrs = _mirror._basetxt.width;
 			
 			tCtx.save();
-			tCtx.translate(_mirror.pos.x, _mirror.pos.y);
+			tCtx.translate(_mirror.pos[0], _mirror.pos[1]);
 			
 			tCtx.drawImage(_mirror._basetxt, - _mrrs / 2, - _mrrs / 2);
 
@@ -280,7 +277,7 @@ function _13World() {
 				
 				tCtx.scale(1.4, 1.4);
 				
-				tCtx.translate(_player.pos.x - _mirror.pos.x, _player.pos.y - _mirror.pos.y);
+				tCtx.translate(_player.pos[0] - _mirror.pos[0], _player.pos[1] - _mirror.pos[1]);
 
 				var _ri = (_player.revved ? 0 : 1);
 
@@ -313,7 +310,7 @@ function _13World() {
 					if(_target != null && _13RectInters(_cBody, _cameraRect))
 					{
 						tCtx.save();
-						tCtx.translate(_cBody.pos.x, _cBody.pos.y);
+						tCtx.translate(_cBody.pos[0], _cBody.pos[1]);
 						tCtx.rotate(_cBody.rot);
 						tCtx.scale(_cBody.scale, _cBody.scale);
 						
@@ -325,15 +322,15 @@ function _13World() {
 						
 						if(!_cBody.facing) tCtx.scale(-1, 1);
 						
-						var _bpos = { x: -_target.width / 2, y: -_target.height / 2}
+						var _bpos = [ -_target.width / 2, -_target.height / 2 ];
 						
 						if(_target.render != null)
 						{
-							_target.render(tCtx, _bpos.x, _bpos.y);
+							_target.render(tCtx, _bpos[0], _bpos[1]);
 						}
 						else
 						{
-							tCtx.drawImage(_target, _bpos.x, _bpos.y);
+							tCtx.drawImage(_target, _bpos[0], _bpos[1]);
 						}
 						
 						tCtx.restore();

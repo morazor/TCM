@@ -11,10 +11,10 @@ function _13ActorRanged(_world, bName, bW, bH) {
 	var _aura = _world.addParticles('aura_' + bName, 10);	
 	_13ObjExtend(_aura, _auraProps);
 	
-	_aura.min.pos = { x: -5, y: -5 }
-	_aura.max.pos = { x: 5, y: 5 }
-	_aura.min.vel.y = 0;
-	_aura.max.vel.y = 10;
+	_aura.min.pos = [ -5, -5 ]
+	_aura.max.pos = [ 5, 5 ]
+	_aura.min.vel[1] = 0;
+	_aura.max.vel[1] = 10;
 	
 	// particles created before body because i need them under the body
 	
@@ -32,8 +32,8 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		_13ObjExtend(_aura, _auraProps);
 		_aura.lifespan = 300;
 		_aura.freq = 60;
-		_aura.min.vel.y = -50;
-		_aura.max.vel.y = 50;
+		_aura.min.vel[1] = -50;
+		_aura.max.vel[1] = 50;
 	
 		_aura.link = _cbul;
 	})
@@ -47,7 +47,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		collide: 'bullet_player',
 		action: {
 			move: null,
-			watch: { x: 0, y: 0 },
+			watch: [0, 0],
 			attack: false
 		},
 		health: _13LimVal(10 + 80 * _retObj.level),
@@ -56,8 +56,8 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
 			var _pusha = _13Ang(this.pos, tbod.pos);
-			this.vel.x = Math.cos(_pusha) * 300 * _pushc;
-			this.vel.y = Math.sin(_pusha) * 300 * _pushc;
+			this.vel[0] = Math.cos(_pusha) * 300 * _pushc;
+			this.vel[1] = Math.sin(_pusha) * 300 * _pushc;
 		},
 		onDie: function() {
 		},
@@ -65,45 +65,43 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		},
 		afterUpdate: function(timePassed) {
 			var _act = this.action;
+			var _this = this;
 			
-			this.facing = _act.watch.x > 0;
+			this.facing = _act.watch[0] > 0;
 			
-			var _wdir = Math.atan2(_act.watch.y, _act.watch.x);
+			var _wdir = Math.atan2(_act.watch[1], _act.watch[0]);
 			
 			this.didatk -= timePassed;
 			
 			 // MOVING
 			var _maxSpeed = 1000 * this.revmult;
 			
-			for(var i in this.acc)
-			{
-				if(_act.move != null && Math.abs(this.vel[i]) < _maxSpeed) 
-					this.acc[i] = timePassed * this.revmult * 0.15 * (_act.move[i] - this.pos[i] - this.vel[i] / 2);
+			_13Rep(2, function(i) {
+				if(_act.move != null && Math.abs(_this.vel[i]) < _maxSpeed) 
+					_this.acc[i] = timePassed * _this.revmult * 0.15 * (_act.move[i] - _this.pos[i] - _this.vel[i] / 2);
 				else {
-					this.acc[i] = 0;
-					this.vel[i] *= 0.99;
+					_this.acc[i] = 0;
+					_this.vel[i] *= 0.99;
 				}
-			}
+			});
 
-			this.alpha = 1 - Math.min(this.level, _13Dist(this.vel, { x: 0, y: 0}) / 600);
+			this.alpha = 1 - Math.min(this.level, _13Dist(this.vel, [0, 0]) / 600);
 			
 			if(this.didatk <= 0 && _act.attack)
 			{
 				this.didatk = _atkTime / this.revmult; // RANGED ATTACK
 
-				var _this = this;
 				_13Each(this.bullets, function (_cbul) {
 					if(_cbul.dead)
 					{
 						var _adir = _wdir;
 						
 						_cbul.undie(_bulLife);
+
+						_cbul.pos = _13ObjClone(_this.pos);
 						
-						_cbul.pos.x = _this.pos.x;
-						_cbul.pos.y = _this.pos.y;
-						
-						_cbul.vel.x = Math.cos(_adir) * _bulVel;
-						_cbul.vel.y = Math.sin(_adir) * _bulVel;
+						_cbul.vel[0] = Math.cos(_adir) * _bulVel;
+						_cbul.vel[1] = Math.sin(_adir) * _bulVel;
 						
 						return true;
 					}

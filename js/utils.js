@@ -59,10 +59,10 @@ function _13RectInters(r1, r2) {
 }
 
 function _13Dist(p1, p2) {
-	return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+	return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
 }
 function _13Ang(p1, p2) {
-	return Math.atan2(p1.y - p2.y, p1.x - p2.x);
+	return Math.atan2(p1[1] - p2[1], p1[0] - p2[0]);
 }
 
 function _13RandBetween(minV, maxV) {
@@ -168,7 +168,7 @@ function _13Gradient(rad, cola, colb, basea, ppow, offset) {
 		_13Rep(_rad2, function (k) {
 			var _bi = (j + k * _rad2) * 4;
 			
-			var _cDist = Math.max(0, _13Dist({ x: j, y: k }, { x: rad, y: rad}) - offset);
+			var _cDist = Math.max(0, _13Dist([j, k], [rad, rad]) - offset);
 			
 			var _cDistPerc = Math.pow(1 - Math.min(1, _cDist / (rad - offset)), ppow);
 			

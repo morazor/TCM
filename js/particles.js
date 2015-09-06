@@ -46,16 +46,19 @@ function _13Particles(_world, bName, maxNum) {
 		update: function(timePassed)
 		{
 			if(this.link)
-			{
-				for(var i in this.pos)
+			{				
+				this.on = !this.link.dead;
+
+				if(this.on)
 				{
-					this.pos[i] = this.link.pos[i];
-					this.vel[i] = this.link.vel[i] * 0.65;
-				}
-				
-				this.alpha = this.link.alpha;
-				
-				this.on = !this.link.dead;				
+					for(var i in this.pos)
+					{
+						this.pos[i] = this.link.pos[i];
+						this.vel[i] = this.link.vel[i] * 0.65;
+					}
+					
+					this.alpha = this.link.alpha;	
+				}				
 			}
 			
 			if(this.on)

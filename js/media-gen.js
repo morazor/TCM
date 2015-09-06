@@ -67,7 +67,7 @@ function _13TextureGen() {
 	_ctx.strokeStyle = 'rgba(255,255,255,0.5)';
 	_13Rep(3, function(i) { // BROKEN MIRROR
 		_ctx.save();
-		_ctx.rotate(Math.random() / 2 + Math.PI * 1.5 * i); // Math.PI * 2 / 3
+		_ctx.rotate(Math.random() / 2 + PI * 1.5 * i); // PI2 / 3
 		
 		var _mstep = -_bls / 2 + 15;
 		
@@ -172,8 +172,8 @@ function _13TextureGen() {
 	
 	_13Path(_canvas, { c: '#261f1f', p: [
 		[ 0, 300 ],
-		[ 'arc', 25, 25, 25, Math.PI, Math.PI * 1.5 ],
-		[ 'arc', 275, 25, 25, Math.PI * 1.5, Math.PI * 2 ],
+		[ 'arc', 25, 25, 25, PI, PI * 1.5 ],
+		[ 'arc', 275, 25, 25, PI * 1.5, PI2 ],
 		[ 300, 300 ]
 	]});
 
@@ -198,19 +198,19 @@ function _13TextureGen() {
 		link: [ {
 			x: 0,
 			y:  _pbs * 0.05,
-			rot: Math.PI,
+			rot: PI,
 			size: _pbs * 0.3,
 			name: 'body',
 			under: true,
 			path: [
 				{ c: _chainc, p: [ // body
 					[ 0.25, 1 ],
-					[ 'arc', 0, 1, 0.25, 0, Math.PI ],
-					[ 'arc', 0, 0, 0.2, Math.PI, 0 ]
+					[ 'arc', 0, 1, 0.25, 0, PI ],
+					[ 'arc', 0, 0, 0.2, PI, 0 ]
 				] },
 				{ c: _platec, b: 1, p: [ // chest - back
 					[ 0.25, 1 ],
-					[ 'arc', 0, 1, 0.25, 0, Math.PI * 0.5 ],
+					[ 'arc', 0, 1, 0.25, 0, PI * 0.5 ],
 					[ 0, 1 ],
 					[ 0.1, 1 ],
 					[ -0.05, 0.45 ],
@@ -218,7 +218,7 @@ function _13TextureGen() {
 				] },
 				{ c: _platec, b: 1, p: [ // chest - front
 					[ 0, 1.25 ],
-					[ 'arc', 0, 1, 0.25, Math.PI * 0.5, Math.PI * 0.9 ],
+					[ 'arc', 0, 1, 0.25, PI * 0.5, PI * 0.9 ],
 					[ -0.3, 0.9 ],
 					[ -0.3, 0.6 ],
 					[ -0.2, 0.15 ],
@@ -240,13 +240,13 @@ function _13TextureGen() {
 			link: [ { // head
 				x: 0,
 				y: _pbs * 0.14,
-				rot: Math.PI,
+				rot: PI,
 				size: _pbs * 0.2,
 				name: 'head',
 				path: [
 					{ c: _platec, b: 1, p: [ // head
 						[ 0.3, 0 ],
-						[ 'arc', 0, 0, 0.3, 0, Math.PI, true  ],
+						[ 'arc', 0, 0, 0.3, 0, PI, true  ],
 						[ -0.3, 0.3 ],
 						[ 0.4, 0.35 ]
 					] },
@@ -268,8 +268,8 @@ function _13TextureGen() {
 			path: [
 				{ c: _chainc, p: [
 					[ 0.35, 0 ],
-					[ 'arc', 0, 0, 0.35, -Math.PI * 0.8, Math.PI * 0.8, true ],
-					[ 'arc', 0, 1, 0.2, Math.PI, 0, true ]
+					[ 'arc', 0, 0, 0.35, -PI * 0.8, PI * 0.8, true ],
+					[ 'arc', 0, 1, 0.2, PI, 0, true ]
 				] },
 				{ c: _platec, b: 1, p: [
 					[ -0.05, 0.1 ],
@@ -289,7 +289,7 @@ function _13TextureGen() {
 					path: [
 						{ c: _chainc, p: [
 							[ 0.2, 0 ],
-							[ 'arc', 0, 0, 0.2, 0, Math.PI, true ],
+							[ 'arc', 0, 0, 0.2, 0, PI, true ],
 							[ 0, 1 ],
 							[ 0.15, 1 ]
 						] },
@@ -327,8 +327,8 @@ function _13TextureGen() {
 		path: [
 			{ c: _chainc, p: [
 				[ 0.35, 0 ],
-				[ 'arc', 0, 0, 0.35, 0, Math.PI, true ],
-				[ 'arc', 0, 1, 0.2, Math.PI, 0, true ]
+				[ 'arc', 0, 0, 0.35, 0, PI, true ],
+				[ 'arc', 0, 1, 0.2, PI, 0, true ]
 			] },
 			{ c: _platec, b: 1, p: [
 				[ -0.35, 0.15 ],
@@ -338,7 +338,7 @@ function _13TextureGen() {
 			] },
 			{ c: _platec, b: 1, p: [
 				[ 0.38, 0 ],
-				[ 'arc', 0, 0, 0.38, 0, Math.PI, true ],
+				[ 'arc', 0, 0, 0.38, 0, PI, true ],
 				[ 0, 0.3 ]
 			] }
 		],
@@ -351,7 +351,7 @@ function _13TextureGen() {
 				path: [
 					{ c: _chainc, p: [ 
 						[ 0.2, 0 ],
-						[ 'arc', 0, 0, 0.2, 0, Math.PI, true ],
+						[ 'arc', 0, 0, 0.2, 0, PI, true ],
 						[ 0, 1 ],
 						[ 0.15, 1 ]
 					] },
@@ -375,7 +375,7 @@ function _13TextureGen() {
 				link: [ {
 					x: 0,
 					y: _pbs * 0.03,
-					rot: -Math.PI * 0.5,
+					rot: -PI * 0.5,
 					size: _pbs * 0.45,
 					name: 'weapon',
 					under: true,
@@ -423,7 +423,7 @@ function _13TextureGen() {
 	var _cshield =  {
 		x: _pbs * 0.15,
 		y: _pbs * 0,
-		rot: Math.PI * 0.5,
+		rot: PI * 0.5,
 		size: _pbs * 0.3,
 		name: 'shield',
 		path: [
@@ -466,7 +466,7 @@ function _13TextureGen() {
 				dur: 1000,
 				loop: true,
 				trans: function (_frSkel, _ap) {
-					var _crot = Math.sin(Math.PI * 2 * _ap) * 0.01;
+					var _crot = Math.sin(PI2 * _ap) * 0.01;
 					var _cbob = _crot * _pbs * 0.2;
 					
 					_frSkel.x += _cbob * 6;
@@ -494,8 +494,8 @@ function _13TextureGen() {
 				loop: true,
 				trans: function (_frSkel, _ap, _ac) {
 				
-					var _crot = Math.sin(Math.PI * 2 * _ap); // legs & arms rotation
-					var _crotk = Math.sin(-Math.PI * 0.5 + Math.PI * 2 * _ap); // knees rotation - 90 deg out of phase
+					var _crot = Math.sin(PI2 * _ap); // legs & arms rotation
+					var _crotk = Math.sin(-PI * 0.5 + PI2 * _ap); // knees rotation - 90 deg out of phase
 					
 					_crot *= _ac;
 					_crotk *= _ac;
@@ -517,7 +517,7 @@ function _13TextureGen() {
 						_frSkel.bones.leg[j].rot = _crot;
 						_frSkel.bones.leg_lk[j].rot = 0.5 + _crotk * ((_crotk > 0) ? (1.2) : (0.5));
 						
-						_frSkel.bones.arm[j].rot = Math.PI -_crot; // arm moves opposite to the leg
+						_frSkel.bones.arm[j].rot = PI -_crot; // arm moves opposite to the leg
 						_frSkel.bones.arm_lk[j].rot = -0.7;
 					}
 					
@@ -529,7 +529,7 @@ function _13TextureGen() {
 				loop: 0.5,
 				trans: function (_frSkel, _ap) {
 					
-					var _crot = Math.sin(Math.PI * 0.5 * Math.min(1, _ap * 2)) * 0.1;
+					var _crot = Math.sin(PI * 0.5 * Math.min(1, _ap * 2)) * 0.1;
 		
 					for(var j = 0; j < 2; j++)
 					{ // first part (not looping)
@@ -549,7 +549,7 @@ function _13TextureGen() {
 					
 					if(_ap > 0.5)
 					{ // second part (looping)
-						var _crot = Math.sin(Math.PI * 2 * (_ap - 0.5) * 2) * 0.015;
+						var _crot = Math.sin(PI2 * (_ap - 0.5) * 2) * 0.015;
 						var _cbob = _crot * _pbs * 0.5;
 						
 						_frSkel.x -=  _cbob;
@@ -586,11 +586,11 @@ function _13TextureGen() {
 				
 						return _frSkel;
 					}, function (_frSkel, _ap, _ac) {
-						var _crot = Math.sin(_ap * Math.PI * 0.5);
+						var _crot = Math.sin(_ap * PI * 0.5);
 						
-						for(var i = 0; i < 3; i++) _frSkel.bones.body[i].rot += Math.PI * 0.1 * _crot;
+						for(var i = 0; i < 3; i++) _frSkel.bones.body[i].rot += PI * 0.1 * _crot;
 						
-						_frSkel.bones.arm[1].rot = (1 + _crot * 0.15) * Math.PI;
+						_frSkel.bones.arm[1].rot = (1 + _crot * 0.15) * PI;
 						
 						// middle thrust: -0.2 < _ac < 0.25 for angle
 						var _cshrot = 4.6 - _crot * 3.5 + _ac * 3; // shoulder
@@ -601,18 +601,18 @@ function _13TextureGen() {
 						{
 							_cshrot = _crot * 0.6 + 0.5;
 							_ckrot = _crot - 1;
-							_cwrot = Math.PI * 0.3 * _ckrot;
+							_cwrot = PI * 0.3 * _ckrot;
 						}
 						/*else if(_ac == -1) // low swing, removed
 						{
 							_cshrot = 3.7 - _crot;
 							_ckrot = -_crot;
-							_cwrot = Math.PI * 0.15 * _ckrot;
+							_cwrot = PI * 0.15 * _ckrot;
 						}*/
 						
-						_frSkel.bones.arm[0].rot = _cshrot * Math.PI * 0.3;
+						_frSkel.bones.arm[0].rot = _cshrot * PI * 0.3;
 						
-						_frSkel.bones.arm_lk[0].rot =  Math.PI * 0.3 * _ckrot;
+						_frSkel.bones.arm_lk[0].rot =  PI * 0.3 * _ckrot;
 						_frSkel.bones.weapon[0].rot = _cwrot;
 					
 						return _frSkel;
@@ -624,11 +624,11 @@ function _13TextureGen() {
 				loop: false,
 				layer: 1,
 				trans: function (_frSkel, _ap, _ac) {
-					var _crot = Math.sin(_ap * Math.PI * 0.5);
+					var _crot = Math.sin(_ap * PI * 0.5);
 					
 					_ac *= (_ac < 0) ? (3) : (0.5);
 					
-					for(var i = 0; i < 3; i++) _frSkel.bones.body[i].rot += _ac * Math.PI * 0.03 * _crot;
+					for(var i = 0; i < 3; i++) _frSkel.bones.body[i].rot += _ac * PI * 0.03 * _crot;
 					
 					_frSkel.bones.arm[1].rot = 2.4 - 0.7 * _crot + _ac;
 					_frSkel.bones.arm_lk[1].rot = - 0.1 * _crot;
@@ -700,7 +700,7 @@ function _13TextureGen() {
 					{
 						tb.path[0].p = [
 							[ 0.3, 0 ],
-							[ 'arc', 0, 0, 0.3, 0, Math.PI * 0.8, true  ],
+							[ 'arc', 0, 0, 0.3, 0, PI * 0.8, true  ],
 							[ 0.1, 0.25 ],
 							[ 0.2, 0.4 ],
 							[ 0.4, 0.4 ]
@@ -717,7 +717,7 @@ function _13TextureGen() {
 					{					
 						tb.path[0].p = [
 							[ 0.1, 1 ],
-							[ 'arc', 0.05, 0, 0.15, Math.PI * 0.4, Math.PI * 2.2 ],
+							[ 'arc', 0.05, 0, 0.15, PI * 0.4, PI * 2.2 ],
 							[ 0.2, 0.2 ],
 							[ 0.2, 1 ]
 						]
@@ -740,8 +740,8 @@ function _13TextureGen() {
 						
 						tb.path[0].p = [
 							[ -0.13, 0.5 ],
-							[ 'arc', 0, 0, 0.1, Math.PI * 0.8, Math.PI * 2.2 ],
-							[ 'arc', 0, 1, 0.1, -Math.PI * 0.3, -Math.PI * 0.7 ]
+							[ 'arc', 0, 0, 0.1, PI * 0.8, PI * 2.2 ],
+							[ 'arc', 0, 1, 0.1, -PI * 0.3, -PI * 0.7 ]
 						]
 					}
 					break;
@@ -750,8 +750,8 @@ function _13TextureGen() {
 					{
 						tb.path[0].p = [
 							[ -0.1, 0.5 ],
-							[ 'arc', 0, 0, 0.1, Math.PI * 0.6, Math.PI * 2.4 ],
-							[ 'arc', 0, 1, 0.1, -Math.PI * 0.4, -Math.PI * 0.6 ]
+							[ 'arc', 0, 0, 0.1, PI * 0.6, PI * 2.4 ],
+							[ 'arc', 0, 1, 0.1, -PI * 0.4, -PI * 0.6 ]
 						]
 					}
 					break;
@@ -858,7 +858,7 @@ function _13TextureGen() {
 				var _cbt = _13RandPick(_blist);
 				_ctx.save();
 				_ctx.translate(k * 10, j * 15);
-				_ctx.rotate(Math.PI * 2 * Math.random());
+				_ctx.rotate(PI2 * Math.random());
 				_ctx.drawImage(_cbt, - _cbt.width / 2, - _cbt.height / 2);
 				_ctx.restore();
 			}
@@ -869,43 +869,80 @@ function _13TextureGen() {
 	
 	// TREES
 	
-	var _bls = 400;
+	var _bls = 500;
 		
-	function _treebr(_ctx, j)
-	{
-		_ctx.save();
-		_ctx.rotate(_13RandBetween(-0.1, 0.1));
-		_ctx.beginPath();
-		_ctx.arc(0, 0, 2 * j, 0, Math.PI);
-		_ctx.translate(0, - 10 - _13RandBetween(15, 25) * j);
-		_ctx.lineTo(- 2 * (j - 1), 0);
-		_ctx.lineTo(2 * (j - 1), 0);
-		_ctx.closePath();
-		_ctx.fill();
+	function _treeBranch(j, brot, brcol)
+	{		
+		var _nw = 0.1 / j * (j -1);
+		var _dw = 0.1 - _nw;
+		var _shr = _13RandBetween(-0.8 / (j + 1), 0.8 / (j + 1));
+		
+		var _cSkel = { 
+			x: 0,
+			y: 0,
+			rot: _13RandBetween(-0.08, 0.08) * (1 - j) + brot,
+			size: _bls * 0.045 * (j + 1),
+			path: [ { c: brcol, p: [
+				[ 'arc', 0, 0, 0.1, 0, PI, true ],
+				[-_nw - _dw + _shr, 0.5],
+				[-_nw, 1],
+				[_nw, 1], 
+				[_nw + _dw + _shr, 0.5]
+			]}],
+			link: []
+		}
 		
 		if(j > 1) {
-			var _spn = (Math.random() < j * 0.18 ? 2 : 1)
-			_ctx.rotate(0.5 * (_spn - 1));
+			var _spn = (Math.random() < (j - 1) * 0.3 ? 2 : 1);
+			var _nrot = 0.5 * (_spn - 1);
 			for(var i = 0; i < _spn; i++)
 			{
-				_ctx.rotate(_13RandBetween(-0.3, 0.3) - i); 
-				_treebr(_ctx, j - 1);
+				_cSkel.link.push(_treeBranch(j - 1, _nrot - i, brcol));
 			}
 		}
 		
-		_ctx.restore();
+		return _cSkel;
 	}
 	
 	for(var i = 0; i < 7; i++) {
-		var _canvas = _13Canv(_bls * 1.2, _bls);
+		var _cdepth = 4 + (i % 2);
 		
-		var _ctx = _canvas.getContext('2d');
+		var _brcol = (i % 2 == 0 ? '#332a21' : '#40352a');
 		
-		_ctx.translate(_bls * 0.6, _bls);
-		_ctx.fillStyle = '#443322';
-		_treebr(_ctx, 4 + (i % 2));
-		
-		_retObj['tree_' + i] = _canvas;
+		var _treeSkel = {
+			x: 0.5 * _bls,
+			y: _bls,
+			rot: PI,
+			size: _bls * 0.01 * (_cdepth + 1),
+			path: [ { c: _brcol, p: [
+				[ -0.55, 0 ],
+				[ -0.45, 1 ],
+				[ 0.45, 1 ],
+				[ 0.55, 0 ]
+			]}],
+			link: [_treeBranch(_cdepth, 0, _brcol)]	
+		}
+
+		_13SkelInit(_treeSkel);
+	
+		_retObj['tree_' + i] = {
+			skel: _treeSkel,
+			anim: {
+				'stand': {
+					dur: 5000,
+					loop: true,
+					trans: function (_frSkel, _ap) {
+						_13SkelAllBones(_frSkel.link[0], function(_cb) {
+							_cb.rot += Math.sin(_ap * PI2) * 0.03;
+						});
+						
+						return _frSkel;
+					}
+				}
+			},
+			w: _bls,
+			h: _bls
+		}
 	}
 	
 	// GRAVES
@@ -924,7 +961,7 @@ function _13TextureGen() {
 		_13Path(_ctx, { c: '#444444', p: [
 			[ -25, 25 ],
 			[ 25, 25 ],
-			[ 'arc', 0, -40, 25, 0, Math.PI, true ]
+			[ 'arc', 0, -40, 25, 0, PI, true ]
 		]});
 		
 		_ctx.fillStyle = 'rgba(0,0,0,0.5)';

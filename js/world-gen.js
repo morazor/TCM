@@ -53,13 +53,13 @@ function _13WorldGen(_world) {
 					var _rnd = ((j + _13RandBetween(0.15, 0.85)) / _toadd[i]) * 2 - 1;
 
 					var _cName = 'tree';
-					var _cOffY = 200;
+					var _cOffY = 250;
 					if(i == 'g') {
 						_cName = 'grave';
 						_cOffY = 50;
 					}
 					
-					_13ObjExtend(_world.addBody(_cName + '_' + _im[i]), {
+					var _cbod = _13ObjExtend(_world.addBody(_cName + '_' + _im[i]), {
 						pos: [
 							_bw.x + _rnd * _bw.w / 3.1, 
 							_bw.y - _bw.h / 2 - _cOffY
@@ -67,6 +67,10 @@ function _13WorldGen(_world) {
 						fixed: true,
 						collide: false
 					});
+					
+					if(i == 't')  {
+						_cbod.texture.play('stand');
+					}
 					
 					_im[i] = (_im[i] + 1) % 7;
 				});
@@ -147,6 +151,7 @@ function _13WorldGen(_world) {
 						_player.revpow = null;
 						_player.revmult = 1.3;
 						_player.texture.trail = '#aabbff';
+						_player.texture.skip = 5;
 					}
 				}
 				else {

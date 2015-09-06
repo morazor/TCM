@@ -135,9 +135,9 @@ function _13Actor(_world, bName, bW, bH, bType) {
 					// basically, i don't want the player to parry to the ground
 					// watch up is - PI / 2, so let's make it zero
 					
-					_watchang = (_watchang + Math.PI * 4.5) % (Math.PI * 2); // now angle is 0 to PI * 2
+					_watchang = (_watchang + PI * 4.5) % (PI2); // now angle is 0 to PI * 2
 						
-					if(_watchang > Math.PI) _watchang = _watchang - Math.PI * 2; // now it's - PI to PI
+					if(_watchang > PI) _watchang = _watchang - PI2; // now it's - PI to PI
 					
 					// now let's reduce the difference
 					
@@ -146,7 +146,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 					
 					// and back
 					
-					_watchang -= Math.PI / 2;
+					_watchang -= PI / 2;
 					
 					var _pang = 1.4 + _bonusAngle;
 					
@@ -157,7 +157,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 					
 					_watchang -= _pang / 2;
 
-					_atkang = (_atkang - _watchang + Math.PI * 4) % (Math.PI * 2);
+					_atkang = (_atkang - _watchang + PI * 4) % (PI2);
 
 					
 					if(_atkang > 0 && _atkang < _pang) { // BLOCKED

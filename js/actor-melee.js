@@ -187,7 +187,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				{
 					var _headbone = _csk.skel.bones.head[0];
 				
-					_headbone.rot = Math.PI + _hbrot;
+					_headbone.rot = PI + _hbrot;
 					
 					if(_act.watch[1] > 0)
 					{

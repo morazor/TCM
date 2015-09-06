@@ -2,7 +2,6 @@ function _13Sprite(bTexture) {
 	if(bTexture == null || bTexture.skel == null) return bTexture;
 	else {
 		var _retObj = {
-			texture: _13Canv(bTexture.w, bTexture.h),
 			width: bTexture.w,
 			height: bTexture.h,
 			skel: _13SkelClone(bTexture.skel),
@@ -39,7 +38,7 @@ function _13Sprite(bTexture) {
 			stop: function(animName) {
 				this.anim[animName].on = false;
 			},
-			refresh: function(timePassed) {
+			refresh: function(timePassed) {				
 				var _frSkel = _13SkelClone(this.skel);
 
 				for(var i in this.anim)
@@ -97,32 +96,30 @@ function _13Sprite(bTexture) {
 				this.lastFrame = _frSkel;
 			},
 			render: function(tContext, posX, posY) {
-				var _ctx = this.texture.getContext('2d');
-				
-				if(this.trail != null)
-				{
-					_ctx.save();
-					_ctx.fillStyle = this.trail;
-					_ctx.globalCompositeOperation = 'source-atop';
-					_ctx.fillRect(0, 0, this.texture.width, this.texture.height);
-					_ctx.restore();
-					
-					_fxctx.globalAlpha = 0.5;
+				if(this.trail != null) {
+					_13SkelDraw(_fxctx, this.lastFrame);
 					
 					_fxctx.save();
-					_fxctx.globalCompositeOperation = 'destination-in';
-					_fxctx.fillRect(0, 0, this.texture.width, this.texture.height);
+					_fxctx.fillStyle = this.trail;
+					_fxctx.globalAlpha = 0.65;
+					_fxctx.globalCompositeOperation = 'source-in';
+					_fxctx.fillRect(0, 0, _fxCanv.width, _fxCanv.height);
 					_fxctx.restore();
-					_fxctx.drawImage(this.texture, _13RandBetween(-3, 3), _13RandBetween(-3, 3));
-					tContext.drawImage(_fxCanv, posX, posY);
+
+					tContext.drawImage(_fxCanv, posX + _13RandBetween(-3, 3), posY + _13RandBetween(-3, 3));
 				}
-				
-				_ctx.clearRect(0, 0, this.texture.width, this.texture.height);
-				
-				_13SkelDraw(_ctx, this.lastFrame);
-				
-				if(this.skip > 0) this.skip--;
-				else tContext.drawImage(this.texture, posX, posY);
+
+				if(this.skip > 0)
+				{
+					this.skip--;
+				}
+				else
+				{
+					tContext.save();
+					tContext.translate(posX, posY);
+					_13SkelDraw(tContext, this.lastFrame);
+					tContext.restore();
+				}
 			}
 		})
 	}
@@ -243,7 +240,7 @@ function _13Body(_world, bName, bW, bH) {
 
 			if(this.revved) {
 				this.texture = this.baserev.texture[1];
-				if(this.texture != null) this.texture.skip = 5;
+				if(this.texture) this.texture.skip = 5;
 				this.light = this.baserev.light[1];
 			}
 			else

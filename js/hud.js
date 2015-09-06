@@ -105,7 +105,7 @@ function _13HUD(_ctx, _player, _world) {
 		{
 			var _flipPerc = ((_world.status == 0 ? 0 : _overDelay) + _world.sttime % _flipTime) / _flipTime;
 
-			if(_13RandBetween(-0.2, 0.2) > Math.cos(_flipPerc * Math.PI * 2 - 1.3))
+			if(_13RandBetween(-0.2, 0.2) > Math.cos(_flipPerc * PI2 - 1.3))
 			{
 				_ctx.scale(-1, 1);
 			}
@@ -151,7 +151,7 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.save();
 		
 		_ctx.translate(960, 80);
-		_ctx.rotate(-Math.PI / 2);
+		_ctx.rotate(-PI / 2);
 		
 		_13Path(_ctx, { c: 'black', b: 0, p: [
 			[ 'arc', 0, 0, 70 ]
@@ -160,14 +160,14 @@ function _13HUD(_ctx, _player, _world) {
 		if(_world._wadv > 0) {
 			_13Path(_ctx, { c: 'red', b: 0, p: [
 				[ 0, 0 ],
-				[ 'arc', 0, 0, 70, 0, Math.PI * 2 * _world._wadv ]
+				[ 'arc', 0, 0, 70, 0, PI2 * _world._wadv ]
 			]});
 		}
 		
 		if(_world._wadv - _world._wlive > 0) {
 			_13Path(_ctx, { c: 'white', b: 0, p: [
 				[ 0, 0 ],
-				[ 'arc', 0, 0, 70, 0, Math.PI * 2 * (_world._wadv - _world._wlive) ]
+				[ 'arc', 0, 0, 70, 0, PI2 * (_world._wadv - _world._wlive) ]
 			]});
 		}	
 		

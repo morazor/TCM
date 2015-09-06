@@ -1,3 +1,6 @@
+var PI = Math.PI;
+var PI2 = PI * 2;
+
 function _13Rep(repnum, onrep) {
 	for(var i = 0; i < repnum; i++)
 	{
@@ -118,7 +121,7 @@ function _13Path(_ctx, _cPath, size)
 		
 		switch(_cform)
 		{
-			case 'arc': _ctx.arc(_prm[0], _prm[1], _prm[2], _prm[3] || 0, _prm[4] || Math.PI * 2, _prm[5]); break;
+			case 'arc': _ctx.arc(_prm[0], _prm[1], _prm[2], _prm[3] || 0, _prm[4] || PI2, _prm[5]); break;
 			case 'rect': _ctx.rect(_prm[0], _prm[1], _prm[2], _prm[3]); break;
 			case 'bez': _ctx.bezierCurveTo(_prm[0], _prm[1], _prm[2], _prm[3], _prm[4], _prm[5]); break;
 			default: 

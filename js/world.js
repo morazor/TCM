@@ -227,7 +227,7 @@ function _13World() {
 
 			_calcPoints(_cameraRect);
 			
-			var _lscl = -Math.sin((_lastUpdate % 150) / 300 * Math.PI) * 0.07; // flickering lights	
+			var _lscl = -Math.sin((_lastUpdate % 150) / 300 * PI) * 0.07; // flickering lights	
 
 			// MIRROR
 			
@@ -359,9 +359,9 @@ function _13World() {
 						// basically, i don't want the player to parry to the ground
 						// whatch up is - PI / 2, so let's make it zero
 						
-						_watchang = (_watchang + Math.PI / 2 + Math.PI * 4) % (Math.PI * 2); // now angle is 0 to PI * 2
+						_watchang = (_watchang + PI / 2 + PI * 4) % (PI2); // now angle is 0 to PI * 2
 						
-						if(_watchang > Math.PI) _watchang = _watchang - Math.PI * 2; // now it's - PI to PI
+						if(_watchang > PI) _watchang = _watchang - PI2; // now it's - PI to PI
 						
 						// now let's reduce the difference
 						
@@ -370,7 +370,7 @@ function _13World() {
 						
 						// and back
 						
-						_watchang -= Math.PI / 2;
+						_watchang -= PI / 2;
 						
 						var _pang = 1.4 + _bonusAngle;
 						

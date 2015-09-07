@@ -271,7 +271,7 @@ function _13World() {
 			tCtx.restore();
 			
 			// MAIN RENDER CYCLE
-
+			
 			_13Each(['texture', 'light'], function (prop) {
 				_13Each(_livebod, function(_cBody) {
 					var _target = _cBody[prop];

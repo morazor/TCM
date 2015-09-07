@@ -46,7 +46,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	}
 	
 	_retObj.bullets = [];
-	_13Rep(bType == 'melee' ? 20 : 1, function() {
+	_13Rep(bType == 'melee' ? 10 : 2, function() {
 		var _cbul = _world.addBody('bullet_' + bName);
 		_13ObjExtend(_cbul, {
 			grav: 0,

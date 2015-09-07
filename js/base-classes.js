@@ -171,9 +171,7 @@ function _13Body(_world, bName, bW, bH) {
 			}
 		}
 	}
-	
-	var _lCanv = null;
-	
+
 	var lightC = [_13MediaLights[bName], _13MediaLights['rev_' + bName]];
 	
 	_13Rep(2, function(i) {

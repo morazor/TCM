@@ -30,8 +30,7 @@ function _13WorldGen(_world) {
 	});
 
 	// FIXED STUFF MUST BE ADDED FIRST!
-	var _furnAdd = { t: [], g: [] }
-	
+
 	_13Each(_walls, function(_bw) {
 		_13ObjExtend(_world.addBody('wall', _bw.w, _bw.h), {
 			pos: [_bw.x, _bw.y],
@@ -172,14 +171,14 @@ function _13WorldGen(_world) {
 			}
 			else {
 				if(_waveTime > _nextStep) {
-					_waveStep++;	
-					
-					if(_waveStep > _endWave)
+					if(_waveStep >= _endWave)
 					{
 						_finalRound = true;
 					}
 					else
 					{
+						_waveStep++;
+						
 						var _mobLvl = _waveStep % 10;
 						
 						// 0: miniboss, 1+: popcorn spawn

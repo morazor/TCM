@@ -68,12 +68,16 @@ function _13Ang(p1, p2) {
 	return Math.atan2(p1[1] - p2[1], p1[0] - p2[0]);
 }
 
+function _13Rand() {
+	return Math.random();
+}
+
 function _13RandBetween(minV, maxV) {
-	return minV + Math.random() * (maxV - minV);
+	return minV + _13Rand() * (maxV - minV);
 }
 
 function _13RandPick(listV) {
-	return listV[Math.floor(Math.random() * listV.length)];
+	return listV[Math.floor(_13Rand() * listV.length)];
 }
 
 function _13Canv(w, h) {

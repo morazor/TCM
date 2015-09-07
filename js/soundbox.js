@@ -121,7 +121,7 @@ var CPlayer = function() {
 
             // Noise oscillator
             if (noiseVol) {
-                rsample += (2 * Math.random() - 1) * noiseVol;
+                rsample += (2 * _13Rand() - 1) * noiseVol;
             }
 
             // Add to (mono) channel buffer

@@ -67,7 +67,7 @@ function _13TextureGen() {
 	_ctx.strokeStyle = 'rgba(255,255,255,0.5)';
 	_13Rep(3, function(i) { // BROKEN MIRROR
 		_ctx.save();
-		_ctx.rotate(Math.random() / 2 + PI * 1.5 * i); // PI2 / 3
+		_ctx.rotate(_13Rand() / 2 + PI * 1.5 * i); // PI2 / 3
 		
 		var _mstep = -_bls / 2 + 15;
 		
@@ -858,7 +858,7 @@ function _13TextureGen() {
 				var _cbt = _13RandPick(_blist);
 				_ctx.save();
 				_ctx.translate(k * 10, j * 15);
-				_ctx.rotate(PI2 * Math.random());
+				_ctx.rotate(PI2 * _13Rand());
 				_ctx.drawImage(_cbt, - _cbt.width / 2, - _cbt.height / 2);
 				_ctx.restore();
 			}
@@ -880,7 +880,7 @@ function _13TextureGen() {
 		var _cSkel = { 
 			x: 0,
 			y: 0,
-			rot: _13RandBetween(-0.08, 0.08) * (1 - j) + brot,
+			rot: _13RandBetween(-0.08, 0.08) * (2 - j) + brot,
 			size: _bls * 0.045 * (j + 1),
 			path: [ { c: brcol, p: [
 				[ 'arc', 0, 0, 0.1, 0, PI, true ],
@@ -893,63 +893,65 @@ function _13TextureGen() {
 		}
 		
 		if(j > 1) {
-			var _spn = (Math.random() < (j - 1) * 0.3 ? 2 : 1);
-			var _nrot = 0.5 * (_spn - 1);
+			var _spn = (_13Rand() < (j - 1) * 0.3 ? 2 : 1);
+			var _nrot = 0.6 * (_spn - 1);
 			for(var i = 0; i < _spn; i++)
 			{
-				_cSkel.link.push(_treeBranch(j - 1, _nrot - i, brcol));
+				_cSkel.link.push(_treeBranch(j - 1, _nrot - i * 1.2, brcol));
 			}
 		}
 		
 		return _cSkel;
 	}
 	
-	for(var i = 0; i < 7; i++) {
-		var _cdepth = 4 + (i % 2);
-		
-		var _brcol = (i % 2 == 0 ? '#332a21' : '#40352a');
-		
-		var _treeSkel = {
-			x: 0.5 * _bls,
-			y: _bls,
-			rot: PI,
-			size: _bls * 0.01 * (_cdepth + 1),
-			path: [ { c: _brcol, p: [
-				[ -0.55, 0 ],
-				[ -0.45, 1 ],
-				[ 0.45, 1 ],
-				[ 0.55, 0 ]
-			]}],
-			link: [_treeBranch(_cdepth, 0, _brcol)]	
-		}
+	_13Rep(2, function(j) {
+		_13Rep(10, function(i) {
+			var _cdepth = 4 + j;
+			
+			var _brcol = (j == 0 ? '#2e261e' : '#40352a');
+			
+			var _treeSkel = {
+				x: 0.5 * _bls,
+				y: _bls,
+				rot: PI,
+				size: _bls * 0.01 * (_cdepth + 1),
+				path: [ { c: _brcol, p: [
+					[ -0.55, 0 ],
+					[ -0.45, 1 ],
+					[ 0.45, 1 ],
+					[ 0.55, 0 ]
+				]}],
+				link: [_treeBranch(_cdepth, 0, _brcol)]	
+			}
 
-		_13SkelInit(_treeSkel);
-	
-		_retObj['tree_' + i] = {
-			skel: _treeSkel,
-			anim: {
-				'stand': {
-					dur: 5000,
-					loop: true,
-					trans: function (_frSkel, _ap) {
-						_13SkelAllBones(_frSkel.link[0], function(_cb) {
-							_cb.rot += Math.sin(_ap * PI2) * 0.03;
-						});
-						
-						return _frSkel;
+			_13SkelInit(_treeSkel);
+		
+			_retObj['tree_' + j + i] = {
+				skel: _treeSkel,
+				anim: {
+					'stand': {
+						dur: 5000,
+						loop: true,
+						trans: function (_frSkel, _ap) {
+							_13SkelAllBones(_frSkel.link[0], function(_cb) {
+								_cb.rot += Math.sin(_ap * PI2) * 0.03;
+							});
+							
+							return _frSkel;
+						}
 					}
-				}
-			},
-			w: _bls,
-			h: _bls
-		}
-	}
+				},
+				w: _bls,
+				h: _bls
+			}
+		})
+	});
 	
 	// GRAVES
 	
 	var _bls = 100;
 	
-	for(var i = 0; i < 7; i++) {
+	_13Rep(10, function(i) {
 		var _canvas = _13Canv(_bls, _bls);
 		
 		var _ctx = _canvas.getContext('2d');
@@ -969,7 +971,7 @@ function _13TextureGen() {
 		for(var j = 0; j < 3; j++)
 		{
 			_ctx.translate(0, -10);
-			if(Math.random() > 0.4) {
+			if(_13Rand() > 0.4) {
 				var _splt = _13RandPick([1,2,3]);
 				var _sx = -18;
 				
@@ -1007,7 +1009,7 @@ function _13TextureGen() {
 		}
 
 		_retObj['grave_' + i] = _canvas;
-	}
+	})
 	
 	/******************* 
 	 * LANDSCAPE START *
@@ -1024,7 +1026,7 @@ function _13TextureGen() {
 
 	_13Rep(50, function() {
 		_13Path(_canvas, { c: 'white', p: [
-			[ 'arc', Math.random() * _fw, Math.random() * _fh, Math.random() * _fh * 0.003 ]
+			[ 'arc', _13Rand() * _fw, _13Rand() * _fh, _13Rand() * _fh * 0.003 ]
 		]});
 	});
 	

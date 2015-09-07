@@ -13,7 +13,7 @@ function _13WorldGen(_world) {
 		var _cx = 250 * _dir;
 		
 		_13Rep(3, function(i) {
-			var _cw = (i % 2 == 0 ? 700 : 300) + 50 * Math.round(Math.random() * 4);
+			var _cw = (i % 2 == 0 ? 700 : 300) + 50 * Math.round(_13Rand() * 4);
 			
 			_walls.push({x: _cx +_cw / 2 * _dir, y: _cy, w: _cw, h: 500, furn: true });
 			
@@ -30,36 +30,44 @@ function _13WorldGen(_world) {
 	});
 
 	// FIXED STUFF MUST BE ADDED FIRST!
-	var _im = { t: 0, g: 0 };
+	var _furnAdd = { t: [], g: [] }
 	
 	_13Each(_walls, function(_bw) {
 		_13ObjExtend(_world.addBody('wall', _bw.w, _bw.h), {
 			pos: [_bw.x, _bw.y],
 			fixed: true
 		});
-		
-		if(_bw.furn)
-		{
-			var _cwt = _bw.w / 700;
-			var _cwg = _cwt * 3;
-			
-			var _toadd = { t: Math.floor(_cwt), g: Math.floor(_cwg) };
-			_toadd.t += (Math.random() > _cwt - _toadd.t ? 1 : 0)
-			_toadd.g += (Math.random() > _cwg - _toadd.g ? 1 : 0)
-			
-			for(var i in _toadd)
+	});
+	
+	_13Each([ 't0', 't1', 'g' ], function(i) {
+		var _mutcount = 0;
+		var _furncount = 0;
+		_13Each(_walls, function(_bw) {
+			if(_bw.furn)
 			{
-				_13Rep(_toadd[i], function(j) {
-					var _rnd = ((j + _13RandBetween(0.15, 0.85)) / _toadd[i]) * 2 - 1;
+				var _toadd = Math.floor(_bw.w / 200);
+				
+				if(i != 'g') {
+					var _treeType = i.match(/\d$/)[0];
+					_toadd = _bw.w > 650 || _treeType == 0;
+				}
+				
+				_13Rep(_toadd, function(j) {
 
-					var _cName = 'tree';
-					var _cOffY = 250;
-					if(i == 'g') {
-						_cName = 'grave';
-						_cOffY = 50;
+					var _rVal = _13RandBetween(0.15, 0.55);
+					var _cOffY = 50;
+					var _cName = 'grave_';
+
+					if(i != 'g')
+					{						
+						_rVal =  _13Rand() * 0.45 + (_treeType == _furncount % 2 ? 0 : 0.55);
+						_cOffY = 250;
+						_cName = 'tree_' + _treeType;
 					}
 					
-					var _cbod = _13ObjExtend(_world.addBody(_cName + '_' + _im[i]), {
+					var _rnd = ((j + _rVal) / _toadd) * 2 - 1;
+					
+					var _cbod = _13ObjExtend(_world.addBody(_cName + _mutcount), {
 						pos: [
 							_bw.x + _rnd * _bw.w / 3.1, 
 							_bw.y - _bw.h / 2 - _cOffY
@@ -68,16 +76,18 @@ function _13WorldGen(_world) {
 						collide: false
 					});
 					
-					if(i == 't')  {
+					if(i != 'g')  {
 						_cbod.texture.play('stand');
 					}
 					
-					_im[i] = (_im[i] + 1) % 7;
+					_mutcount = (_mutcount + 1) % 10;
 				});
+				
+				_furncount++;
 			}
-		}
+		});
 	})
-	
+
 	_13ObjExtend(_world.addBody('mirror_inner'), {
 		pos: [0, -150],
 		fixed: true,

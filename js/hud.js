@@ -171,16 +171,6 @@ function _13HUD(_ctx, _player, _world) {
 			]});
 		}	
 		
-		
-		/*_ctx.translate(760, 0);
-
-		_13Rep(20, function(i) {
-			if(Math.floor(_world.adv * 20) > i) _ctx.fillStyle = 'white';
-			else _ctx.fillStyle = '#444444';
-			
-			_ctx.fillRect(20 * i, 2, 16, 30);
-		});*/
-
 		_ctx.restore();
 	}
 }

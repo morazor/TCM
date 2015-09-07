@@ -121,6 +121,29 @@ function _13WorldGen(_world) {
 	var _finalRound = false;
 	var _finalBoss = null;
 	
+		
+	_player = _13ObjExtend(_world.addActorMelee('player'), {
+		pos: [0, -200]
+	});
+	
+	var _spawnList = [];
+	
+	_13Rep(_endWave, function(i) {
+		var _mobLvl = i % 10;
+						
+		// 0: miniboss, 1+: popcorn spawn
+		// starts with 1
+
+		_mobLvl = Math.max(0, 1 - _mobLvl);
+
+		_spawnList[i] = _13ObjExtend(_world.addEnemy(_13RandPick(['enemy_skel_', 'enemy_wotw_']) + _mobLvl), {
+			pos: _13ObjClone(_13RandPick(_spawnp)),
+			awake: true,
+			dead: true,
+			revmult: (_mobLvl == 0 ? 0.8 : 1.1)
+		});
+	});
+	
 	_spawner.beforeUpdate = function(timePassed) { // must be before update because if i add mobs after update they will be rendered without a skeleton refresh
 		if(_world.status == 1)
 		{
@@ -179,30 +202,17 @@ function _13WorldGen(_world) {
 					{
 						_waveStep++;
 						
-						var _mobLvl = _waveStep % 10;
+						var _cMob = _spawnList[_waveStep];
 						
-						// 0: miniboss, 1+: popcorn spawn
-
-						_mobLvl = Math.max(0, 1 - _mobLvl);
-					
-						var _bName = _13RandPick(['enemy_skel_', 'enemy_wotw_']);
-						_13ObjExtend(_world.addEnemy(_bName + _mobLvl), {
-							pos: _13ObjClone(_13RandPick(_spawnp)),
-							awake: true,
-							revmult: (_mobLvl == 0 ? 0.8 : 1.1)
-						});
+						_cMob.undie();
 						
 						_waveTime = 0;
-						_nextStep = (4500 - 2500 * _adv) * (_mobLvl * 2 + 1);
+						_nextStep = (4500 - 2500 * _adv) * (_cMob.level * 2 + 1);
 					}				
 				}
 			}
 		}
 	}
-	
-	_player = _13ObjExtend(_world.addActorMelee('player'), {
-		pos: [0, -200]
-	});
 	
 	return _player;
 }

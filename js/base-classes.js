@@ -10,7 +10,7 @@ function _13Sprite(bTexture) {
 		}
 		
 		var _fxCanv = _13Canv(bTexture.w, bTexture.h)
-		var _fxctx = _fxCanv.getContext('2d');
+		var _fxctx = _13Ctx(_fxCanv);
 		
 		return _13ObjExtend(_retObj, {
 			play: function(animName, animSpeed, animCoeff) {
@@ -63,7 +63,7 @@ function _13Sprite(bTexture) {
 								else  _ap -= Math.floor(_ap);
 							}
 							else {
-								_ap = Math.min(1, _ap);
+								_ap = _13Min(1, _ap);
 							}
 							
 							var _ac = _cAnim.coeff;
@@ -153,7 +153,7 @@ function _13Body(_world, bName, bW, bH) {
 	else if(bTexture != null) { // repeat texture on size
 		var _cCanvas = _13Canv(bW, bH);
 		
-		var _cContext = _cCanvas.getContext('2d');
+		var _cContext = _13Ctx(_cCanvas);
 		
 		_cContext.drawImage(bTexture, 0, 0, 50, 50, 0, 0, 50, 50);
 		_cContext.drawImage(bTexture, bTexture.width - 50, 0, 50, 50, _cCanvas.width - 50, 0, 50, 50);
@@ -186,7 +186,7 @@ function _13Body(_world, bName, bW, bH) {
 		revTexture.anim = _cCanvas.anim;
 	}
 
-	return {
+	var _retObj = {
 		name: bName,
 		texture: _cCanvas,
 		light: lightC[0],
@@ -254,6 +254,10 @@ function _13Body(_world, bName, bW, bH) {
 			light: lightC
 		}
 	};
+	
+	_world.bodies.push(_retObj);
+	
+	return _retObj;
 }
 
 function _13LimVal(maxval, cval)
@@ -265,7 +269,7 @@ function _13LimVal(maxval, cval)
 		max: maxval,
 		perc: cval / maxval,
 		add: function(aval) {
-			this.c = Math.max(0, Math.min(this.c + aval, this.max));
+			this.c = _13Max(0, _13Min(this.c + aval, this.max));
 			this.perc = this.c / this.max;
 		}
 	}

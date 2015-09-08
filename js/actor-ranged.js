@@ -8,13 +8,11 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		fx: { scale: 1, alpha: 1 }
 	}
 	
-	var _aura = _world.addParticles('aura_' + bName, 10);	
+	var _aura = _13Particles(_world, 'aura_' + bName, 10);	
 	_13ObjExtend(_aura, _auraProps);
 	
-	_aura.min.pos = [ -5, -5 ]
-	_aura.max.pos = [ 5, 5 ]
-	_aura.min.vel[1] = 0;
-	_aura.max.vel[1] = 10;
+	_aura.rnd.pos = [ 5, 5 ]
+	_aura.rnd.vel[1] = 10;
 	
 	// particles created before body because i need them under the body
 	
@@ -28,12 +26,11 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		_cbul.w = 20;
 		_cbul.h = 20;
 		
-		var _aura = _world.addParticles('aura_bullet_' + bName, 20);	
+		var _aura = _13Particles(_world, 'aura_bullet_' + bName, 20);	
 		_13ObjExtend(_aura, _auraProps);
 		_aura.lifespan = 300;
 		_aura.freq = 60;
-		_aura.min.vel[1] = -50;
-		_aura.max.vel[1] = 50;
+		_aura.rnd.vel[1] = 50;
 	
 		_aura.link = _cbul;
 	})
@@ -56,8 +53,8 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
 			var _pusha = _13Ang(this.pos, tbod.pos);
-			this.vel[0] = Math.cos(_pusha) * 300 * _pushc;
-			this.vel[1] = Math.sin(_pusha) * 300 * _pushc;
+			this.vel[0] = _13Cos(_pusha) * 300 * _pushc;
+			this.vel[1] = _13Sin(_pusha) * 300 * _pushc;
 		},
 		onDie: function() {
 		},
@@ -85,7 +82,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 				}
 			});
 
-			this.alpha = 1 - Math.min(this.level, _13Dist(this.vel, [0, 0]) / 600);
+			this.alpha = 1 - _13Min(this.level, _13Dist(this.vel, [0, 0]) / 600);
 			
 			if(this.didatk <= 0 && _act.attack)
 			{
@@ -100,8 +97,8 @@ function _13ActorRanged(_world, bName, bW, bH) {
 
 						_cbul.pos = _13ObjClone(_this.pos);
 						
-						_cbul.vel[0] = Math.cos(_adir) * _bulVel;
-						_cbul.vel[1] = Math.sin(_adir) * _bulVel;
+						_cbul.vel[0] = _13Cos(_adir) * _bulVel;
+						_cbul.vel[1] = _13Sin(_adir) * _bulVel;
 						
 						return true;
 					}

@@ -1,7 +1,4 @@
 function _13WorldGen(_world) {
-	
-	var _player;
-	
 	var _walls = [
 	]
 	
@@ -76,7 +73,7 @@ function _13WorldGen(_world) {
 					});
 					
 					if(i != 'g')  {
-						_cbod.texture.play('stand');
+						_cbod.texture.play('stand')
 					}
 					
 					_mutcount = (_mutcount + 1) % 10;
@@ -122,7 +119,7 @@ function _13WorldGen(_world) {
 	var _finalBoss = null;
 	
 		
-	_player = _13ObjExtend(_world.addActorMelee('player'), {
+	var _player = _13ObjExtend(_world.addActor('player'), {
 		pos: [0, -200]
 	});
 	
@@ -134,17 +131,30 @@ function _13WorldGen(_world) {
 		// 0: miniboss, 1+: popcorn spawn
 		// starts with 1
 
-		_mobLvl = Math.max(0, 1 - _mobLvl);
+		_mobLvl = _13Max(0, 1 - _mobLvl);
 
-		_spawnList[i] = _13ObjExtend(_world.addEnemy(_13RandPick(['enemy_skel_', 'enemy_wotw_']) + _mobLvl), {
+		_spawnList[i] = _13ObjExtend(_world.addActor(_13RandPick(['enemy_skel_', 'enemy_wotw_']) + _mobLvl), {
 			pos: _13ObjClone(_13RandPick(_spawnp)),
 			awake: true,
 			dead: true,
 			revmult: (_mobLvl == 0 ? 0.8 : 1.1)
 		});
 	});
+		
+	var _rain = _13ObjExtend(_13Particles(_world, 'rain', 40), {
+		freq: 60,
+		grav: 1.5,
+		lifespan: 2000,
+		collide: 'wall',
+		colldie: true
+	});
 	
-	_spawner.beforeUpdate = function(timePassed) { // must be before update because if i add mobs after update they will be rendered without a skeleton refresh
+	var _clouds = _13ObjExtend(_world.addBody('clouds'), {
+		fixed: true,
+		collide: false
+	});
+	
+	_spawner.afterUpdate = function(timePassed) { // must be before update because if i add mobs after update they will be rendered without a skeleton refresh
 		if(_world.status == 1)
 		{
 			_waveTime += timePassed;
@@ -169,7 +179,7 @@ function _13WorldGen(_world) {
 				{
 					if(_liveEnemies == 0)
 					{
-						_finalBoss = _13ObjExtend(_world.addActorMelee('rev_player'), {
+						_finalBoss = _13ObjExtend(_world.addActor('rev_player'), {
 							pos: [0, -200],
 							health: _13LimVal(600),
 							revmult: 1.3
@@ -211,6 +221,25 @@ function _13WorldGen(_world) {
 					}				
 				}
 			}
+		}
+		
+		_13ObjExtend(_clouds, { 
+			pos: [
+				_player.pos[0],
+				_player.pos[1] - 700 - 20 * _13Max(0, 20 - _waveStep - _waveTime / _nextStep)
+			]
+		})
+		
+		if(_waveStep > 30)
+		{
+			_13ObjExtend(_rain, { 
+				pos: [
+					_13RandBetween(-960, 960) + _player.pos[0] + _player.vel[0],
+					_player.pos[1] - 800
+				],
+				on: true,
+				freq: _13Max(1000 / (_waveStep - 29), 30)
+			})
 		}
 	}
 	

@@ -6,7 +6,7 @@ function _13SkelInit(tb, skipIndex) {
 		
 		tb.texture = _13Canv(_cw, _ch);
 		
-		var _ctx = tb.texture.getContext('2d');
+		var _ctx = _13Ctx(tb.texture);
 		
 		_ctx.translate(_cw / 2, _ch / 3); // paths goes -0.5 < x < 0.5, 0 < y < 1
 

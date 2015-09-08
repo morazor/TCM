@@ -78,10 +78,10 @@ function _13Game() {
 	
 	_13MediaGen();
 	
-	var _ctx = _bgCanv.getContext('2d');
+	var _ctx = _13Ctx(_bgCanv);
 	_ctx.drawImage(_13MediaTextures.landscape, 0, 0);
 
-	var _ctx = _mainCanv.getContext('2d');
+	var _ctx = _13Ctx(_mainCanv);
 	
 	
 

@@ -4,7 +4,7 @@ function _13HUD(_ctx, _player, _world) {
 	
 	if(_world.status == 1)
 	{
-		_ctx.fillStyle = 'rgba(0,0,0,' + Math.max(0, 1 - _world.sttime / 500) + ')';
+		_ctx.fillStyle = 'rgba(0,0,0,' + _13Max(0, 1 - _world.sttime / 500) + ')';
 		_ctx.fillRect(0, 0, 1920, 1080);
 	
 		_ctx.save();
@@ -68,7 +68,7 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.beginPath();
 		
 		if(_world.status != 0) {
-			_ctx.globalAlpha = Math.max(0, (_world.sttime - _overDelay) / 500);
+			_ctx.globalAlpha = _13Max(0, (_world.sttime - _overDelay) / 500);
 			
 			_ctx.fillStyle = 'rgba(0,0,0,0.5)';
 			_ctx.fillRect(0, 0, 1920, 1080);
@@ -105,7 +105,7 @@ function _13HUD(_ctx, _player, _world) {
 		{
 			var _flipPerc = ((_world.status == 0 ? 0 : _overDelay) + _world.sttime % _flipTime) / _flipTime;
 
-			if(_13RandBetween(-0.2, 0.2) > Math.cos(_flipPerc * PI2 - 1.3))
+			if(_13RandBetween(-0.2, 0.2) > _13Cos(_flipPerc * PI2 - 1.3))
 			{
 				_ctx.scale(-1, 1);
 			}

@@ -9,7 +9,6 @@ function _13World() {
 
 	var _lastUpdate = 0;
 
-	var _particles = [];
 	var _livebod = [];
 	var _mirror;
 	var _player;
@@ -18,6 +17,7 @@ function _13World() {
 		status: 0,
 		bodies: [],
 		actors: [],
+		particles: [],
 		sttime: 0,
 		setst: function(stnum) {
 			this.status = stnum;
@@ -40,10 +40,9 @@ function _13World() {
 			_lastUpdate += timePassed;
 
 			/* PARTICLES */
-			for(var i = 0; i < _particles.length; i++)
-			{
-				_particles[i].update(timePassed);
-			}
+			_13Each(this.particles, function(_cParticles) {
+				_cParticles.update(timePassed);
+			});
 			
 			/* BODIES */
 			_livebod = [];
@@ -79,8 +78,8 @@ function _13World() {
 					
 					var _velang = Math.atan2(_cBody.vel[1], _cBody.vel[0]);
 					var _frict = [
-						_cBody.frict * Math.cos(_velang) * timePassed * 0.1, 
-						_cBody.frict * Math.sin(_velang) * timePassed * 0.1
+						_cBody.frict * _13Cos(_velang) * timePassed * 0.1, 
+						_cBody.frict * _13Sin(_velang) * timePassed * 0.1
 					]
 					
 					_13Rep(2, function (i) {
@@ -124,8 +123,8 @@ function _13World() {
 					(_r1.beforeCollide(_r2) && _r2.beforeCollide(_r1))) {
 					
 						var _overlap = [
-							Math.max(0, Math.min(_r1.right,_r2.right) - Math.max(_r1.left,_r2.left)),
-							Math.max(0, Math.min(_r1.bottom,_r2.bottom) - Math.max(_r1.top,_r2.top))
+							_13Max(0, _13Min(_r1.right,_r2.right) - _13Max(_r1.left,_r2.left)),
+							_13Max(0, _13Min(_r1.bottom,_r2.bottom) - _13Max(_r1.top,_r2.top))
 						]
 				
 						if(_overlap[0] * _overlap[1] > 0)
@@ -227,7 +226,7 @@ function _13World() {
 
 			_calcPoints(_cameraRect);
 			
-			var _lscl = -Math.sin((_lastUpdate % 150) / 300 * PI) * 0.07; // flickering lights	
+			var _lscl = -_13Sin((_lastUpdate % 150) / 300 * PI) * 0.07; // flickering lights	
 
 			// MIRROR
 			
@@ -402,8 +401,6 @@ function _13World() {
 		addBody: function (bName, bW, bH) {
 			var _retObj = _13Body(this, bName, bW, bH);
 			
-			this.bodies.push(_retObj);
-			
 			if(bName == 'mirror_inner') {
 				_mirror = _retObj;
 				_mirror._basetxt = _mirror.texture
@@ -412,32 +409,13 @@ function _13World() {
 		
 			return _retObj;
 		},
-		addActorRanged: function(bName, bW, bH) {
-			var _retObj = _13ActorRanged(this, bName, bW, bH);
-			
-			this.actors.push(_retObj);
-		
-			return _retObj;
-		},
-		addActorMelee: function(bName, bW, bH) {
-			var _retObj = _13ActorMelee(this, bName, bW, bH);
-			
-			if(bName == 'player') _player = _retObj;
-			
-			this.actors.push(_retObj);
-		
-			return _retObj;
-		},
-		addEnemy: function(bName) {
-			if(bName.match(/wotw/) != null) return this.addActorRanged(bName);
-			else return this.addActorMelee(bName);
-		},
-		addParticles: function(bName, maxNum)
-		{	
-			var _retObj = _13Particles(this, bName, maxNum)
-			_particles.push(_retObj);
-
-			return _retObj;
+		addActor: function(bName) {
+			if(bName.match(/wotw/) != null) return _13ActorRanged(this, bName);
+			else {
+				var _retObj = _13ActorMelee(this, bName);
+				if(bName == 'player') _player = _retObj;
+				return _retObj;
+			}
 		}
 	}
 }

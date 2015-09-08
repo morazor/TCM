@@ -49,7 +49,7 @@ function _13TextureGen() {
 	
 	var _canvas = _13Canv(_bls, _bls);
 	
-	var _ctx = _canvas.getContext('2d');
+	var _ctx = _13Ctx(_canvas);
 	
 	_ctx.translate(_bls / 2, _bls / 2);
 	_ctx.scale(0.7, 1);
@@ -96,7 +96,7 @@ function _13TextureGen() {
 	
 	var _canvas = _13Canv(_bls, _bls);
 	
-	var _ctx = _canvas.getContext('2d');
+	var _ctx = _13Ctx(_canvas);
 	
 	_ctx.translate(_bls / 2, _bls / 2);
 	_ctx.scale(0.7, 1);
@@ -114,7 +114,7 @@ function _13TextureGen() {
 	
 	var _canvas = _13Canv(_bls, _bls);
 	
-	var _ctx = _canvas.getContext('2d');
+	var _ctx = _13Ctx(_canvas);
 	
 	_ctx.translate(0, _bls / 2);
 
@@ -132,7 +132,7 @@ function _13TextureGen() {
 	
 	var _canvas = _13Canv(_bls, _bls);
 	
-	var _ctx = _canvas.getContext('2d');
+	var _ctx = _13Ctx(_canvas);
 	_ctx.translate(_bls / 2, 0);
 
 	_13Path(_ctx, { c: _bonec, b: 1, p: [
@@ -208,6 +208,26 @@ function _13TextureGen() {
 					[ 'arc', 0, 1, 0.25, 0, PI ],
 					[ 'arc', 0, 0, 0.2, PI, 0 ]
 				] },
+				{ c: _platec, b: 1, p: [ // chest
+					[ 0, 1.25 ],
+					[ 0, 1 ],
+					[ -0.05, 1 ],
+					[ 0, 0.55 ],
+					[ 0.1, 0.5 ],
+					[ 0.1, 0.45 ],
+					[ 0, 0.4 ],
+					[ -0.1, 0.25 ],
+					[ -0.2, 0.15 ],
+					[ -0.3, 0.6 ],
+					[ -0.3, 0.9 ],
+					[ 'arc', 0, 1, 0.25, PI * 0.9, 0, true ],
+					[ 0.25, 0.45 ],
+					[ 0.1, 0.45 ],
+					[ 0.1, 0.5 ],
+					[ 0, 0.55 ],
+					[ 0.05, 1 ],
+					[ 0, 1 ]
+				] },/*
 				{ c: _platec, b: 1, p: [ // chest - back
 					[ 0.25, 1 ],
 					[ 'arc', 0, 1, 0.25, 0, PI * 0.5 ],
@@ -229,12 +249,13 @@ function _13TextureGen() {
 					[ 0, 0.55 ],
 					[ -0.1, 1 ],
 					[ 0, 1 ]
-				] },
+				] },*/
 				{ c: _platec, b: 1, p: [ // neck
-					[ -0.15, 1.2 ],
-					[ -0.15, 1.5 ],
-					[ 0.07, 1.5 ],
-					[ 0.1, 1.2 ]
+					[ 'rect', -0.15, 1.2, 0.25, 0.2 ]
+					/*[ -0.15, 1.2 ],
+					[ -0.15, 1.4 ],
+					[ 0.07, 1.4 ],
+					[ 0.1, 1.2 ]*/
 				] }
 			], 
 			link: [ { // head
@@ -449,10 +470,11 @@ function _13TextureGen() {
 	_cshield2.name = 'shieldside';
 	_cshield2.alpha = 0;
 	_cshield2.path = [{ c: _platec, b: 1, p: [ // sideways
-		[ -0.1, 0 ],
+		[ 'rect', -0.1, 0, 0.3, 1.4 ]
+		/*[ -0.1, 0 ],
 		[ 0.2, 0 ],
 		[ 0.2, 1.4 ],
-		[ -0.1, 1.4 ]
+		[ -0.1, 1.4 ]*/
 	] }];
 
 	_farm.link[0].link[0].link = [_cshield, _cshield2];
@@ -466,7 +488,7 @@ function _13TextureGen() {
 				dur: 1000,
 				loop: true,
 				trans: function (_frSkel, _ap) {
-					var _crot = Math.sin(PI2 * _ap) * 0.01;
+					var _crot = _13Sin(PI2 * _ap) * 0.01;
 					var _cbob = _crot * _pbs * 0.2;
 					
 					_frSkel.x += _cbob * 6;
@@ -494,8 +516,8 @@ function _13TextureGen() {
 				loop: true,
 				trans: function (_frSkel, _ap, _ac) {
 				
-					var _crot = Math.sin(PI2 * _ap); // legs & arms rotation
-					var _crotk = Math.sin(-PI * 0.5 + PI2 * _ap); // knees rotation - 90 deg out of phase
+					var _crot = _13Sin(PI2 * _ap); // legs & arms rotation
+					var _crotk = _13Sin(-PI * 0.5 + PI2 * _ap); // knees rotation - 90 deg out of phase
 					
 					_crot *= _ac;
 					_crotk *= _ac;
@@ -529,7 +551,7 @@ function _13TextureGen() {
 				loop: 0.5,
 				trans: function (_frSkel, _ap) {
 					
-					var _crot = Math.sin(PI * 0.5 * Math.min(1, _ap * 2)) * 0.1;
+					var _crot = _13Sin(PI * 0.5 * _13Min(1, _ap * 2)) * 0.1;
 		
 					for(var j = 0; j < 2; j++)
 					{ // first part (not looping)
@@ -549,7 +571,7 @@ function _13TextureGen() {
 					
 					if(_ap > 0.5)
 					{ // second part (looping)
-						var _crot = Math.sin(PI2 * (_ap - 0.5) * 2) * 0.015;
+						var _crot = _13Sin(PI2 * (_ap - 0.5) * 2) * 0.015;
 						var _cbob = _crot * _pbs * 0.5;
 						
 						_frSkel.x -=  _cbob;
@@ -586,7 +608,7 @@ function _13TextureGen() {
 				
 						return _frSkel;
 					}, function (_frSkel, _ap, _ac) {
-						var _crot = Math.sin(_ap * PI * 0.5);
+						var _crot = _13Sin(_ap * PI * 0.5);
 						
 						for(var i = 0; i < 3; i++) _frSkel.bones.body[i].rot += PI * 0.1 * _crot;
 						
@@ -624,7 +646,7 @@ function _13TextureGen() {
 				loop: false,
 				layer: 1,
 				trans: function (_frSkel, _ap, _ac) {
-					var _crot = Math.sin(_ap * PI * 0.5);
+					var _crot = _13Sin(_ap * PI * 0.5);
 					
 					_ac *= (_ac < 0) ? (3) : (0.5);
 					
@@ -722,9 +744,9 @@ function _13TextureGen() {
 							[ 0.2, 1 ]
 						]
 						
-						tb.path[3].c = _chainc;
-						tb.path[3].p = [
-							[ -0.1, 0.9 ],
+						tb.path[2].c = _chainc;
+						tb.path[2].p = [
+							//[ -0.1, 0.9 ],
 							[ 'rect', -0.05, 1.2, 0.1, 0.3 ]
 						]
 					}
@@ -777,10 +799,11 @@ function _13TextureGen() {
 					case 'shieldside':
 					{
 						tb.path[0].p = [
-							[ -0.1, -0.1 ],
+							[ 'rect', -0.1, -0.1, 0.3, 1.2 ]
+							/*[ -0.1, -0.1 ],
 							[ 0.2, -0.1 ],
 							[ 0.2, 1.1 ],
-							[ -0.1, 1.1 ]
+							[ -0.1, 1.1 ] */
 						]
 					}
 					break;
@@ -824,7 +847,7 @@ function _13TextureGen() {
 	
 	// player initialized at the end (the other clone the skeleton)
 	_13SkelInit(_cSkel);
-	
+
 	_retObj.player = _skelObj;
 	 
 	// BONE PILES
@@ -835,13 +858,13 @@ function _13TextureGen() {
 	{
 		var _canvas = _13Canv(_bls * 1.2, _bls);
 		
-		var _ctx = _canvas.getContext('2d');
+		var _ctx = _13Ctx(_canvas);
 		
 		var _blist = [];
 		
 		for(var j = 0; j < 5; j++)
 		{
-			_13SkelAllBones(_retObj['enemy_skel_' + Math.max(0, 1 - j)].skel, function(tb) {
+			_13SkelAllBones(_retObj['enemy_skel_' + _13Max(0, 1 - j)].skel, function(tb) {
 				if(tb.texture != null && tb.alpha != 0)
 				{
 					_blist.push(tb.texture);
@@ -933,8 +956,8 @@ function _13TextureGen() {
 						dur: 5000,
 						loop: true,
 						trans: function (_frSkel, _ap) {
-							_13SkelAllBones(_frSkel.link[0], function(_cb) {
-								_cb.rot += Math.sin(_ap * PI2) * 0.03;
+							if(_13Rand() < 0.002) _13SkelAllBones(_frSkel.link[0], function(_cb) {
+								_cb.rot += _13RandBetween(-0.1, 0.1);
 							});
 							
 							return _frSkel;
@@ -954,7 +977,7 @@ function _13TextureGen() {
 	_13Rep(10, function(i) {
 		var _canvas = _13Canv(_bls, _bls);
 		
-		var _ctx = _canvas.getContext('2d');
+		var _ctx = _13Ctx(_canvas);
 		
 		_ctx.translate(_bls / 2, _bls);
 
@@ -968,7 +991,7 @@ function _13TextureGen() {
 		
 		_ctx.fillStyle = 'rgba(0,0,0,0.5)';
 		
-		for(var j = 0; j < 3; j++)
+	/*	for(var j = 0; j < 3; j++)
 		{
 			_ctx.translate(0, -10);
 			if(_13Rand() > 0.4) {
@@ -985,7 +1008,9 @@ function _13TextureGen() {
 			}
 		}
 		
-		_ctx.translate(0, -20);
+		_ctx.translate(0, -20);*/
+		
+		_ctx.translate(0, -50);
 		
 		if(i % 2 == 0)
 		{
@@ -1052,6 +1077,26 @@ function _13TextureGen() {
 	/*****************
 	 * LANDSCAPE END *
 	 *****************/
+	 
+	 // CLOUDS
+	 
+	var _fw = 1920; // anim width
+
+	var _canvas = _13Canv(_fw, _fw / 6);
+
+	_13Rep(11, function(i) {
+		_13Path(_canvas, { c: '#333333', p: [ [ 'arc', i * _fw / 10, 0, _fw * _13RandBetween(0.1, 0.15) ] ]});
+	});
+	
+	_retObj.clouds = _canvas;
+	
+	 // RAIN
+	 
+	var _canvas = _13Canv(2, 30);
+
+	_13Path(_canvas, { c: 'rgba(127,127,127,0.5)', p: [ [ 'rect', 0, 0, 2, 30 ] ]});
+
+	_retObj.rain = _canvas;
 	
 	return _retObj;
 }
@@ -1411,6 +1456,6 @@ var SBData = {
       rowLen: 5513,   // In sample lengths
       patternLen: 32,  // Rows per pattern
       endPattern: 31  // End pattern
-    }  
+    } 
 }
 

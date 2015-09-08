@@ -36,7 +36,7 @@ var CPlayer = function() {
 
     // Oscillators
     var osc_sin = function (value) {
-        return Math.sin(value * 6.283184);
+        return _13Sin(value * 6.283184);
     };
 
     var osc_saw = function (value) {
@@ -257,7 +257,7 @@ var CPlayer = function() {
                         if (fxLFO) {
                             f *= oscLFO(lfoFreq * k) * lfoAmt + 0.5;
                         }
-                        f = 1.5 * Math.sin(f);
+                        f = 1.5 * _13Sin(f);
                         low += f * band;
                         high = q * (sample - band) - low;
                         band += f * high;
@@ -282,7 +282,7 @@ var CPlayer = function() {
 
                         // Panning
 						
-						/*t = Math.sin(panFreq * k) * panAmt + 0.5;
+						/*t = _13Sin(panFreq * k) * panAmt + 0.5;
                         lsample = rsample * (1 - t);
                         rsample *= t;*/
 						

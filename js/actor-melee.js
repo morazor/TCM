@@ -9,7 +9,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 	_13Each(_retObj.bullets, function(_cbul) {
 		_cbul.afterUpdate = function (timePassed) {
 			_bulLife = timePassed * 2;
-			this.lifespan = Math.min(this.lifespan, _bulLife);
+			this.lifespan = _13Min(this.lifespan, _bulLife);
 			this.scale = this.lifespan / _bulLife;
 		}
 	});
@@ -146,7 +146,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			
 			if(_absx > _brakeTo)
 			{
-				var _brakeM = Math.max(_brakeTo, _absx - timePassed * 2);
+				var _brakeM = _13Max(_brakeTo, _absx - timePassed * 2);
 				_vx = (_vx < 0 ? -_brakeM : _brakeM);
 			}
 			
@@ -175,7 +175,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				if(_vx == 0) this.texture.play('stand', this.revmult);
 				else {
 					var _animSpeed = (((this.facing && _vx > 0) || (!this.facing && _vx < 0)) ? (1) : (-1));
-					this.texture.play('run', _animSpeed * this.revmult, Math.max(0.2, Math.abs(_vx) / _plSpeed));
+					this.texture.play('run', _animSpeed * this.revmult, _13Max(0.2, Math.abs(_vx) / _plSpeed));
 				}
 			}
 			
@@ -274,8 +274,8 @@ function _13ActorMelee(_world, bName, bW, bH) {
 					_cSkel = _cSkel.link[0];
 					_rotSum += _cSkel.rot;
 					
-					_pde[0] += _dn * (_cSkel.x + Math.sin(_rotSum) * _cSkel.size);
-					_pde[1] += _cSkel.y + Math.cos(_rotSum) * _cSkel.size;
+					_pde[0] += _dn * (_cSkel.x + _13Sin(_rotSum) * _cSkel.size);
+					_pde[1] += _cSkel.y + _13Cos(_rotSum) * _cSkel.size;
 				})
 						
 				_13Each(this.bullets, function(_cbul) {

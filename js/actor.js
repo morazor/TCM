@@ -4,7 +4,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	var _spnam = (bType == 'melee' ? 'sparks' : 'sparks_' + bName);
 	var _pgrav = (bType == 'melee' ? 1 : 0);
 	
-	var _sparks = _world.addParticles(_spnam, 10);
+	var _sparks = _13Particles(_world, _spnam, 10);
 	_13ObjExtend(_sparks, {
 		rotvel: 10,
 		grav: _pgrav,
@@ -14,32 +14,26 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		fx: { scale: 1, alpha: 1 }
 	});
 	
-	_sparks.min.vel = [-350, -350]
-	_sparks.max.vel = [350, 350]
+	_sparks.rnd.vel = [350, 350]
 
-	var _blood = _13ObjExtend(_world.addParticles('blood_' + bName, 5), {
+	var _blood = _13ObjExtend(_13Particles(_world, 'blood_' + bName, 5), {
 		lifespan: 350,
 		freq: 0,
 		grav: _pgrav,
-		scale: 0.5,
 		fx: { scale: 1 }
 	});
 	
-	_blood.min.scale = 0.5;
-	_blood.max.scale = 1;
+	_blood.rnd.scale = 0.5;
 
 	if(bName == 'player' || bName == 'rev_player') {
 		_blood.autorot = true;
 	}
 	else {
-		_blood.min.rot = 0;
-		_blood.max.rot = 2.8;
-		_blood.min.rotvel = -10;
-		_blood.max.rotvel = 10;
+		_blood.rnd.rot = PI;
+		_blood.rnd.rotvel = 10;
 	}
 	
-	_blood.min.vel = [-200, -200]
-	_blood.max.vel = [200, 200]
+	_blood.rnd.vel = [200, 200]
 	
 	if(bType == 'ranged') {
 		_blood.fx.alpha = 1;
@@ -88,7 +82,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				var _this = this;
 				
 				if(this.revved) {
-					var _maxh = Math.min(this.revpow.c, _cdam); // maximum convertible damage is current rewpow
+					var _maxh = _13Min(this.revpow.c, _cdam); // maximum convertible damage is current rewpow
 					this.revpow.add(-_maxh); 
 					this.health.add(_maxh);
 					this.health.add(_maxh - _cdam); // apply exceeding damage
@@ -211,6 +205,8 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		onDamage: function() {},
 		onDie: function() {}
 	});
+	
+	_world.actors.push(_retObj);
 	
 	return _retObj;
 }

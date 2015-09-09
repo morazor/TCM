@@ -52,7 +52,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				{
 					_13ObjExtend(_world.addBody(tb.texture), {
 						name: 'bone',
-						dead: false,
+						fixed: false,
 						w: tb.size * 0.5,
 						h: tb.size * 0.5,
 						bounce: 0.5,

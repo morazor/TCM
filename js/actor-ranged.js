@@ -19,14 +19,11 @@ function _13ActorRanged(_world, bName, bW, bH) {
 	var _retObj = _13Actor(_world, bName, bW, bH, 'ranged');
 	_aura.link = _retObj;
 	
-	var _bulLife = 2500;
-	var _bulVel = 600;
-	
 	_13Each(_retObj.bullets, function(_cbul) {
 		_cbul.w = 20;
 		_cbul.h = 20;
 		
-		var _aura = _13Particles(_world, 'aura_bullet_' + bName, 20);	
+		var _aura = _13Particles(_world, 'aura_bullet_' + bName, 5);	
 		_13ObjExtend(_aura, _auraProps);
 		_aura.lifespan = 300;
 		_aura.rnd.vel[1] = 50;
@@ -46,18 +43,8 @@ function _13ActorRanged(_world, bName, bW, bH) {
 			watch: [0, 0],
 			attack: false
 		},
-		health: _13LimVal(10 + 80 * _retObj.level),
-		damval: 25,
 		didatk: 0,
-		pushback: function (tbod, _pushc) {
-			// PUSHBACK
-			var _pusha = _13Ang(this.pos, tbod.pos);
-			this.vel[0] = _13Cos(_pusha) * 300 * _pushc;
-			this.vel[1] = _13Sin(_pusha) * 300 * _pushc;
-		},
 		onDie: function() {
-		},
-		beforeUpdate: function() {
 		},
 		afterUpdate: function(timePassed) {
 			var _act = this.action;
@@ -92,12 +79,12 @@ function _13ActorRanged(_world, bName, bW, bH) {
 					{
 						var _adir = _wdir;
 						
-						_cbul.undie(_bulLife);
+						_cbul.undie(2500);
 
 						_cbul.pos = _13ObjClone(_this.pos);
 						
-						_cbul.vel[0] = _13Cos(_adir) * _bulVel;
-						_cbul.vel[1] = _13Sin(_adir) * _bulVel;
+						_cbul.vel[0] = _13Cos(_adir) * 600;
+						_cbul.vel[1] = _13Sin(_adir) * 600;
 						
 						return true;
 					}

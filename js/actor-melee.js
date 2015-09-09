@@ -10,7 +10,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		_cbul.afterUpdate = function (timePassed) {
 			var _bulLife = timePassed * _bulFrames;
 			this.lifespan = _13Min(this.lifespan, _bulLife);
-			this.alpha = 0;
+			this.alpha = 0; // glow effect on sword requires that bullets get hidden after the first frame
 		}
 	});
 	
@@ -89,8 +89,8 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		isattack: false,
 		isshield: false,
 		canshield: _retObj.level != 0,
-		shnrg: _13LimVal(3),
-		_sndatk: {},
+		shnrg: _13LimVal(3), // shield energy: AI monsters decrase parry chance when they parry something
+		_sndatk: {}, // ugly property to avoid spamming attack sounds
 		beforeUpdate: function(timePassed) {
 			// REV CHECK
 			
@@ -155,14 +155,13 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		afterUpdate: function(timePassed) {
 			var _act = this.action;
 
-			// always change facing instatly regardless of attacks because ai sometimes gets stuck
-			/*if(!this.isattack) */
+			// always change facing instatly regardless of attacks because AI sometimes gets stuck
 			
-			this.facing = _act.watch[0] > 0;
+			/*if(!this.isattack) */ this.facing = _act.watch[0] > 0;
 
 			var _wxabs = Math.abs(_act.watch[0]); // need abs on this because of facing handling
 			
-			var _hbrot = Math.atan2(_act.watch[1], _wxabs) * 0.2; // watch dir
+			var _hbrot = Math.atan2(_act.watch[1], _wxabs) * 0.2; // watch direction
 
 			if(!this.block.d)
 			{

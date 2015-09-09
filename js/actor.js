@@ -1,8 +1,10 @@
 function _13Actor(_world, bName, bW, bH, bType) {
 	var _retObj = _world.addBody(bName, bW, bH);
 	
-	var _spnam = (bType == 'melee' ? 'sparks' : 'sparks_' + bName);
-	var _pgrav = (bType == 'melee' ? 1 : 0);
+	var _isMelee = bType == 'melee';
+	
+	var _spnam = (_isMelee ? 'sparks' : 'sparks_' + bName);
+	var _pgrav = (_isMelee ? 1 : 0);
 	
 	var _sparks = _13Particles(_world, _spnam, 10);
 	_13ObjExtend(_sparks, {
@@ -30,12 +32,12 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	
 	_blood.rnd.vel = [200, 200]
 	
-	if(bType == 'ranged') {
+	if(!_isMelee) {
 		_blood.fx.alpha = 1;
 	}
 	
 	_retObj.bullets = [];
-	_13Rep(bType == 'melee' ? 15 : 2, function() {
+	_13Rep(_isMelee ? 15 : 2, function() {
 		var _cbul = _world.addBody('bullet_' + bName);
 		_13ObjExtend(_cbul, {
 			grav: 0,
@@ -44,7 +46,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 			dead: true,
 			overlap: true,
 			owner: _retObj,
-			scale: (bType == 'melee' ? 0.5 : 1),
+			scale: (_isMelee ? 0.5 : 1), // to avoid creating different size textures based on type... space limit :<
 			dammod: 1, // useful for damage normalization for different speed swing animations
 			onOverlap: function (tbod) {
 				_retObj.onHit(tbod, this);
@@ -57,16 +59,18 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	var _lev = bName.match(/\d$/);
 	if(_lev != null) _lev = parseInt(_lev[0], 10);
 	
+	var _maxHealth = (_isMelee ? 100 + 100 * _lev : 10 + 80 * _lev)
+	
 	_13ObjExtend(_retObj, {
 		type: bType,
 		level: _lev,
-		lastai: 0,
+		lastai: 0, // last AI check
 		faction: (bName == 'player' ? 0 : 1),
 		awake: false,
 		stopatk: false,
 		didatk: 0,
-		health: _13LimVal(100 + 100 * _lev), // should go in melee-actor
-		damval: 2,
+		health: _13LimVal(_maxHealth), // should go in melee-actor
+		damval: (_isMelee ? 2 : 25),
 		atkspeed: 1,
 		speed: 400,
 		revmult: 1,
@@ -95,15 +99,23 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				_blood.on = 3;
 				
 				if(this.health.c <= 0) {
-					this.die(bullet); // DIE!!!
+					this.die(bullet);
 				}
 				else this.onDamage(bullet);
 			}
 		},
 		pushback: function (tbod, _pushc) {
 			// PUSHBACK
-			this.vel[0] = (this.pos[0] > tbod.pos[0]) ? (300) : (-300) * _pushc;
-			this.vel[1] = -120 * _pushc;
+			if(_isMelee)
+			{
+				this.vel[0] = (this.pos[0] > tbod.pos[0]) ? (300) : (-300) * _pushc;
+				this.vel[1] = -120 * _pushc;
+			}
+			else{
+				var _pusha = _13Ang(this.pos, tbod.pos);
+				this.vel[0] = _13Cos(_pusha) * 300 * _pushc;
+				this.vel[1] = _13Sin(_pusha) * 300 * _pushc;
+			}
 		},
 		onHit: function(tbod, bullet)
 		{
@@ -117,7 +129,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				bullet.die();
 				
 				var _atkbod = bullet;
-				if(this.type == 'melee') _atkbod = this;
+				if(_isMelee) _atkbod = this;
 
 				if(tbod.isshield) {
 					var _watchang = Math.atan2(tbod.action.watch[1], tbod.action.watch[0]);
@@ -157,7 +169,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 						tbod.shnrg.add(-1);
 						tbod.pushback(_atkbod, 0.3 * this.revmult);
 						
-						if(this.type == 'melee') this.pushback(tbod, 0.7 * tbod.revmult);
+						if(_isMelee) this.pushback(tbod, 0.7 * tbod.revmult);
 					}
 				}
 				
@@ -165,7 +177,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 					tbod.pushback(_atkbod, this.revmult);
 					tbod.damage(bullet);
 				
-					if(this.type == 'melee')
+					if(_isMelee)
 					{
 						if(!bullet.owner._sndatk.hit) {
 							bullet.owner._sndatk.hit = true;
@@ -185,7 +197,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 				
 				_sparks.pos = _13ObjClone(bullet.pos);
 				
-				if(this.type == 'melee') {
+				if(_isMelee) {
 					if(!bullet.owner._sndatk.block) {
 						bullet.owner._sndatk.block = true;
 						_13MediaSounds.block.play();

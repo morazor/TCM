@@ -211,7 +211,7 @@ function _13TextureGen() {
 					[ -0.2, 0.15 ],
 					[ -0.3, 0.6 ],
 					[ -0.3, 0.9 ],
-					[ 'arc', 0, 1, 0.25, PI * 0.9, 0, true ],
+					[ 'arc', 0, 1, 0.25, 2.8, 0, true ],
 					[ 0.25, 0.45 ],
 					[ 0.1, 0.45 ],
 					[ 0.1, 0.5 ],
@@ -278,7 +278,7 @@ function _13TextureGen() {
 			under: true,
 			path: [
 				{ c: _chainc, p: [
-					[ 'arc', 0, 0, 0.35, -PI * 0.8, PI * 0.8, true ],
+					[ 'arc', 0, 0, 0.35, -2.5, 2.5, true ],
 					[ 'arc', 0, 1, 0.2, PI, 0, true ]
 				] },
 				{ c: _platec, b: 1, p: [
@@ -345,7 +345,7 @@ function _13TextureGen() {
 				[ -0.25, 0.8 ]
 			] },
 			{ c: _platec, b: 1, p: [
-				[ 'arc', 0, 0, 0.38, 0, PI, true ],
+				[ 'arc', 0, 0, 0.38, 0, PI, true ], // shoulder
 				[ 0, 0.3 ]
 			] }
 		],
@@ -588,7 +588,7 @@ function _13TextureGen() {
 				layer: 1,
 				chain: { split: [ 0.5, 0.5 ], trans: [ // everybody loves parallel arrays <3
 					function (_frSkel, _ap, _ac) { // first part of attack is charging
-						var _endpos = this[1](_13SkelClone(_frSkel), 0, _ac);
+						var _endpos = this[1](_13SkelClone(_frSkel), 0, _ac); // this clone is pretty bad for performance
 						_frSkel = _13SkelAverage(_frSkel, _endpos, 1 - _ap);
 				
 						return _frSkel;
@@ -706,7 +706,7 @@ function _13TextureGen() {
 					case 'head':
 					{
 						tb.path[0].p = [
-							[ 'arc', 0, 0, 0.3, 0, PI * 0.8, true  ],
+							[ 'arc', 0, 0, 0.3, 0, 2.5, true  ],
 							[ 0.1, 0.25 ],
 							[ 0.2, 0.4 ],
 							[ 0.4, 0.4 ]
@@ -722,7 +722,7 @@ function _13TextureGen() {
 					case 'body':
 					{					
 						tb.path[0].p = [
-							[ 'arc', 0.05, 0, 0.15, PI * 0.4, PI * 2.2 ],
+							[ 'arc', 0.05, 0, 0.15, 1.25, 6.9 ],
 							[ 0.2, 0.2 ],
 							[ 0.2, 1 ]
 						]
@@ -738,14 +738,14 @@ function _13TextureGen() {
 					{
 						if(k < 1) tb.path.splice(2, 1);
 
-					} // break;
+					} // no break here, it has to continue
 					case 'leg': 
 					{
 						if(k < 1) tb.path.splice(1, 1);
 						
 						tb.path[0].p = [
-							[ 'arc', 0, 0, 0.1, PI * 0.8, PI * 2.2 ],
-							[ 'arc', 0, 1, 0.1, -PI * 0.3, -PI * 0.7 ]
+							[ 'arc', 0, 0, 0.1, 2.5, 6.9 ],
+							[ 'arc', 0, 1, 0.1, -0.95, -2.2 ]
 						]
 					}
 					break;
@@ -753,8 +753,8 @@ function _13TextureGen() {
 					case 'arm_lk':
 					{
 						tb.path[0].p = [
-							[ 'arc', 0, 0, 0.1, PI * 0.6, PI * 2.4 ],
-							[ 'arc', 0, 1, 0.1, -PI * 0.4, -PI * 0.6 ]
+							[ 'arc', 0, 0, 0.1, 1.8, 7.5 ],
+							[ 'arc', 0, 1, 0.1, -1.25, -1.8 ]
 						]
 					}
 					break;
@@ -831,11 +831,9 @@ function _13TextureGen() {
 	 
 	// BONE PILES
 	 
-	var _bls = 450;
-	
 	for(var i = 0; i < 2; i++)
 	{
-		var _canvas = _13Canv(_bls * 1.2, _bls);
+		var _canvas = _13Canv(540, 450);
 		
 		var _ctx = _canvas.getContext('2d');
 		
@@ -851,7 +849,7 @@ function _13TextureGen() {
 			});
 		}
 		
-		_ctx.translate(_bls * 0.6, _bls * 0.07);
+		_ctx.translate(270, 31.5);
 		
 		for(var j = 0; j < 23; j++)
 		{
@@ -954,14 +952,12 @@ function _13TextureGen() {
 	
 	// GRAVES
 	
-	var _bls = 100;
-	
 	_13Rep(10, function(i) {
-		var _canvas = _13Canv(_bls, _bls);
+		var _canvas = _13Canv(100, 100);
 		
 		var _ctx = _canvas.getContext('2d');
 		
-		_ctx.translate(_bls / 2, _bls);
+		_ctx.translate(50, 100);
 
 		_ctx.rotate(_13RandBetween(-0.2, 0.2));
 		
@@ -995,6 +991,9 @@ function _13TextureGen() {
 		
 		_ctx.translate(0, -50);
 		
+		_ctx.fillRect(-5, 0, 10, 2);
+		_ctx.fillRect(-1, -5, 2, 15);
+		
 		if(i % 2 == 0)
 		{
 			_ctx.globalCompositeOperation = 'destination-out';
@@ -1010,10 +1009,6 @@ function _13TextureGen() {
 			_ctx.lineTo(-35, -50);
 			_ctx.closePath();
 			_ctx.fill();
-		}
-		else {
-			_ctx.fillRect(-5, 0, 10, 2);
-			_ctx.fillRect(-1, -5, 2, 15);
 		}
 
 		_retObj['grave_' + i] = _canvas;

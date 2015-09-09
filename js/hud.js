@@ -33,7 +33,7 @@ function _13HUD(_ctx, _player, _world) {
 	}
 	else
 	{
-		var _text = [ // intro
+		var _text = [ // title
 			'Developed for JS13K by morazor',
 			'[click to start]',
 			'The Cursed',
@@ -151,7 +151,7 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.translate(960, 80);
 		_ctx.rotate(-PI / 2);
 		
-		_13Path(_ctx, { c: 'black', p: [
+		_13Path(_ctx, { c: 'rgba(0,0,0,0.5)', p: [
 			[ 'arc', 0, 0, 70 ]
 		]});
 		

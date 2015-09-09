@@ -117,9 +117,7 @@ function _13Game() {
 			
 			var _wasalive = !_player.dead;
 		
-			var _worlspeed = (_world.status == 1 ? 1 : 0.2);
-			
-			_world.update(_updTime * _worlspeed);
+			_world.update(_updTime * (_world.status == 1 ? 1 : 0.2));
 
 			var _camPos = [ _player.pos[0] + _camOffset[0], _player.pos[1] + _camOffset[1] - _player.h * 0.5 ]; // adding player height to center on player
 			

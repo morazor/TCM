@@ -211,14 +211,14 @@ function _13WorldGen(_world) {
 			}
 			else {
 				if(_waveTime > _nextStep) {	
+					_waveStep++;
+				
 					if(_waveStep >= _endWave)
 					{
 						_finalRound = true;
 					}
 					else
 					{
-						_waveStep++;
-						
 						var _cMob = _spawnList[_waveStep];
 						
 						_cMob.undie();

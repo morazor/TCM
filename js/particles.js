@@ -3,7 +3,7 @@ function _13Particles(_world, bName, maxNum) {
 	for(var i = 0; i < maxNum; i++)
 	{
 		var _cBody = _world.addBody(bName);
-		_cBody.collide = false;
+		_cBody.fixed = false;
 		_cBody.die();
 		_pList.push(_cBody);
 	}

@@ -32,7 +32,6 @@ function _13WorldGen(_world) {
 	_13Each(_walls, function(_bw) {
 		_13ObjExtend(_world.addBody('wall', _bw.w, _bw.h), {
 			pos: [_bw.x, _bw.y],
-			fixed: true,
 			collide: true
 		});
 	});
@@ -71,8 +70,7 @@ function _13WorldGen(_world) {
 						pos: [
 							_bw.x + _rnd * _bw.w / 3.1, 
 							_bw.y - _bw.h / 2 - _cOffY
-						],
-						fixed: true
+						]
 					});
 					
 					if(i != 'g')  {
@@ -88,19 +86,16 @@ function _13WorldGen(_world) {
 	})
 
 	_13ObjExtend(_world.addBody('mirror_inner'), {
-		pos: [0, -150],
-		fixed: true
+		pos: [0, -150]
 	});
 	
 	_13ObjExtend(_world.addBody('mirror'), {
-		pos: [0, -150],
-		fixed: true
+		pos: [0, -150]
 	});
 	
 	_13Each(_spawnp, function(_spp, i) {
 		_13ObjExtend(_world.addBody('bone_pile_' + i), {
 			pos: _spp,
-			fixed: true,
 			collide: 'player',
 			w: 300,
 			h:400
@@ -151,9 +146,7 @@ function _13WorldGen(_world) {
 		grav: 0
 	});
 	
-	var _clouds = _13ObjExtend(_world.addBody('clouds'), {
-		fixed: true
-	});
+	var _clouds = _world.addBody('clouds');
 	
 	_spawner.beforeUpdate = function(timePassed) { 
 	// must be before update because if i add mobs after update they will be rendered without a skeleton refresh

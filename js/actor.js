@@ -40,6 +40,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	_13Rep(_isMelee ? 15 : 2, function() {
 		var _cbul = _world.addBody('bullet_' + bName);
 		_13ObjExtend(_cbul, {
+			fixed: false,
 			grav: 0,
 			w: 25,
 			h: 25,
@@ -62,6 +63,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	var _maxHealth = (_isMelee ? 100 + 100 * _lev : 10 + 80 * _lev)
 	
 	_13ObjExtend(_retObj, {
+		fixed: false,
 		type: bType,
 		level: _lev,
 		lastai: 0, // last AI check

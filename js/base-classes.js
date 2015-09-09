@@ -197,7 +197,7 @@ function _13Body(_world, bName, bW, bH) {
 		acc: [0, 0],
 		rot: 0,
 		rotvel: 0,
-		fixed: false,
+		fixed: true,
 		facing: true,
 		bounce: 0,
 		frict: 1,

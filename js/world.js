@@ -68,13 +68,14 @@ function _13World() {
 			_13Each(_livebod, function(_cBody) {
 				
 				// MOVEMENT
+				var _timePassedSec = timePassed / 1000;
 
 				if(!_cBody.fixed)
 				{
 					var _cgrav = _cBody.grav * timePassed; // gravity
 					
-					_cBody.vel[0] += _cBody.acc[0] * timePassed / 1000;
-					_cBody.vel[1] += _cBody.acc[1] * timePassed / 1000 + _cgrav;
+					_cBody.vel[0] += _cBody.acc[0] * _timePassedSec;
+					_cBody.vel[1] += _cBody.acc[1] * _timePassedSec + _cgrav;
 					
 					var _velang = Math.atan2(_cBody.vel[1], _cBody.vel[0]);
 					var _frict = [
@@ -86,7 +87,7 @@ function _13World() {
 						if(Math.abs(_frict[i]) > Math.abs(_cBody.vel[i])) _cBody.vel[i] = 0;
 						else _cBody.vel[i] -= _frict[i];
 						
-						_cBody.pos[i] += _cBody.vel[i] * timePassed / 1000;
+						_cBody.pos[i] += _cBody.vel[i] * _timePassedSec;
 					});
 					
 					if(_cBody.autorot)
@@ -94,13 +95,13 @@ function _13World() {
 						_cBody.rot = _velang;
 					}
 					else{
-						var _frict = _cBody.frict * timePassed * 0.001 * (_cBody.rotvel > 0 ? 1 : -1);
+						var _frict = _cBody.frict * _timePassedSec * (_cBody.rotvel > 0 ? 1 : -1);
 						
 						if(Math.abs(_frict) > Math.abs(_cBody.rotvel)) _cBody.rotvel = 0;
 						else _cBody.rotvel -= _frict;
 					}
 					
-					_cBody.rot += _cBody.rotvel * timePassed / 1000;
+					_cBody.rot += _cBody.rotvel * _timePassedSec;
 					
 					for(var i in _cBody.block) _cBody.block[i] = false;
 				}

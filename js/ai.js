@@ -17,7 +17,7 @@ function _13AI(mob, player, timePassed)
 		{
 			var _pldist = Math.abs(_mpos[0] - mob.pos[0]);
 				
-			if(_pldist < 500) {
+			if(_pldist < 400) {
 				mob.awake = true;
 			}
 			

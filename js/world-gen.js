@@ -121,7 +121,7 @@ function _13WorldGen(_world) {
 	
 		
 	var _player = _13ObjExtend(_world.addActor('player'), {
-		pos: [0, -200]
+		pos: [0, -100]
 	});
 	
 	var _spawnList = [];
@@ -187,7 +187,7 @@ function _13WorldGen(_world) {
 					if(_liveEnemies == 0)
 					{
 						_finalBoss = _13ObjExtend(_world.addActor('rev_player'), {
-							pos: [0, -200],
+							pos: [0, -100],
 							health: _13LimVal(600),
 							revmult: 1.3
 						});

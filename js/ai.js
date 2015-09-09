@@ -75,8 +75,8 @@ function _13AI(mob, player, timePassed)
 					}
 					
 					if(_act.move == -1 && mob.block.l || _act.move == 1 && mob.block.r) {
-						mob.action.jump = true; // no delay in jumps
-						mob.action.move = 0;
+						_act.jump = true;
+						_act.move = 0;
 					}
 				}
 			}

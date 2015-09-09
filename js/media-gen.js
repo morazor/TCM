@@ -1066,7 +1066,7 @@ function _13TextureGen() {
 
 	_13Rep(13, function(i) {
 		var _cs = (i == 0 || i == 12 ? 0.07 : _13RandBetween(0.1, 0.14));
-		_13Path(_canvas, { c: 'black', b: 1, p: [ [ 'arc', (i + 1) * 192, 0, _fw * _cs ] ]});
+		_13Path(_ctx, { c: 'black', b: 5, p: [ [ 'arc', (i + 1) * 192, 0, _fw * _cs ] ]});
 	})
 	
 	/*

@@ -29,7 +29,6 @@ function _13ActorRanged(_world, bName, bW, bH) {
 		var _aura = _13Particles(_world, 'aura_bullet_' + bName, 20);	
 		_13ObjExtend(_aura, _auraProps);
 		_aura.lifespan = 300;
-		_aura.freq = 60;
 		_aura.rnd.vel[1] = 50;
 	
 		_aura.link = _cbul;

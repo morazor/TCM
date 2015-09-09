@@ -6,10 +6,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	
 	var _sparks = _13Particles(_world, _spnam, 10);
 	_13ObjExtend(_sparks, {
-		rotvel: 10,
 		grav: _pgrav,
-		lifespan: 350,
-		freq: 0,
 		collide: 'wall',
 		fx: { scale: 1, alpha: 1 }
 	});
@@ -17,8 +14,6 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	_sparks.rnd.vel = [350, 350]
 
 	var _blood = _13ObjExtend(_13Particles(_world, 'blood_' + bName, 5), {
-		lifespan: 350,
-		freq: 0,
 		grav: _pgrav,
 		fx: { scale: 1 }
 	});

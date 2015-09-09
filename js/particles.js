@@ -25,9 +25,9 @@ function _13Particles(_world, bName, maxNum) {
 			alpha: 0
 		},
 		grav: 1,
-		lifespan: 1000,
+		lifespan: 350,
 		bounce: 1,
-		freq: 250,
+		freq: 0,
 		on: false,
 		fx: {},
 		update: function(timePassed)

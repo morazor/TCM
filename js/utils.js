@@ -148,7 +148,7 @@ function _13Path(_ctx, _cPath, size)
 	if(_cPath.b != null)
 	{
 		_ctx.strokeStyle = 'rgba(127,127,127,0.5)';
-		_ctx.lineWidth = 1;
+		_ctx.lineWidth = _cPath.b;
 		_ctx.stroke();
 	}
 	

@@ -19,13 +19,13 @@ function _13HUD(_ctx, _player, _world) {
 		
 		// health bar
 		_13Path(_ctx, { c: 'red', p: [
-			[ 'rect', -100, 0, 200 * _player.health.perc, 50 ]
+			[ 'rect', -99, 1, 198 * _player.health.perc, 48 ]
 		]});
 
 		if(_player.revpow != null) // revpower bar
 		{
 			_13Path(_ctx, { c: 'white', p: [
-				[ 'rect', -100, 50, 200 * _player.revpow.perc, 25 ]
+				[ 'rect', -99, 50, 198 * _player.revpow.perc, 24 ]
 			]});
 		}	
 
@@ -158,14 +158,14 @@ function _13HUD(_ctx, _player, _world) {
 		if(_world._wadv > 0) {
 			_13Path(_ctx, { c: 'red', p: [
 				[ 0, 0 ],
-				[ 'arc', 0, 0, 70, 0, PI2 * _world._wadv ]
+				[ 'arc', 0, 0, 69, 0, PI2 * _world._wadv ]
 			]});
 		}
 		
 		if(_world._wadv - _world._wlive > 0) {
 			_13Path(_ctx, { c: 'white', p: [
 				[ 0, 0 ],
-				[ 'arc', 0, 0, 70, 0, PI2 * (_world._wadv - _world._wlive) ]
+				[ 'arc', 0, 0, 69, 0, PI2 * (_world._wadv - _world._wlive) ]
 			]});
 		}	
 		

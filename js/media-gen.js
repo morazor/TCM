@@ -31,12 +31,10 @@ function _13TextureGen() {
 	
 	/*** COLORS AND PATTERNS ***/
 	
-	var _pw = 4; // pattern size
+	var _chainc = _13Canv(4, 4);
 
-	var _chainc = _13Canv(_pw, _pw);
-
-	_13Path(_chainc, { c: '#444444', p: [ [ 'rect', 0, 0, _pw, _pw ] ]});
-	_13Path(_chainc, { c: '#aaaadd', l: 1, p: [ [ 'arc', _pw / 2, _pw / 2, _pw / 2 - 1 / 2 ] ]});
+	_13Path(_chainc, { c: '#444444', p: [ [ 'rect', 0, 0, 4, 4 ] ]});
+	_13Path(_chainc, { c: '#aaaadd', l: 1, p: [ [ 'arc', 2, 2, 1.5 ] ]});
 
 	var _platec = '#f5f5ff';
 	var _goldc = '#ffdd77';
@@ -45,23 +43,21 @@ function _13TextureGen() {
 	var _rustc = '#dd9977';
 	
 	// MIRROR
-	var _bls = 250;
+	var _canvas = _13Canv(250, 250);
 	
-	var _canvas = _13Canv(_bls, _bls);
+	var _ctx = _canvas.getContext('2d');
 	
-	var _ctx = _13Ctx(_canvas);
-	
-	_ctx.translate(_bls / 2, _bls / 2);
+	_ctx.translate(125, 125);
 	_ctx.scale(0.7, 1);
 	
 	_13Path(_ctx, { c: 'rgba(127,127,127,0.25)', p: [
-		[ 'arc', 0, 0, _bls / 2 - 15 ]
+		[ 'arc', 0, 0, 110 ]
 	]});
 	
 	_13Path(_ctx, { c: '#777777', p: [
-		[ _bls / 2, 0],
-		[ 'arc', 0, 0, _bls / 2 - 1 ],
-		[ 'arc', 0, 0, _bls / 2 - 15, null, null, true ]
+		[ 125, 0],
+		[ 'arc', 0, 0, 124 ],
+		[ 'arc', 0, 0, 105, null, null, true ]
 	]});
 	
 	_ctx.strokeStyle = 'rgba(255,255,255,0.5)';
@@ -69,7 +65,7 @@ function _13TextureGen() {
 		_ctx.save();
 		_ctx.rotate(_13Rand() / 2 + PI * 1.5 * i); // PI2 / 3
 		
-		var _mstep = -_bls / 2 + 15;
+		var _mstep = -105;
 		
 		_ctx.translate(0, -_mstep);
 		
@@ -94,16 +90,16 @@ function _13TextureGen() {
 		
 	_retObj.mirror = _canvas;
 	
-	var _canvas = _13Canv(_bls, _bls);
+	var _canvas = _13Canv(250, 250);
 	
-	var _ctx = _13Ctx(_canvas);
+	var _ctx = _canvas.getContext('2d');
 	
-	_ctx.translate(_bls / 2, _bls / 2);
+	_ctx.translate(125, 125);
 	_ctx.scale(0.7, 1);
 
 	_13Path(_ctx, { c: '#333333', p: [
-		[ _bls / 2, 0 ],
-		[ 'arc', 0, 0, _bls / 2 - 15 ]
+		[ 125, 0 ],
+		[ 'arc', 0, 0, 105 ]
 	]});
 	
 	_retObj.mirror_inner = _canvas;
@@ -114,7 +110,7 @@ function _13TextureGen() {
 	
 	var _canvas = _13Canv(_bls, _bls);
 	
-	var _ctx = _13Ctx(_canvas);
+	var _ctx = _canvas.getContext('2d');
 	
 	_ctx.translate(0, _bls / 2);
 
@@ -128,11 +124,9 @@ function _13TextureGen() {
 	
 	// BLOOD SKELETONS
 	
-	var _bls = 25;
-	
 	var _canvas = _13Canv(_bls, _bls);
 	
-	var _ctx = _13Ctx(_canvas);
+	var _ctx = _canvas.getContext('2d');
 	_ctx.translate(_bls / 2, 0);
 
 	_13Path(_ctx, { c: _bonec, b: 1, p: [
@@ -154,13 +148,11 @@ function _13TextureGen() {
 	_retObj.sparks = _canvas;
 	
 	// AURAS
-	var _bls = 40;
-	
 	var _aurac = [ ['#0032ff','#0000ff'], ['#6400ff','#3200ff'] ];
 	_13Each(_aurac, function(_cau, i) {
-		_retObj['aura_enemy_wotw_' + i] = _13Gradient(_bls, _cau[0], _cau[1], 175, 1, _bls / 2);
+		_retObj['aura_enemy_wotw_' + i] = _13Gradient(40, _cau[0], _cau[1], 175, 1, 20);
 
-		var _canvas = _13Gradient(_bls / 2, _cau[0], _cau[1], 175, 1, _bls / 4);
+		var _canvas = _13Gradient(20, _cau[0], _cau[1], 175, 1, 10);
 		
 		_retObj['aura_bullet_enemy_wotw_' + i] = _canvas;
 		_retObj['blood_enemy_wotw_' + i] = _canvas;
@@ -204,14 +196,13 @@ function _13TextureGen() {
 			under: true,
 			path: [
 				{ c: _chainc, p: [ // body
-					[ 0.25, 1 ],
 					[ 'arc', 0, 1, 0.25, 0, PI ],
 					[ 'arc', 0, 0, 0.2, PI, 0 ]
 				] },
 				{ c: _platec, b: 1, p: [ // chest
 					[ 0, 1.25 ],
 					[ 0, 1 ],
-					[ -0.05, 1 ],
+					[ -0.07, 1 ],
 					[ 0, 0.55 ],
 					[ 0.1, 0.5 ],
 					[ 0.1, 0.45 ],
@@ -225,10 +216,10 @@ function _13TextureGen() {
 					[ 0.1, 0.45 ],
 					[ 0.1, 0.5 ],
 					[ 0, 0.55 ],
-					[ 0.05, 1 ],
+					[ 0.07, 1 ],
 					[ 0, 1 ]
-				] },/*
-				{ c: _platec, b: 1, p: [ // chest - back
+				] },
+				/*{ c: _platec, b: 1, p: [ // chest - back
 					[ 0.25, 1 ],
 					[ 'arc', 0, 1, 0.25, 0, PI * 0.5 ],
 					[ 0, 1 ],
@@ -266,7 +257,6 @@ function _13TextureGen() {
 				name: 'head',
 				path: [
 					{ c: _platec, b: 1, p: [ // head
-						[ 0.3, 0 ],
 						[ 'arc', 0, 0, 0.3, 0, PI, true  ],
 						[ -0.3, 0.3 ],
 						[ 0.4, 0.35 ]
@@ -288,7 +278,6 @@ function _13TextureGen() {
 			under: true,
 			path: [
 				{ c: _chainc, p: [
-					[ 0.35, 0 ],
 					[ 'arc', 0, 0, 0.35, -PI * 0.8, PI * 0.8, true ],
 					[ 'arc', 0, 1, 0.2, PI, 0, true ]
 				] },
@@ -309,7 +298,6 @@ function _13TextureGen() {
 					name: 'leg_lk',
 					path: [
 						{ c: _chainc, p: [
-							[ 0.2, 0 ],
 							[ 'arc', 0, 0, 0.2, 0, PI, true ],
 							[ 0, 1 ],
 							[ 0.15, 1 ]
@@ -347,7 +335,6 @@ function _13TextureGen() {
 		name: 'arm',
 		path: [
 			{ c: _chainc, p: [
-				[ 0.35, 0 ],
 				[ 'arc', 0, 0, 0.35, 0, PI, true ],
 				[ 'arc', 0, 1, 0.2, PI, 0, true ]
 			] },
@@ -358,7 +345,6 @@ function _13TextureGen() {
 				[ -0.25, 0.8 ]
 			] },
 			{ c: _platec, b: 1, p: [
-				[ 0.38, 0 ],
 				[ 'arc', 0, 0, 0.38, 0, PI, true ],
 				[ 0, 0.3 ]
 			] }
@@ -371,7 +357,6 @@ function _13TextureGen() {
 				name: 'arm_lk',
 				path: [
 					{ c: _chainc, p: [ 
-						[ 0.2, 0 ],
 						[ 'arc', 0, 0, 0.2, 0, PI, true ],
 						[ 0, 1 ],
 						[ 0.15, 1 ]
@@ -650,7 +635,7 @@ function _13TextureGen() {
 					
 					_ac *= (_ac < 0) ? (3) : (0.5);
 					
-					for(var i = 0; i < 3; i++) _frSkel.bones.body[i].rot += _ac * PI * 0.03 * _crot;
+					//for(var i = 0; i < 3; i++) _frSkel.bones.body[i].rot += _ac * PI * 0.03 * _crot;
 					
 					_frSkel.bones.arm[1].rot = 2.4 - 0.7 * _crot + _ac;
 					_frSkel.bones.arm_lk[1].rot = - 0.1 * _crot;
@@ -721,7 +706,6 @@ function _13TextureGen() {
 					case 'head':
 					{
 						tb.path[0].p = [
-							[ 0.3, 0 ],
 							[ 'arc', 0, 0, 0.3, 0, PI * 0.8, true  ],
 							[ 0.1, 0.25 ],
 							[ 0.2, 0.4 ],
@@ -738,7 +722,6 @@ function _13TextureGen() {
 					case 'body':
 					{					
 						tb.path[0].p = [
-							[ 0.1, 1 ],
 							[ 'arc', 0.05, 0, 0.15, PI * 0.4, PI * 2.2 ],
 							[ 0.2, 0.2 ],
 							[ 0.2, 1 ]
@@ -747,7 +730,7 @@ function _13TextureGen() {
 						tb.path[2].c = _chainc;
 						tb.path[2].p = [
 							//[ -0.1, 0.9 ],
-							[ 'rect', -0.05, 1.2, 0.1, 0.3 ]
+							[ 'rect', -0.05, 1.2, 0.1, 0.2 ]
 						]
 					}
 					break;
@@ -761,7 +744,6 @@ function _13TextureGen() {
 						if(k < 1) tb.path.splice(1, 1);
 						
 						tb.path[0].p = [
-							[ -0.13, 0.5 ],
 							[ 'arc', 0, 0, 0.1, PI * 0.8, PI * 2.2 ],
 							[ 'arc', 0, 1, 0.1, -PI * 0.3, -PI * 0.7 ]
 						]
@@ -771,7 +753,6 @@ function _13TextureGen() {
 					case 'arm_lk':
 					{
 						tb.path[0].p = [
-							[ -0.1, 0.5 ],
 							[ 'arc', 0, 0, 0.1, PI * 0.6, PI * 2.4 ],
 							[ 'arc', 0, 1, 0.1, -PI * 0.4, -PI * 0.6 ]
 						]
@@ -785,12 +766,10 @@ function _13TextureGen() {
 						}
 						else{
 							tb.path[0].p = [
-								[ 0.6, 0.5 ],
 								[ 'arc', 0, 0.5, 0.6 ]
 							]
 							
 							tb.path[1].p = [
-								[ 0.5, 0.5 ],
 								[ 'arc', 0, 0.5, 0.5 ]
 							]
 						}
@@ -858,7 +837,7 @@ function _13TextureGen() {
 	{
 		var _canvas = _13Canv(_bls * 1.2, _bls);
 		
-		var _ctx = _13Ctx(_canvas);
+		var _ctx = _canvas.getContext('2d');
 		
 		var _blist = [];
 		
@@ -977,7 +956,7 @@ function _13TextureGen() {
 	_13Rep(10, function(i) {
 		var _canvas = _13Canv(_bls, _bls);
 		
-		var _ctx = _13Ctx(_canvas);
+		var _ctx = _canvas.getContext('2d');
 		
 		_ctx.translate(_bls / 2, _bls);
 
@@ -989,12 +968,15 @@ function _13TextureGen() {
 			[ 'arc', 0, -40, 25, 0, PI, true ]
 		]});
 		
-		_ctx.fillStyle = 'rgba(0,0,0,0.5)';
+		_ctx.fillStyle = 'rgba(0,0,0,0.35)';
 		
-	/*	for(var j = 0; j < 3; j++)
-		{
+		
+		/*_13Rep(3, function(j) {
 			_ctx.translate(0, -10);
-			if(_13Rand() > 0.4) {
+			if(_13Rand() > 0.4) _ctx.fillRect(-18, 0, 36, 1);
+			
+			// OLD PART WITH SPLITS
+			{
 				var _splt = _13RandPick([1,2,3]);
 				var _sx = -18;
 				
@@ -1006,9 +988,7 @@ function _13TextureGen() {
 					_sx += _cspl + 4;
 				}
 			}
-		}
-		
-		_ctx.translate(0, -20);*/
+		});*/
 		
 		_ctx.translate(0, -50);
 		
@@ -1080,13 +1060,25 @@ function _13TextureGen() {
 	 
 	 // CLOUDS
 	 
-	var _fw = 1920; // anim width
+	var _canvas = _13Canv(2880, 320);
+	var _ctx = _canvas.getContext('2d');
 
-	var _canvas = _13Canv(_fw, _fw / 6);
+	_13Rep(13, function(i) {
+		_13Path(_canvas, { c: '#333333', p: [ [ 'arc', (i +1) * 192, 0, _fw * _13RandBetween(0.1, 0.15) ] ]});
+	})
+	
+	/*var _bGrad = _13Gradient(160, '#000000', '#999999', 255, 0.1, 150);
 
-	_13Rep(11, function(i) {
-		_13Path(_canvas, { c: '#333333', p: [ [ 'arc', i * _fw / 10, 0, _fw * _13RandBetween(0.1, 0.15) ] ]});
-	});
+	_13Rep(13, function(i) {
+		var _cScale = _13RandBetween(1, 1.4);
+	
+		_ctx.save();
+		_ctx.globalCompositeOperation = 'multiply';
+		_ctx.translate(i * 192 + 86, -160);
+		_ctx.scale(_cScale, _cScale);
+		_ctx.drawImage(_bGrad, 0, 0);
+		_ctx.restore();
+	});*/
 	
 	_retObj.clouds = _canvas;
 	
@@ -1456,6 +1448,52 @@ var SBData = {
       rowLen: 5513,   // In sample lengths
       patternLen: 32,  // Rows per pattern
       endPattern: 31  // End pattern
-    } 
+    },
+	'thunder': {
+	  songData: [
+        { // Instrument 0
+          i: [
+		  2, // OSC1_WAVEFORM
+          0, // OSC1_VOL
+          92, // OSC1_SEMI
+          0, // OSC1_XENV
+          2, // OSC2_WAVEFORM
+          0, // OSC2_VOL
+          92, // OSC2_SEMI
+          0, // OSC2_DETUNE
+          0, // OSC2_XENV
+          255, // NOISE_VOL
+          0, // ENV_ATTACK
+          0, // ENV_SUSTAIN
+          155, // ENV_RELEASE
+          0, // ARP_CHORD
+          0, // ARP_SPEED
+          2, // LFO_WAVEFORM
+          0, // LFO_AMT
+          0, // LFO_FREQ
+          0, // LFO_FX_FREQ
+          2, // FX_FILTER
+          14, // FX_FREQ
+          0, // FX_RESONANCE
+          0, // FX_DIST
+          255 // FX_DRIVE
+          //0, // FX_PAN_AMT
+          //0, // FX_PAN_FREQ
+          //0, // FX_DELAY_AMT
+          //0 // FX_DELAY_TIME
+          ],
+          // Patterns
+          p: [1],
+          // Columns
+          c: [
+            {n: [120],
+             f: []}
+          ]
+        }
+      ],
+      rowLen: 5513,   // In sample lengths
+      patternLen: 32,  // Rows per pattern
+      endPattern: 31  // End pattern
+    }
 }
 

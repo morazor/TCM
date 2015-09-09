@@ -216,6 +216,7 @@ function _13World() {
 			var _cc = [Math.round(-cameraPos[0] + tCtx.canvas.width / 2), Math.round(-cameraPos[1] + tCtx.canvas.height / 2)];
 		
 			tCtx.clearRect(0, 0, tCtx.canvas.width, tCtx.canvas.height);
+			
 			tCtx.translate(_cc[0], _cc[1]);
 			
 			var _cameraRect = { 
@@ -268,6 +269,13 @@ function _13World() {
 			tCtx.drawImage(_mirror._basetxt, - _mrrs / 2, - _mrrs / 2);
 			
 			tCtx.restore();
+			
+			if(this.thunder)
+			{
+				this.thunder = false;
+				tCtx.fillStyle = 'white';
+				tCtx.fillRect(-_cc[0], -_cc[1], tCtx.canvas.width, tCtx.canvas.height);
+			}
 			
 			// MAIN RENDER CYCLE
 			

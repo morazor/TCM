@@ -124,8 +124,8 @@ function _13HUD(_ctx, _player, _world) {
 				_ctx.fillStyle = 'white';
 				_ctx.textAlign = 'right';
 				
-				_ctx.strokeStyle = 'black';
-				_ctx.lineWidth = 0.5;
+				//_ctx.strokeStyle = 'black';
+				//_ctx.lineWidth = 0.5;
 				
 				_13Each(_text[i], function (_ct, j) {
 					if(j > 0) {
@@ -134,7 +134,7 @@ function _13HUD(_ctx, _player, _world) {
 					}
 					
 					_ctx.fillText(_text[i][j], -20, 0);
-					if(i > 3) _ctx.strokeText(_text[i][j], -20, 0);
+					//if(i > 3) _ctx.strokeText(_text[i][j], -20, 0);
 				});
 				
 				_ctx.restore();

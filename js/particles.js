@@ -26,7 +26,6 @@ function _13Particles(_world, bName, maxNum) {
 		},
 		grav: 1,
 		lifespan: 1000,
-		collide: false,
 		bounce: 1,
 		freq: 250,
 		on: false,
@@ -96,7 +95,7 @@ function _13Particles(_world, bName, maxNum) {
 									}
 								},
 								onCollide: function() {
-									if(_em.colldie) this.die();
+									if(_em.diecoll) this.die();
 								}
 							});
 							

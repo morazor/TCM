@@ -22,7 +22,6 @@ function _13Game() {
 		_13Each(_allCanvas, function(_cvs) {
 			_cvs.style.height = 1080 * _scaleRatio;
 			_cvs.style.width = 1920 * _scaleRatio;
-			_cvs.style.display = 'block';
 			_cvs.style.left = (window.innerWidth / 2 - _cvs.offsetWidth / 2) + 'px';
 		});
 	}
@@ -78,13 +77,11 @@ function _13Game() {
 	
 	_13MediaGen();
 	
-	var _ctx = _13Ctx(_bgCanv);
+	var _ctx = _bgCanv.getContext('2d');
 	_ctx.drawImage(_13MediaTextures.landscape, 0, 0);
 
-	var _ctx = _13Ctx(_mainCanv);
+	var _ctx = _mainCanv.getContext('2d');
 	
-	
-
 	var _world = _13World();
 	
 	var _player = _13WorldGen(_world);

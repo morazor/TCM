@@ -19,6 +19,7 @@ function _13WorldGen(_world) {
 		});
 		
 		_walls.push({x: _cx + 500 *_dir, y: _cy, w: 1000, h: 500});
+		_walls.push({x: _cx + 1450 *_dir, y: _cy + 50, w: 1000, h: 500, furn: true});
 		_spawnp.push([ _cx + 500 *_dir, _cy -390 ]);
 	});
 
@@ -31,7 +32,8 @@ function _13WorldGen(_world) {
 	_13Each(_walls, function(_bw) {
 		_13ObjExtend(_world.addBody('wall', _bw.w, _bw.h), {
 			pos: [_bw.x, _bw.y],
-			fixed: true
+			fixed: true,
+			collide: true
 		});
 	});
 	
@@ -68,8 +70,7 @@ function _13WorldGen(_world) {
 							_bw.x + _rnd * _bw.w / 3.1, 
 							_bw.y - _bw.h / 2 - _cOffY
 						],
-						fixed: true,
-						collide: false
+						fixed: true
 					});
 					
 					if(i != 'g')  {
@@ -86,14 +87,12 @@ function _13WorldGen(_world) {
 
 	_13ObjExtend(_world.addBody('mirror_inner'), {
 		pos: [0, -150],
-		fixed: true,
-		collide: false
+		fixed: true
 	});
 	
 	_13ObjExtend(_world.addBody('mirror'), {
 		pos: [0, -150],
-		fixed: true,
-		collide: false
+		fixed: true
 	});
 	
 	_13Each(_spawnp, function(_spp, i) {
@@ -146,14 +145,13 @@ function _13WorldGen(_world) {
 		grav: 1.5,
 		lifespan: 2000,
 		collide: 'wall',
-		colldie: true
+		diecoll: true
 	});
 	
 	var _clouds = _13ObjExtend(_world.addBody('clouds'), {
-		fixed: true,
-		collide: false
+		fixed: true
 	});
-	
+
 	_spawner.afterUpdate = function(timePassed) { // must be before update because if i add mobs after update they will be rendered without a skeleton refresh
 		if(_world.status == 1)
 		{
@@ -172,6 +170,11 @@ function _13WorldGen(_world) {
 			
 			_world._wadv = _waveStep / _endWave;
 			_world._wlive = _liveEnemies / _endWave;
+
+			if(_waveTime % 101 == 0 && _13Rand() < (_waveStep - 35) / _endWave) {
+				_13MediaSounds.thunder.play();
+				_world.thunder = true;
+			}
 			
 			if(_finalRound)
 			{
@@ -203,7 +206,7 @@ function _13WorldGen(_world) {
 				}
 			}
 			else {
-				if(_waveTime > _nextStep) {
+				if(_waveTime > _nextStep) {	
 					if(_waveStep >= _endWave)
 					{
 						_finalRound = true;
@@ -222,11 +225,15 @@ function _13WorldGen(_world) {
 				}
 			}
 		}
+
+		var _wp = (_waveStep + _waveTime / _nextStep) / _endWave;
+		var _ccp = Math.log(_wp + 0.3);
+		if(_ccp > 0) _ccp /= 2;
 		
-		_13ObjExtend(_clouds, { 
+		_13ObjExtend(_clouds, {
 			pos: [
-				_player.pos[0],
-				_player.pos[1] - 700 - 20 * _13Max(0, 20 - _waveStep - _waveTime / _nextStep)
+				_player.pos[0] + 1920 * _ccp,
+				_player.pos[1] - 700
 			]
 		})
 		

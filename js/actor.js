@@ -47,7 +47,6 @@ function _13Actor(_world, bName, bW, bH, bType) {
 			w: 25,
 			h: 25,
 			dead: true,
-			collide: false,
 			overlap: true,
 			owner: _retObj,
 			dammod: 1, // useful for damage normalization for different speed swing animations
@@ -74,6 +73,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		atkspeed: 1,
 		speed: 400,
 		revmult: 1,
+		collide: true,
 		damage: function(bullet) {		
 			// DAMAGE
 			if(!this.dead)

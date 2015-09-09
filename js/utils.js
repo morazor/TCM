@@ -90,14 +90,10 @@ function _13Canv(w, h) {
 	return _canvas;
 }
 
-function _13Ctx(canvas) {
-	return canvas.getContext('2d');
-}
-
 function _13Path(_ctx, _cPath, size)
 {
 	if(size == null) size = 1;
-	if(_ctx.getContext != null) _ctx = _13Ctx(_ctx);
+	if(_ctx.getContext != null) _ctx = _ctx.getContext('2d');
 	
 	_ctx.save();
 	_ctx.beginPath();
@@ -175,7 +171,7 @@ function _13Gradient(rad, cola, colb, basea, ppow, offset) {
 		_baseColB.push(parseInt(colb.substr(1 + j, 2), 16));
 	}
 	
-	var _ctx = _13Ctx(_canvas);
+	var _ctx = _canvas.getContext('2d');
 	var _imgData = _ctx.createImageData(_rad2, _rad2);
 
 	_13Rep(_rad2, function (j) {

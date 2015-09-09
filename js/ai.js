@@ -2,13 +2,9 @@ function _13AI(mob, player, timePassed)
 {
 	if(mob != player && !mob.dead)
 	{
-		if(mob._lastAI == null) mob._lastAI = 0;
+		mob.lastai -= timePassed;
 		
-		mob._lastAI -= timePassed;
-		
-		if(mob._naction == null) mob._naction = _13ObjClone(mob.action, true);
-		mob.action = mob._naction;
-		var _act = mob._naction = _13ObjClone(mob.action, true);
+		var _act = mob.action;
 		
 		var _mpos = [];
 
@@ -17,7 +13,7 @@ function _13AI(mob, player, timePassed)
 			_act.watch[i] = player.pos[i] - mob.pos[i];
 		});
 		
-		if(mob._lastAI < 0)
+		if(mob.lastai < 0)
 		{
 			var _pldist = Math.abs(_mpos[0] - mob.pos[0]);
 				
@@ -85,7 +81,7 @@ function _13AI(mob, player, timePassed)
 				}
 			}
 			
-			mob._lastAI = 150 / mob.revmult;
+			mob.lastai = 150 / mob.revmult;
 		}
 	}
 }

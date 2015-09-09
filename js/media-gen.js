@@ -1061,29 +1061,31 @@ function _13TextureGen() {
 	 // CLOUDS
 	 
 	var _canvas = _13Canv(2880, 320);
-	_ctx = _canvas.getContext('2d');
+	/*_ctx = _canvas.getContext('2d');
 	_ctx.globalCompositeOperation = 'multiply';
 
-	_13Rep(13, function(i) {
-		var _cs = (i == 0 || i == 12 ? 0.07 : _13RandBetween(0.1, 0.14));
+	_13Rep(14, function(i) {
+		var _cs = (i == 0 || i == 13 ? 0.07 : _13RandBetween(0.1, 0.14));
 		_13Path(_ctx, { c: 'black', b: 5, p: [ [ 'arc', (i + 1) * 192, 0, _fw * _cs ] ]});
-	})
+	})*/
 	
-	/*
+	
 	var _ctx = _canvas.getContext('2d');
-	var _bGrad = _13Gradient(160, '#000000', '#999999', 255, 0.1, 150);
+	var _bGrad = _13Gradient(192, '#000000', '#9999ff', 255, 0.1, 180);
 
-	_13Rep(13, function(i) {
-		var _cScale = _13RandBetween(1, 1.4);
+	_13Rep(14, function(i) {
+		var _cScale = (i == 0 || i == 13 ? 0.7 : _13RandBetween(1, 1.4));
 	
 		_ctx.save();
 		_ctx.globalCompositeOperation = 'multiply';
-		_ctx.translate(i * 192 + 86, -160);
+		_ctx.translate((i + 1) * 192, 0);
 		_ctx.scale(_cScale, _cScale);
-		_ctx.drawImage(_bGrad, 0, 0);
+		_ctx.drawImage(_bGrad, -192, -192);
 		_ctx.restore();
-	});*/
+	});
 	
+	//document.body.appendChild(_canvas);
+
 	_retObj.clouds = _canvas;
 	
 	 // RAIN

@@ -60,7 +60,8 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	_13ObjExtend(_retObj, {
 		type: bType,
 		level: _lev,
-		faction: (bName == 'player' ? 'good' : 'evil'),
+		lastai: 0,
+		faction: (bName == 'player' ? 0 : 1),
 		awake: false,
 		stopatk: false,
 		didatk: 0,

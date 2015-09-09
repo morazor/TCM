@@ -469,7 +469,7 @@ function _13TextureGen() {
 		w: _fw,
 		h: _fh,
 		anim: {
-			'stand': {
+			stand: {
 				dur: 1000,
 				loop: true,
 				trans: function (_frSkel, _ap) {
@@ -496,7 +496,7 @@ function _13TextureGen() {
 					return _frSkel;
 				}
 			},
-			'run': {
+			run: {
 				dur: 800,
 				loop: true,
 				trans: function (_frSkel, _ap, _ac) {
@@ -531,7 +531,7 @@ function _13TextureGen() {
 					return _frSkel;
 				}
 			},
-			'jump': {
+			jump: {
 				dur: 1000,
 				loop: 0.5,
 				trans: function (_frSkel, _ap) {
@@ -581,7 +581,7 @@ function _13TextureGen() {
 					return _frSkel;
 				}
 			},
-			'attack': {
+			attack: {
 				dur: 600,
 				loop: false,
 				reset: true,
@@ -626,7 +626,7 @@ function _13TextureGen() {
 					}
 				] }
 			},
-			'block': {
+			block: {
 				dur: 250,
 				loop: false,
 				layer: 1,
@@ -931,12 +931,15 @@ function _13TextureGen() {
 			_retObj['tree_' + j + i] = {
 				skel: _treeSkel,
 				anim: {
-					'stand': {
+					stand: {
 						dur: 5000,
 						loop: true,
-						trans: function (_frSkel, _ap) {
-							if(_13Rand() < 0.002) _13SkelAllBones(_frSkel.link[0], function(_cb) {
-								_cb.rot += _13RandBetween(-0.1, 0.1);
+						trans: function (_frSkel, _ap, _ac) {
+							_ac *= 0.05;
+							
+							_13SkelAllBones(_frSkel.link[0], function(_cb) {
+								_ac *= 1.05;
+								_cb.rot += _ac * (1.5 + _13Sin(_ap * PI2));
 							});
 							
 							return _frSkel;
@@ -1090,9 +1093,9 @@ function _13TextureGen() {
 	
 	 // RAIN
 	 
-	var _canvas = _13Canv(2, 30);
+	var _canvas = _13Canv(30, 2);
 
-	_13Path(_canvas, { c: 'rgba(127,127,127,0.5)', p: [ [ 'rect', 0, 0, 2, 30 ] ]});
+	_13Path(_canvas, { c: 'rgba(127,127,127,0.5)', p: [ [ 'rect', 0, 0, 30, 2 ] ]});
 
 	_retObj.rain = _canvas;
 	

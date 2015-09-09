@@ -37,6 +37,8 @@ function _13WorldGen(_world) {
 		});
 	});
 	
+	var _treeArray = [];
+	
 	_13Each([ 't0', 't1', 'g' ], function(i) {
 		var _mutcount = 0;
 		var _furncount = 0;
@@ -74,7 +76,7 @@ function _13WorldGen(_world) {
 					});
 					
 					if(i != 'g')  {
-						_cbod.texture.play('stand')
+						_treeArray.push(_cbod);
 					}
 					
 					_mutcount = (_mutcount + 1) % 10;
@@ -142,10 +144,11 @@ function _13WorldGen(_world) {
 		
 	var _rain = _13ObjExtend(_13Particles(_world, 'rain', 40), {
 		freq: 60,
-		grav: 1.5,
 		lifespan: 2000,
 		collide: 'wall',
-		diecoll: true
+		diecoll: true,
+		autorot: true,
+		grav: 0
 	});
 	
 	var _clouds = _13ObjExtend(_world.addBody('clouds'), {
@@ -245,13 +248,18 @@ function _13WorldGen(_world) {
 		{
 			_13ObjExtend(_rain, { 
 				pos: [
-					_13RandBetween(-960, 960) + _player.pos[0] + _player.vel[0],
+					_13RandBetween(-960, 960) + _player.pos[0] + _player.vel[0] / 2 - _wp * 250,
 					_player.pos[1] - 800
 				],
+				vel: [_wp * 500, 1200],
 				on: true,
 				freq: _13Max(1000 / (_waveStep - 29), 30)
 			})
 		}
+		
+		_13Each(_treeArray, function(_ctree) {
+			_ctree.texture.play('stand', 1 + _wp, _wp);
+		});
 	}
 	
 	return _player;

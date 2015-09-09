@@ -279,8 +279,8 @@ function _13World() {
 			
 			// MAIN RENDER CYCLE
 			
-			_13Each(['texture', 'light'], function (prop) {
-				_13Each(_livebod, function(_cBody) {
+			_13Each(this.bodies, function(_cBody) {
+				if(!_cBody.dead) _13Each(['texture', 'light'], function (prop) {
 					var _target = _cBody[prop];
 					
 					if(_target != null && _13RectInters(_cBody, _cameraRect))

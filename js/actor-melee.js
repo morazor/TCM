@@ -4,13 +4,13 @@ function _13ActorMelee(_world, bName, bW, bH) {
 	_retObj.w *= 0.17;
 	_retObj.h *= 0.45;
 	
-	var _bulLife = 60;
+	var _bulFrames = 3;
 	
 	_13Each(_retObj.bullets, function(_cbul) {
 		_cbul.afterUpdate = function (timePassed) {
-			_bulLife = timePassed * 2;
+			var _bulLife = timePassed * _bulFrames;
 			this.lifespan = _13Min(this.lifespan, _bulLife);
-			this.scale = this.lifespan / _bulLife;
+			this.alpha = 0;
 		}
 	});
 	
@@ -249,10 +249,10 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				this.isshield = false;
 			}
 		},
-		afterRefresh: function() {
+		afterRefresh: function(timePassed) {
 			var _this = this;
 			
-			if(this.didatk > 0 && !this.stopatk && 
+			if(this.didatk > timePassed && !this.stopatk && 
 				this.didatk < _atkTime - _preAtkTime) { // let the attack telegraph end
 				
 				if(!this._sndatk.swing) {
@@ -281,7 +281,8 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				_13Each(this.bullets, function(_cbul) {
 					if(_cbul.dead)
 					{
-						_cbul.undie(_bulLife);
+						_cbul.undie(timePassed * _bulFrames);
+						_cbul.alpha = 1;
 						
 						_13Rep(2, function(i) {
 							var _pdd = (_pde[i] - _pds[i]) * (0.1 + 0.3 * _bulnum); // _bulnum is 3 to 1

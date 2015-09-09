@@ -1061,13 +1061,17 @@ function _13TextureGen() {
 	 // CLOUDS
 	 
 	var _canvas = _13Canv(2880, 320);
-	var _ctx = _canvas.getContext('2d');
+	_ctx = _canvas.getContext('2d');
+	_ctx.globalCompositeOperation = 'multiply';
 
 	_13Rep(13, function(i) {
-		_13Path(_canvas, { c: '#333333', p: [ [ 'arc', (i +1) * 192, 0, _fw * _13RandBetween(0.1, 0.15) ] ]});
+		var _cs = (i == 0 || i == 12 ? 0.07 : _13RandBetween(0.1, 0.14));
+		_13Path(_canvas, { c: 'black', b: 1, p: [ [ 'arc', (i + 1) * 192, 0, _fw * _cs ] ]});
 	})
 	
-	/*var _bGrad = _13Gradient(160, '#000000', '#999999', 255, 0.1, 150);
+	/*
+	var _ctx = _canvas.getContext('2d');
+	var _bGrad = _13Gradient(160, '#000000', '#999999', 255, 0.1, 150);
 
 	_13Rep(13, function(i) {
 		var _cScale = _13RandBetween(1, 1.4);

@@ -8,25 +8,23 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.fillRect(0, 0, 1920, 1080);
 	
 		_ctx.save();
-		
-		_ctx.fillStyle = 'black';
-		
+	
 		var _topd = (_player.revpow != null? 75 : 50);
 		
 		_ctx.translate(960, 1080 - _topd);
 
-		_13Path(_ctx, { c: 'black', b: 0, p: [
+		_13Path(_ctx, { c: 'black', p: [
 			[ 'rect', -100, 0, 200, 75 ]
 		]});
 		
 		// health bar
-		_13Path(_ctx, { c: 'red', b: 0, p: [
+		_13Path(_ctx, { c: 'red', p: [
 			[ 'rect', -100, 0, 200 * _player.health.perc, 50 ]
 		]});
 
 		if(_player.revpow != null) // revpower bar
 		{
-			_13Path(_ctx, { c: 'white', b: 0, p: [
+			_13Path(_ctx, { c: 'white', p: [
 				[ 'rect', -100, 50, 200 * _player.revpow.perc, 25 ]
 			]});
 		}	
@@ -153,19 +151,19 @@ function _13HUD(_ctx, _player, _world) {
 		_ctx.translate(960, 80);
 		_ctx.rotate(-PI / 2);
 		
-		_13Path(_ctx, { c: 'black', b: 0, p: [
+		_13Path(_ctx, { c: 'black', p: [
 			[ 'arc', 0, 0, 70 ]
 		]});
 		
 		if(_world._wadv > 0) {
-			_13Path(_ctx, { c: 'red', b: 0, p: [
+			_13Path(_ctx, { c: 'red', p: [
 				[ 0, 0 ],
 				[ 'arc', 0, 0, 70, 0, PI2 * _world._wadv ]
 			]});
 		}
 		
 		if(_world._wadv - _world._wlive > 0) {
-			_13Path(_ctx, { c: 'white', b: 0, p: [
+			_13Path(_ctx, { c: 'white', p: [
 				[ 0, 0 ],
 				[ 'arc', 0, 0, 70, 0, PI2 * (_world._wadv - _world._wlive) ]
 			]});

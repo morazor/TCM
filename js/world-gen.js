@@ -151,8 +151,9 @@ function _13WorldGen(_world) {
 	var _clouds = _13ObjExtend(_world.addBody('clouds'), {
 		fixed: true
 	});
-
-	_spawner.afterUpdate = function(timePassed) { // must be before update because if i add mobs after update they will be rendered without a skeleton refresh
+	
+	_spawner.beforeUpdate = function(timePassed) { 
+	// must be before update because if i add mobs after update they will be rendered without a skeleton refresh
 		if(_world.status == 1)
 		{
 			_waveTime += timePassed;
@@ -225,7 +226,10 @@ function _13WorldGen(_world) {
 				}
 			}
 		}
-
+	}
+	
+	_spawner.afterUpdate = function() {
+		// must be done after update to align clouds and player before rendering
 		var _wp = (_waveStep + _waveTime / _nextStep) / _endWave;
 		var _ccp = Math.log(_wp + 0.3);
 		if(_ccp > 0) _ccp /= 2;

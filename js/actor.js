@@ -40,7 +40,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	}
 	
 	_retObj.bullets = [];
-	_13Rep(bType == 'melee' ? 10 : 2, function() {
+	_13Rep(bType == 'melee' ? 15 : 2, function() {
 		var _cbul = _world.addBody('bullet_' + bName);
 		_13ObjExtend(_cbul, {
 			grav: 0,
@@ -49,6 +49,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 			dead: true,
 			overlap: true,
 			owner: _retObj,
+			scale: (bType == 'melee' ? 0.5 : 1),
 			dammod: 1, // useful for damage normalization for different speed swing animations
 			onOverlap: function (tbod) {
 				_retObj.onHit(tbod, this);

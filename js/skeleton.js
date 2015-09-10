@@ -42,6 +42,8 @@ function _13SkelInit(tb, skipIndex) {
 }
 
 function _13Skel_Index(tb, rootBone) {
+	// building index to fast access to named bones
+	// also useful because accessing bones by name means they can change position in the tree and be found anyway
 	if(rootBone == null) {
 		rootBone = tb;
 		tb.bones = {};
@@ -73,7 +75,7 @@ function _13SkelDraw(tctx, tb) {
 	
 	tctx.translate(0, tb.size);
 	
-	_13Each(tb.link, function(_tl) {
+	_13Each(tb.link, function(_tl) { // bones with the under flag must be rendered before the parent
 		if(_tl.under) _13SkelDraw(tctx, _tl);
 	})
 	
@@ -143,7 +145,7 @@ function _13SkelAllBones(tb, onBone) {
 }
 
 function _13SkelAverage(tb, sb, tc) {
-	
+	// averaging the position of two skeletons, weighted by tc
 	tb.x = tb.x * tc + sb.x * (1 - tc);
 	tb.y = tb.y * tc + sb.y * (1 - tc);
 	tb.rot = tb.rot * tc + sb.rot * (1 - tc);

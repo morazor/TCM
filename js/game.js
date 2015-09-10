@@ -12,7 +12,7 @@ function _13Game() {
 	var _bgCanv = _allCanvas[0];
 	var _mainCanv = _allCanvas[1];
 	
-	/*** SCALE HANDLING ***/
+	// SCALE HANDLING
 	
 	var _scaleRatio = 1;
 	
@@ -28,7 +28,7 @@ function _13Game() {
 	
 	window.onresize();
 	
-	/*** INPUT HANDLING ***/
+	// INPUT HANDLING
 
 	var _keyPressed = [];
 	var _mousePos = [0, 0];
@@ -73,7 +73,7 @@ function _13Game() {
 	
 	var _camOffset = [0, -150];
 	
-	/*** WORLD INIT ***/
+	// WORLD INIT
 	
 	_13MediaGen();
 	
@@ -82,18 +82,18 @@ function _13Game() {
 
 	var _ctx = _mainCanv.getContext('2d');
 	
-	var _world = _13World();
+	var _world = _13World(); // physics init
 	
-	var _player = _13WorldGen(_world);
+	var _player = _13WorldGen(_world); // populates stage
 	
-	/*** MAIN CYCLE ***/
+	// MAIN CYCLE
 	
 	var _updTime = 30;
 
-	_13HUD(_ctx, _player, _world);
+	_13HUD(_ctx, _player, _world); // pain the title screen now or you see a glimpse of the background
 	
 	setInterval(function () {
-		if(_world.status > 0)
+		if(_world.status > 0) // title ended
 		{
 			var _act = {
 				move: 0,
@@ -113,6 +113,9 @@ function _13Game() {
 				_act.move ++;
 			}
 			
+			// player gets his action object from the controls
+			// mobs get a similar one from the AI
+			
 			_player.action = _act;
 			
 			var _wasalive = !_player.dead;
@@ -123,11 +126,11 @@ function _13Game() {
 			
 			_world.render(_ctx, _camPos);
 			
-			if(_player.dead && _wasalive) _world.setst(2);
+			if(_player.dead && _wasalive) _world.setst(2); // game over state
 		}
 		
-		_world.sttime += _updTime;
+		_world.sttime += _updTime; // needed to let the game over an finish screens fade in after a certain amount of time
 		
-		_13HUD(_ctx, _player, _world);
+		_13HUD(_ctx, _player, _world); // painting HUD and title/game over/finish screens
 	}, _updTime);
 }

@@ -1,3 +1,5 @@
+/** Stuff about melee actors (the player, the skeletons and the nemesis **/
+
 function _13ActorMelee(_world, bName, bW, bH) {
 	var _retObj = _13Actor(_world, bName, bW, bH, 'melee');
 
@@ -29,8 +31,8 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			atkspeed: 1.2,
 			damval: 5,
 			health: _13LimVal(250),
-			revpow: _13LimVal(100, 0),
-			onRev: function() {
+			revpow: _13LimVal(100, 0), // curse energy (reverse power)
+			onRev: function() { // when it is reversed, also the bullets get reversed
 				_13Each(this.bullets, function(_cbul) {
 					_cbul.rev();
 				});
@@ -50,6 +52,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			_13SkelAllBones(this.texture.skel, function (tb) {		
 				if(tb.texture != null && tb.alpha != 0)
 				{
+					// creating the pieces
 					_13ObjExtend(_world.addBody(tb.texture), {
 						name: 'bone',
 						fixed: false,
@@ -85,7 +88,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 			attack: false,
 			block: false
 		},
-		lastgy: 0,
+		lastgy: 0, // last y value when the player was on the ground. needed for wisps height
 		isattack: false,
 		isshield: false,
 		canshield: _retObj.level != 0,
@@ -217,11 +220,9 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				if(_act.attack) {
 					this.didatk = _atkTime;
 					this.stopatk = false;
-					
-					/*if(_hbrot > 0.25) _atkType = -1; // low swing, removed
-					else */
+
 					if(_hbrot < (_didJump ? 0 : -0.20)) _atkType = 1; // high swing
-					else { // middle thrust
+					else { // middle/low thrust
 						_atkType = _hbrot;
 					}
 				
@@ -259,6 +260,8 @@ function _13ActorMelee(_world, bName, bW, bH) {
 					this._sndatk.swing= true;
 				}
 				
+				// spamming bullets along the weapon
+				
 				var _bulnum = 3;
 				
 				var _cSkel = this.texture.lastFrame;
@@ -280,7 +283,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 				_13Each(this.bullets, function(_cbul) {
 					if(_cbul.dead)
 					{
-						_cbul.undie(timePassed * _bulFrames);
+						_cbul.undie(timePassed * _bulFrames); // they must stay alive for some time to avoid missed collisions
 						_cbul.alpha = 1;
 						
 						_13Rep(2, function(i) {

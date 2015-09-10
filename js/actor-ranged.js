@@ -13,9 +13,8 @@ function _13ActorRanged(_world, bName, bW, bH) {
 	
 	_aura.rnd.pos = [ 5, 5 ]
 	_aura.rnd.vel[1] = 10;
-	
-	// particles created before body because i need them under the body
-	
+
+	// it has no texture, just particles
 	var _retObj = _13Actor(_world, bName, bW, bH, 'ranged');
 	_aura.link = _retObj;
 	
@@ -68,7 +67,7 @@ function _13ActorRanged(_world, bName, bW, bH) {
 				}
 			});
 
-			this.alpha = 1 - _13Min(this.level, _13Dist(this.vel, [0, 0]) / 600);
+			this.alpha = 1 - _13Min(this.level, _13Dist(this.vel, [0, 0]) / 600); // fade effect on wisp 2
 			
 			if(this.didatk <= 0 && _act.attack)
 			{

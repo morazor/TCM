@@ -6,11 +6,13 @@ function _13WorldGen(_world) {
 	]
 	
 	_13Each([-1, 1], function(_dir) {
+		// randomly creating walls
 		var _cy = 370;
 		var _cx = 250 * _dir;
 		
 		_13Rep(3, function(i) {
 			var _cw = (i % 2 == 0 ? 700 : 300) + 50 * Math.round(_13Rand() * 4);
+			// alternating a log and a short one
 			
 			_walls.push({x: _cx +_cw / 2 * _dir, y: _cy, w: _cw, h: 500, furn: true });
 			
@@ -18,13 +20,13 @@ function _13WorldGen(_world) {
 			_cy += _13RandPick([-1, 1, 1.5]) * 50;
 		});
 		
-		_walls.push({x: _cx + 500 *_dir, y: _cy, w: 1000, h: 500});
-		_walls.push({x: _cx + 1450 *_dir, y: _cy + 50, w: 1000, h: 500, furn: true});
+		_walls.push({x: _cx + 500 *_dir, y: _cy, w: 1000, h: 500}); // spawn point on this
+		_walls.push({x: _cx + 1450 *_dir, y: _cy + 50, w: 1000, h: 500, furn: true}); // beyond the spawn point
 		_spawnp.push([ _cx + 500 *_dir, _cy -390 ]);
 	});
 
 	_13Rep(3, function(i) {
-		_walls.push({ x : 0, y: 225 + 50 * i, w: 150 + 100 * i * i, h: 500 });
+		_walls.push({ x : 0, y: 225 + 50 * i, w: 150 + 100 * i * i, h: 500 }); // under the mirror
 	});
 
 	// FIXED STUFF MUST BE ADDED FIRST!
@@ -38,6 +40,7 @@ function _13WorldGen(_world) {
 	
 	var _treeArray = [];
 	
+	// graves and trees
 	_13Each([ 't0', 't1', 'g' ], function(i) {
 		var _mutcount = 0;
 		var _furncount = 0;
@@ -169,6 +172,8 @@ function _13WorldGen(_world) {
 			_world._wlive = _liveEnemies / _endWave;
 
 			if(_waveTime % 101 == 0 && _13Rand() < (_waveStep - 35) / _endWave) {
+				// 101 is a prime number, % 101 means that this check will be done every 101 updates
+				// this doesn't work well if you change the refresh rate
 				_13MediaSounds.thunder.play();
 				_world.thunder = true;
 			}
@@ -199,7 +204,7 @@ function _13WorldGen(_world) {
 				else {
 					_world._wadv = 1;
 					_world._wlive = _finalBoss.health.perc;
-					if(_finalBoss.dead) _world.setst(3);
+					if(_finalBoss.dead) _world.setst(3); // finish status
 				}
 			}
 			else {

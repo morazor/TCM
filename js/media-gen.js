@@ -3,7 +3,7 @@ var _13MediaLights = {};
 var _13MediaSounds = {};
 
 function _13MediaGen() {
-	var _lights = {
+	var _lights = { // light color
 		player: { c: '#f5f5ff', r: 175 },
 		enemy_wotw_0: { c: '#3264ff', r: 125 },
 		enemy_wotw_1: { c: '#9632ff', r: 125 },
@@ -29,7 +29,7 @@ function _13MediaGen() {
 function _13TextureGen() {
 	var _retObj =  {};
 	
-	/*** COLORS AND PATTERNS ***/
+	// COLORS AND PATTERNS
 	
 	var _chainc = _13Canv(4, 4);
 
@@ -63,7 +63,7 @@ function _13TextureGen() {
 	_ctx.strokeStyle = 'rgba(255,255,255,0.5)';
 	_13Rep(3, function(i) { // BROKEN MIRROR
 		_ctx.save();
-		_ctx.rotate(_13Rand() / 2 + PI * 1.5 * i); // PI2 / 3
+		_ctx.rotate(_13Rand() / 2 + PI * 1.5 * i);
 		
 		var _mstep = -105;
 		
@@ -122,7 +122,7 @@ function _13TextureGen() {
 	_retObj.blood_player = _canvas;
 	_retObj.blood_rev_player = _canvas;
 	
-	// BLOOD SKELETONS
+	// BLOOD SKELETONS (bone shards)
 	
 	var _canvas = _13Canv(_bls, _bls);
 	
@@ -138,7 +138,7 @@ function _13TextureGen() {
 	_retObj.blood_enemy_skel_0 = _canvas;
 	_retObj.blood_enemy_skel_1 = _canvas;
 	
-	// SPARK
+	// SPARK (melee attack blocked)
 	var _canvas = _13Canv(4, 4);
 	
 	_13Path(_canvas, { c: 'yellow', b: 1, p: [
@@ -170,8 +170,9 @@ function _13TextureGen() {
 	]});
 
 	_retObj.wall = _canvas;
-	
+
 	// skeletal textures paths goes -0.5 < x < 0.5, 0 < y < 1
+	// because textures base link to other bones is on half width
 
 	/**************** 
 	 * PLAYER START *
@@ -219,34 +220,8 @@ function _13TextureGen() {
 					[ 0.07, 1 ],
 					[ 0, 1 ]
 				] },
-				/*{ c: _platec, b: 1, p: [ // chest - back
-					[ 0.25, 1 ],
-					[ 'arc', 0, 1, 0.25, 0, PI * 0.5 ],
-					[ 0, 1 ],
-					[ 0.1, 1 ],
-					[ -0.05, 0.45 ],
-					[ 0.25, 0.45 ]
-				] },
-				{ c: _platec, b: 1, p: [ // chest - front
-					[ 0, 1.25 ],
-					[ 'arc', 0, 1, 0.25, PI * 0.5, PI * 0.9 ],
-					[ -0.3, 0.9 ],
-					[ -0.3, 0.6 ],
-					[ -0.2, 0.15 ],
-					[ -0.1, 0.25 ],
-					[ 0, 0.4 ],
-					[ 0.1, 0.45 ],
-					[ 0.1, 0.5 ],
-					[ 0, 0.55 ],
-					[ -0.1, 1 ],
-					[ 0, 1 ]
-				] },*/
 				{ c: _platec, b: 1, p: [ // neck
 					[ 'rect', -0.15, 1.2, 0.25, 0.2 ]
-					/*[ -0.15, 1.2 ],
-					[ -0.15, 1.4 ],
-					[ 0.07, 1.4 ],
-					[ 0.1, 1.2 ]*/
 				] }
 			], 
 			link: [ { // head
@@ -323,6 +298,7 @@ function _13TextureGen() {
 	}
 
 	// FAKE BODY avoids layers handling
+	// i create an invisible body under and one over
 	var _farm = _13SkelClone(_cSkel.link[0]);
 	_farm.under = false;
 	_farm.path = null;
@@ -454,16 +430,13 @@ function _13TextureGen() {
 	var _cshield2 = _13SkelClone(_cshield);
 	_cshield2.name = 'shieldside';
 	_cshield2.alpha = 0;
-	_cshield2.path = [{ c: _platec, b: 1, p: [ // sideways
+	_cshield2.path = [{ c: _platec, b: 1, p: [ // sideways shield
 		[ 'rect', -0.1, 0, 0.3, 1.4 ]
-		/*[ -0.1, 0 ],
-		[ 0.2, 0 ],
-		[ 0.2, 1.4 ],
-		[ -0.1, 1.4 ]*/
 	] }];
 
 	_farm.link[0].link[0].link = [_cshield, _cshield2];
 
+	// ANIMATIONS
 	var _skelObj = {
 		skel: _cSkel,
 		w: _fw,
@@ -502,7 +475,7 @@ function _13TextureGen() {
 				trans: function (_frSkel, _ap, _ac) {
 				
 					var _crot = _13Sin(PI2 * _ap); // legs & arms rotation
-					var _crotk = _13Sin(-PI * 0.5 + PI2 * _ap); // knees rotation - 90 deg out of phase
+					var _crotk = _13Sin(-PI * 0.5 + PI2 * _ap); // knees rotation - PI / 2 out of phase
 					
 					_crot *= _ac;
 					_crotk *= _ac;
@@ -610,13 +583,7 @@ function _13TextureGen() {
 							_ckrot = _crot - 1;
 							_cwrot = PI * 0.3 * _ckrot;
 						}
-						/*else if(_ac == -1) // low swing, removed
-						{
-							_cshrot = 3.7 - _crot;
-							_ckrot = -_crot;
-							_cwrot = PI * 0.15 * _ckrot;
-						}*/
-						
+
 						_frSkel.bones.arm[0].rot = _cshrot * PI * 0.3;
 						
 						_frSkel.bones.arm_lk[0].rot =  PI * 0.3 * _ckrot;
@@ -634,9 +601,7 @@ function _13TextureGen() {
 					var _crot = _13Sin(_ap * PI * 0.5);
 					
 					_ac *= (_ac < 0) ? (3) : (0.5);
-					
-					//for(var i = 0; i < 3; i++) _frSkel.bones.body[i].rot += _ac * PI * 0.03 * _crot;
-					
+
 					_frSkel.bones.arm[1].rot = 2.4 - 0.7 * _crot + _ac;
 					_frSkel.bones.arm_lk[1].rot = - 0.1 * _crot;
 					_frSkel.bones.arm_lk[1].scale = { y: 1 - 0.8 * _crot, x: 1 };
@@ -661,6 +626,7 @@ function _13TextureGen() {
 	
 	var _skelRev = _13SkelClone(_cSkel);
 
+	// replacing colors for reversed version
 	_13SkelAllBones(_skelRev, function (tb) {
 	 	
 	 	_13Each(tb.path, function(_cp) {
@@ -698,6 +664,7 @@ function _13TextureGen() {
 	 {
 		var _skelSkel = _13SkelClone(_cSkel);
 
+		// changing some pieces with bones, removing some armor and changing head shape
 		_13SkelAllBones(_skelSkel, function (tb) {
 			if(tb.path != null) 
 			{
@@ -779,15 +746,12 @@ function _13TextureGen() {
 					{
 						tb.path[0].p = [
 							[ 'rect', -0.1, -0.1, 0.3, 1.2 ]
-							/*[ -0.1, -0.1 ],
-							[ 0.2, -0.1 ],
-							[ 0.2, 1.1 ],
-							[ -0.1, 1.1 ] */
 						]
 					}
 					break;
 				}
-					
+				
+				// colors replace
 				_13Each(tb.path, function(_cp) 
 				{
 					switch(_cp.c) {
@@ -876,6 +840,8 @@ function _13TextureGen() {
 		var _nw = 0.1 / j * (j -1);
 		var _dw = 0.1 - _nw;
 		var _shr = _13RandBetween(-0.8 / (j + 1), 0.8 / (j + 1));
+		// branches get randomly bent in the middle to be more creepy
+		// ending branches are more bent
 		
 		var _cSkel = { 
 			x: 0,
@@ -909,6 +875,7 @@ function _13TextureGen() {
 			var _cdepth = 4 + j;
 			
 			var _brcol = (j == 0 ? '#2e261e' : '#40352a');
+			// smaller trees on the background have a darker color
 			
 			var _treeSkel = {
 				x: 0.5 * _bls,
@@ -926,6 +893,7 @@ function _13TextureGen() {
 
 			_13SkelInit(_treeSkel);
 		
+			// tree animation
 			_retObj['tree_' + j + i] = {
 				skel: _treeSkel,
 				anim: {
@@ -936,7 +904,11 @@ function _13TextureGen() {
 							_ac *= 0.05;
 							
 							_13SkelAllBones(_frSkel.link[0], function(_cb) {
-								_ac *= 1.05;
+								_ac *= 1.05; 
+								// i'm incrementing it for each iteration because ending branches must be bent more by the wind
+								// moreover, the allbones function iterates from right branch to left branch
+								// so the left branches get bent more, and that's cool because they are the ones more exposed to the wind
+								
 								_cb.rot += _ac * (1.5 + _13Sin(_ap * PI2));
 							});
 							
@@ -969,13 +941,12 @@ function _13TextureGen() {
 		
 		_ctx.fillStyle = 'rgba(0,0,0,0.35)';
 		
+		// graves used to have some random lines on
+		// too look like written text, but i need space :<
 		
 		/*_13Rep(3, function(j) {
 			_ctx.translate(0, -10);
 			if(_13Rand() > 0.4) _ctx.fillRect(-18, 0, 36, 1);
-			
-			// OLD PART WITH SPLITS
-			{
 				var _splt = _13RandPick([1,2,3]);
 				var _sx = -18;
 				
@@ -991,17 +962,18 @@ function _13TextureGen() {
 		
 		_ctx.translate(0, -50);
 		
-		_ctx.fillRect(-5, 0, 10, 2);
+		_ctx.fillRect(-5, 0, 10, 2); // cross
 		_ctx.fillRect(-1, -5, 2, 15);
 		
 		if(i % 2 == 0)
 		{
+			// removing pieces to make broken graves
 			_ctx.globalCompositeOperation = 'destination-out';
 			_ctx.fillStyle = 'black';
 			_ctx.beginPath();
 			_ctx.moveTo(-25, 0);
 			var _splt = _13RandPick([2,3]);
-			for(var j = 0; j < _splt;j++)
+			for(var j = 0; j < _splt; j++)
 			{
 				_ctx.lineTo((j + 1) * 50 / _splt - 25, _13RandBetween(-20, 20))
 			}
@@ -1023,11 +995,11 @@ function _13TextureGen() {
 	 
 	var _canvas = _13Canv(_fw, _fh);
 	
-	_13Path(_canvas, { c: '#020408', p: [
+	_13Path(_canvas, { c: '#020408', p: [ // sky
 		[ 'rect', 0, 0, _fw, _fh ]
 	]});
 
-	_13Rep(50, function() {
+	_13Rep(50, function() { // spamming stars
 		_13Path(_canvas, { c: 'white', p: [
 			[ 'arc', _13Rand() * _fw, _13Rand() * _fh, _13Rand() * _fh * 0.003 ]
 		]});
@@ -1059,14 +1031,6 @@ function _13TextureGen() {
 	 // CLOUDS
 	 
 	var _canvas = _13Canv(2880, 320);
-	/*_ctx = _canvas.getContext('2d');
-	_ctx.globalCompositeOperation = 'multiply';
-
-	_13Rep(14, function(i) {
-		var _cs = (i == 0 || i == 13 ? 0.07 : _13RandBetween(0.1, 0.14));
-		_13Path(_ctx, { c: 'black', b: 5, p: [ [ 'arc', (i + 1) * 192, 0, _fw * _cs ] ]});
-	})*/
-	
 	
 	var _ctx = _canvas.getContext('2d');
 	var _bGrad = _13Gradient(192, '#000000', '#9999ff', 255, 0.1, 180);
@@ -1081,8 +1045,6 @@ function _13TextureGen() {
 		_ctx.drawImage(_bGrad, -192, -192);
 		_ctx.restore();
 	});
-	
-	//document.body.appendChild(_canvas);
 
 	_retObj.clouds = _canvas;
 	

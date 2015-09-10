@@ -1,3 +1,5 @@
+// various helper and code shortening stuff
+
 var PI = Math.PI;
 var PI2 = PI * 2;
 
@@ -92,6 +94,7 @@ function _13Canv(w, h) {
 
 function _13Path(_ctx, _cPath, size)
 {
+	// helper for canvas drawing, used also in skeletons
 	if(size == null) size = 1;
 	if(_ctx.getContext != null) _ctx = _ctx.getContext('2d');
 	
@@ -155,7 +158,17 @@ function _13Path(_ctx, _cPath, size)
 }
 
 function _13Gradient(rad, cola, colb, basea, ppow, offset) {
-	if(colb == null) colb = cola;
+	// custom gradients
+	// may seem overkill, but basic gradients have a linear color change
+	// i need a quadratic change for lights
+	
+	// rad: gradient radius
+	// cola, colb: colors in hex, alpha is always going from basea to 0
+	// basea: starting alpha
+	// ppow: change speed power
+	// offset: inner radius at which change of color starts
+	
+	if(colb == null) colb = cola; 
 	
 	var _rad2 = rad * 2;
 	var _canvas = _13Canv(_rad2, _rad2);

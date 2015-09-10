@@ -16,12 +16,12 @@ function _13Particles(_world, bName, maxNum) {
 		scale: 1, 
 		alpha: 1,
 		list: _pList,
-		rnd: {
+		rnd: { // rnd props gets multiplied by -1 < random < 1 and summed with the base ones
 			pos: [0, 0],
 			vel: [0, 0],
 			rot: 0,
 			rotvel: 0,
-			scale: 0, // all props get summed with min-max, so i need 0 here
+			scale: 0, // all rnd props get summed with base, so i need 0 here
 			alpha: 0
 		},
 		grav: 1,
@@ -29,10 +29,10 @@ function _13Particles(_world, bName, maxNum) {
 		bounce: 1,
 		freq: 0,
 		on: false,
-		fx: {},
+		fx: {}, // used for changing props according to lifespan remaining
 		update: function(timePassed)
 		{
-			if(this.link)
+			if(this.link) // linked to some body (ie: wisps)
 			{				
 				this.on = !this.link.dead;
 
@@ -50,6 +50,8 @@ function _13Particles(_world, bName, maxNum) {
 			
 			if(this.on)
 			{
+				// if on is a number: emit that number of particles
+				// if on is boolean: emit continously/explode all particles if freq == 0
 				var _pnum = 0;
 				var _em = this;
 				

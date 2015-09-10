@@ -252,7 +252,7 @@ function _13World() {
 				var _ri = (_player.revved ? 0 : 1);
 
 				var _crev = _player.baserev.texture[_ri];
-				_crev.refresh(0); // this skips easing between frames but it's not very noticeable
+				_crev.refresh(0); // this skips smoothing between frames but it's not very noticeable
 
 				if(!_player.facing) tCtx.scale(-1, 1);
 				
@@ -271,7 +271,7 @@ function _13World() {
 			
 			tCtx.restore();
 			
-			if(this.thunder)
+			if(this.thunder) // whiteout thunder effect
 			{
 				this.thunder = false;
 				tCtx.fillStyle = 'white';
@@ -281,6 +281,8 @@ function _13World() {
 			// MAIN RENDER CYCLE
 			
 			_13Each(this.bodies, function(_cBody) {
+				// not just on livebod because during the update stuff something may be added
+				// it's for melee bullets, they get invisible at the first update and they must be rendered right after being added
 				if(!_cBody.dead) _13Each(['texture', 'light'], function (prop) {
 					var _target = _cBody[prop];
 					
@@ -316,6 +318,8 @@ function _13World() {
 			});
 			
 			// BODY DEBUG
+			// this stuff is for body and block debug
+			
 			/*
 			for(var i = 0; i < this.bodies.length; i++)
 			{
@@ -405,7 +409,8 @@ function _13World() {
 			
 			tCtx.restore();
 		},
-		/*** CLASSES ***/
+		
+		// functions adding stuff
 		
 		addBody: function (bName, bW, bH) {
 			var _retObj = _13Body(this, bName, bW, bH);

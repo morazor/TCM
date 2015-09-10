@@ -6,7 +6,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	var _spnam = (_isMelee ? 'sparks' : 'sparks_' + bName);
 	var _pgrav = (_isMelee ? 1 : 0);
 	
-	var _sparks = _13Particles(_world, _spnam, 10);
+	var _sparks = _13Particles(_world, _spnam, 10); // particles for blocked attacks
 	_13ObjExtend(_sparks, {
 		grav: _pgrav,
 		collide: 'wall',
@@ -15,7 +15,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 	
 	_sparks.rnd.vel = [350, 350]
 
-	var _blood = _13ObjExtend(_13Particles(_world, 'blood_' + bName, 5), {
+	var _blood = _13ObjExtend(_13Particles(_world, 'blood_' + bName, 5), { // particles when it gets hit
 		grav: _pgrav,
 		fx: { scale: 1 }
 	});
@@ -75,10 +75,11 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		damval: (_isMelee ? 2 : 25),
 		atkspeed: 1,
 		speed: 400,
-		revmult: 1,
+		revmult: 1, // originally used to store the bonus when reversed, i planned to change the bonus according to hps of the player
+					// now it's just a general multiplier used for moving speed, attack speed, damage also for mobs
 		collide: true,
 		damage: function(bullet) {		
-			// DAMAGE
+			// SUSTAIN DAMAGE
 			if(!this.dead)
 			{
 				var _cdam = bullet.owner.damval * bullet.owner.revmult * bullet.dammod;
@@ -121,6 +122,7 @@ function _13Actor(_world, bName, bW, bH, bType) {
 		},
 		onHit: function(tbod, bullet)
 		{
+			// HITTING SOMETHING
 			var _stopped = false;
 			if(tbod.name == 'wall')
 			{

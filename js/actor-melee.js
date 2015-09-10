@@ -295,7 +295,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 							so i have to normalize damage to get the same damage per attack
 							***/
 							
-							_cbul.dammod = _atkSpeed;
+							_cbul.dammod = _atkSpeed * timePassed / 30;
 						});
 
 						if(--_bulnum <= 0) return true;

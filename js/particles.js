@@ -1,3 +1,5 @@
+/** class for particle effects **/
+
 function _13Particles(_world, bName, maxNum) {
 	var _pList = [];
 	for(var i = 0; i < maxNum; i++)

@@ -1,3 +1,5 @@
+/** class for ranged enemies (wisps) **/
+
 function _13ActorRanged(_world, bName, bW, bH) {
 	
 	var _auraProps = {

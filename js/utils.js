@@ -1,4 +1,4 @@
-// various helper and code shortening stuff
+/** various helper functions and code shortening stuff **/
 
 var PI = Math.PI;
 var PI2 = PI * 2;

@@ -1,3 +1,5 @@
+/** class handling physics (collisions, movement) and rendering */
+
 function _13World() {	
 
 	function _calcPoints(cBody) {

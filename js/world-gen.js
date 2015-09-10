@@ -1,3 +1,6 @@
+/** function that populates the level: creates terrain, decorative stuff, enemies...
+also handles stage progress (enemies spawning, clouds and rain, tree animation) **/
+
 function _13WorldGen(_world) {
 	var _walls = [
 	]

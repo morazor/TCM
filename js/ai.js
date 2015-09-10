@@ -1,3 +1,5 @@
+/** function called to create the action object for enemies **/
+
 function _13AI(mob, player, timePassed)
 {
 	if(mob != player && !mob.dead)

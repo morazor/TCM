@@ -1,3 +1,5 @@
+/** game init and main cycle **/
+
 function _13Game() {
 	
 	var _allCanvas = [];

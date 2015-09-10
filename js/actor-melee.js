@@ -1,4 +1,4 @@
-/** Stuff about melee actors (the player, the skeletons and the nemesis **/
+/** class for melee actors (the player, the skeletons and the nemesis **/
 
 function _13ActorMelee(_world, bName, bW, bH) {
 	var _retObj = _13Actor(_world, bName, bW, bH, 'melee');
@@ -30,7 +30,7 @@ function _13ActorMelee(_world, bName, bW, bH) {
 		_13ObjExtend(_retObj, {
 			atkspeed: 1.2,
 			damval: 5,
-			health: _13LimVal(250),
+			health: _13LimVal(300),
 			revpow: _13LimVal(100, 0), // curse energy (reverse power)
 			onRev: function() { // when it is reversed, also the bullets get reversed
 				_13Each(this.bullets, function(_cbul) {

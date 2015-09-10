@@ -1,3 +1,5 @@
+/** functions to generate lights, textures, animations and sound **/
+
 var _13MediaTextures = {};
 var _13MediaLights = {};
 var _13MediaSounds = {};

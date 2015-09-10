@@ -1,3 +1,5 @@
+/** base class for actors **/
+
 function _13Actor(_world, bName, bW, bH, bType) {
 	var _retObj = _world.addBody(bName, bW, bH);
 	

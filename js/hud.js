@@ -1,3 +1,5 @@
+/** function that draws HUD and title/game over/finish screens */
+
 function _13HUD(_ctx, _player, _world) {
 	var _overDelay = 5000;
 	var _flipTime = 10000;

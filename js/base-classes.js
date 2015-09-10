@@ -1,3 +1,5 @@
+/** base classes for bodies and animations **/
+
 function _13Sprite(bTexture) {
 	// main class for animations and images, stores both things
 	if(bTexture == null || bTexture.skel == null) return bTexture;

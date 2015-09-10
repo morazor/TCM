@@ -1,3 +1,5 @@
+/** functions to manipulate skeletons: init, rendering and utilities **/
+
 function _13SkelInit(tb, skipIndex) {
 	if(tb.path != null)
 	{
@@ -97,8 +99,7 @@ function _13Skel_DrawBone(tctx, tb) {
 	{
 		tctx.save();
 		
-		if(tb.alpha != null) tctx.globalAlpha = tb.alpha;
-		if(tb.scale != null) tctx.scale(tb.scale, tb.scale);			
+		if(tb.alpha != null) tctx.globalAlpha = tb.alpha;		
 
 		tctx.drawImage(tb.texture, -tb.size, -tb.size);
 		

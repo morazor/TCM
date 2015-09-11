@@ -21,5 +21,9 @@ Curse energy will grow up over time, when it's full you will transform in your e
 
 ##SUGGESTED BROWSERS
 
+Works on any browser. In Internet Explorer sound doesn't work.
+
+For best performance:
+
 - On Windows: Firefox.
 - On MacOS: Chrome.

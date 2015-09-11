@@ -4,10 +4,10 @@ You are a valiant knight. While you were fighting an evil and powerful warlock y
 
 ##CONTROLS
 
--WASD or arrow keys to move and jump.
--Mouse to aim.
--Left click to attack.
--Right click to block.
+- WASD or arrow keys to move and jump.
+- Mouse to aim.
+- Left click to attack.
+- Right click to block.
 
 ##HOW TO PLAY
 
@@ -21,5 +21,5 @@ Curse energy will grow up over time, when it's full you will transform in your e
 
 ##SUGGESTED BROWSERS
 
--On Windows: Firefox.
--On MacOS: Chrome.
+- On Windows: Firefox.
+- On MacOS: Chrome.
